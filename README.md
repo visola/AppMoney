@@ -1,11 +1,11 @@
-== What you need ? ==
+## What you need ?
 
 - Gradle
 - Java 8
 
-== How to start ? ==
+## How to start ?
 
-=== To compile ===
+### To compile
 
 Run:
 
@@ -36,7 +36,7 @@ BUILD SUCCESSFUL
 Total time: 8.621 secs
 ```
 
-=== To run ===
+### To run
 
 Run the jar:
 

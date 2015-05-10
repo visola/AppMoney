@@ -1,0 +1,7 @@
+admin:
+  username: admin
+  password: 1234
+
+user:
+  username: john
+  password: 1234

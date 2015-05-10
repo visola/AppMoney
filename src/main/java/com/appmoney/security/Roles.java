@@ -2,6 +2,7 @@ package com.appmoney.security;
 
 public enum Roles {
 
-  ADMIN
+  ADMIN,
+  USER
 
 }

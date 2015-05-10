@@ -1,15 +1,13 @@
-package com.appmoney.config;
+package com.appmoney.security;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-
-import com.appmoney.security.Roles;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled=true)
@@ -26,8 +24,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     "/shutdown"
   };
 
-  @Value("${admin.password}")
-  private String password;
+  @Autowired
+  TokenService tokenService;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -40,11 +38,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/authenticate").anonymous()
       .antMatchers(ACTUATOR_ENDPOINTS).hasRole(Roles.ADMIN.toString())
       .anyRequest().authenticated();
+
+    http.addFilterBefore(tokenAuthenticationFilter(tokenService), BasicAuthenticationFilter.class);
   }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.inMemoryAuthentication().withUser("admin").password("1234").roles(Roles.ADMIN.toString());
+  private TokenAuthenticationFilter tokenAuthenticationFilter(TokenService tokenService) {
+    return new TokenAuthenticationFilter(tokenService);
   }
 
 }

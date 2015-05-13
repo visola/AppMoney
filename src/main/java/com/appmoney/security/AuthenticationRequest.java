@@ -1,6 +1,6 @@
 package com.appmoney.security;
 
-public class AppMoneyAuthentication {
+public class AuthenticationRequest {
 
   private String username;
   private String password;

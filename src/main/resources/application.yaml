@@ -5,3 +5,10 @@ admin:
 user:
   username: john
   password: 1234
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/appmoney
+    username: postgres
+    password: admin

@@ -1,27 +1,8 @@
 <html>
   <head>
-    <link type="text/css" rel="stylesheet" href="/css/bootstrap.css" />
-    <link type="text/css" rel="stylesheet" href="/css/bootstrap-theme.css" />
-    <script src="/js/lib/require.js"></script>
-    <script>
-      require.config({
-        baseUrl: "/js",
-        jsx: {
-          fileExtension: '.jsx'
-        },
-        paths: {
-          "backbone" : "/js/lib/backbone",
-          "JSXTransformer" : "/js/lib/JSXTransformer",
-          "jquery" : "/js/lib/jquery-2.1.4",
-          "jsx" : "/js/lib/jsx",
-          "react" : "/js/lib/react-with-addons",
-          "text" : "/js/lib/text",
-          "underscore" : "/js/lib/underscore"
-        }
-      });
-
-      require(['jsx!AppMoney']);
-    </script>
+    <link type="text/css" rel="stylesheet" href="/css/lib/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="/css/lib/bootstrap-theme.css" />
+    <script data-main="/js/main.js" src="/js/lib/require.js"></script>
   </head>
   <body></body>
 </html>

@@ -12,3 +12,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/appmoney
     username: postgres
     password: admin
+
+oauth:
+  google:
+    clientId: 960331671953-des925sr54tqc64q6bl1pp7gcduk5tu2.apps.googleusercontent.com
+    clientSecret: hpxc9dDWl331kwMuM9XzEtHv
+    redirectUri: http://localhost:8080/oauth2callback
+    scopes: email

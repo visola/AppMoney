@@ -12,3 +12,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/appmoney
     username: postgres
     password: admin
+
+flyway:
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/appmoney 
+  user: postgres
+  password: admin

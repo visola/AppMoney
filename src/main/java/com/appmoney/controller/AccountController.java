@@ -10,7 +10,7 @@ import com.appmoney.account.Account;
 import com.appmoney.dao.AccountDAO;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/api/v1/accounts")
 public class AccountController {
   
   @Autowired

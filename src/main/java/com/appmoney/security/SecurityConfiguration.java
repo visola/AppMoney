@@ -47,9 +47,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     http
       .authorizeRequests()
-      .antMatchers("/authenticate").anonymous()
+      .antMatchers("/api/v1/authenticate").anonymous()
       .antMatchers(ACTUATOR_ENDPOINTS).hasRole(Roles.ADMIN.toString())
-      .anyRequest().authenticated();
+      .antMatchers("/api/v1/**").authenticated();
 
     http.addFilterBefore(tokenAuthenticationFilter(), BasicAuthenticationFilter.class);
   }

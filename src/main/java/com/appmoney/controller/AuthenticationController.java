@@ -12,6 +12,7 @@ import com.appmoney.security.AuthenticationRequest;
 import com.appmoney.security.AuthenticationResponse;
 import com.appmoney.security.TokenService;
 
+@RequestMapping("/api/v1")
 @RestController
 public class AuthenticationController {
 
@@ -21,7 +22,7 @@ public class AuthenticationController {
   @Autowired
   TokenService tokenService;
 
-  @RequestMapping(method=RequestMethod.POST)
+  @RequestMapping(method=RequestMethod.POST, value="/authenticate")
   public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest authentication) {
     AuthenticationResponse response = tokenService.generateToken(
         authenticationManager.authenticate(

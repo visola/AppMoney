@@ -11,7 +11,7 @@ public class AccountDAOImpl implements AccountDAO{
   private JdbcTemplate jdbcTemplate;
 
   public void insert(Account account) {
-    String sql = "INSERT INTO ACCOUNT (OWNER, INITIAL_AMOUNT, CURRENT_AMOUNT) VALUES (?, ?, ?)";
+    String sql = "INSERT INTO ACCOUNTS (OWNER, INITIAL_AMOUNT, CURRENT_AMOUNT) VALUES (?, ?, ?)";
    
     jdbcTemplate.update(sql, new Object[] { account.getOwner(), account.getInitialAmount(), account.getCurrentAmount() });
   } 

@@ -19,5 +19,5 @@ CREATE TABLE accounts (
 	created timestamp,
 	create_by int references users(id),
 	updated timestamp,
-	updated_by int references users(id),
+	updated_by int references users(id)
 );

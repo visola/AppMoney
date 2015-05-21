@@ -3,7 +3,7 @@ package com.appmoney.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.appmoney.account.Account;
+import com.appmoney.model.Account;
 
 public class AccountDAOImpl implements AccountDAO{
 

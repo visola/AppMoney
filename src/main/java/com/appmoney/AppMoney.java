@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.appmoney.dao.AccountDAO;
 import com.appmoney.dao.AccountDAOImpl;
+import com.appmoney.dao.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
@@ -30,6 +31,11 @@ public class AppMoney {
   @Bean
   public ObjectMapper objectMapper() {
     return new ObjectMapper();
+  }
+
+  @Bean
+  public UserDao userDao() {
+    return new UserDao();
   }
 
 }

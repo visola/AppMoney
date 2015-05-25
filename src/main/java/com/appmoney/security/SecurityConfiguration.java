@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.appmoney.model.UserService;
+
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 @EnableWebMvcSecurity
@@ -48,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     http
       .authorizeRequests()
       .antMatchers("/api/v1/authenticate").anonymous()
-      .antMatchers(ACTUATOR_ENDPOINTS).hasRole(Roles.ADMIN.toString())
+      .antMatchers(ACTUATOR_ENDPOINTS).hasRole("ADMIN")
       .antMatchers("/api/v1/**").authenticated();
 
     http.addFilterBefore(tokenAuthenticationFilter(), BasicAuthenticationFilter.class);
@@ -56,10 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    auth
-      .inMemoryAuthentication()
-        .withUser(adminUsername).password(adminPassword).roles(Roles.ADMIN.toString())
-        .and().withUser(userUsername).password(userPassword).roles(Roles.USER.toString());
+    auth.userDetailsService(userService());
   }
 
   @Bean
@@ -70,6 +69,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   public TokenService tokenService() {
     return new TokenService();
+  }
+
+  @Bean
+  public UserService userService() {
+    return new UserService();
   }
 
 }

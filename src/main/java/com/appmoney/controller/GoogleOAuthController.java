@@ -17,10 +17,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.appmoney.security.AuthenticationResponse;
 import com.appmoney.security.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +34,9 @@ public class GoogleOAuthController {
   private static final String GOOGLE_OAUTH_ENDPOINT = "https://accounts.google.com/o/oauth2/auth";
   private static final String GOOGLE_TOKEN_ENDPOINT = "https://www.googleapis.com/oauth2/v3/token";
   private static final String GOOGLE_EMAIL_ENDPOINT = "https://www.googleapis.com/plus/v1/people/me";
+
+  @Autowired
+  AuthenticationManager authenticationManager;
 
   @Autowired
   HttpClient httpClient;
@@ -74,7 +80,16 @@ public class GoogleOAuthController {
   @RequestMapping(method=RequestMethod.GET, value="/oauth2callback")
   public Map<String, Object> receiveRedirect(String code) throws Exception {
     Map<String, Object> model = new HashMap<>();
-    model.put("email", getUserEmail(getToken(code)));
+
+    String token = getToken(code);
+    String email = getUserEmail(token);
+
+    AuthenticationResponse response = tokenService.generateToken(
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(email, "")));
+
+    model.put("email", email);
+    model.put("token", response.getToken());
     return model;
   }
 
@@ -105,8 +120,12 @@ public class GoogleOAuthController {
     post.setEntity(new UrlEncodedFormEntity(formParams, Consts.UTF_8));
     HttpResponse response = httpClient.execute(post);
 
-    JsonNode node = objectMapper.readTree(response.getEntity().getContent());
-    return node.get("access_token").asText();
+    if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() < 300) {
+      JsonNode node = objectMapper.readTree(response.getEntity().getContent());
+      return node.get("access_token").asText();
+    } else {
+      throw new RuntimeException(String.format("Error while fetching token from Google. Status: %d, Response: %s", response.getStatusLine().getStatusCode(), response.getStatusLine().getReasonPhrase()));
+    }
   }
 
 }

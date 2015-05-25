@@ -17,5 +17,5 @@ oauth:
   google:
     clientId: 960331671953-des925sr54tqc64q6bl1pp7gcduk5tu2.apps.googleusercontent.com
     clientSecret: hpxc9dDWl331kwMuM9XzEtHv
-    redirectUri: http://localhost:8080/oauth2callback
+    redirectUri: http://localhost:8080/authenticate/oauth2callback
     scopes: email

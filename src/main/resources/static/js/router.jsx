@@ -2,6 +2,10 @@ define(["backbone", "react", "security"],
   function (Backbone, React, Security) {
     var originalRoute = Backbone.Router.prototype.route;
 
+    function getContentElement() {
+      return document.body;
+    };
+
     var Router = Backbone.Router.extend({
       routes : {
         "(/)" : "home",
@@ -10,13 +14,13 @@ define(["backbone", "react", "security"],
 
       home : function () {
         require(["jsx!component/Home"], function (Home) {
-          React.render(<Home />, document.body);
+          React.render(<Home />, getContentElement());
         });
       },
 
       login : function () {
         require(["jsx!component/Login"], function (Login) {
-          React.render(<Login />, document.body);
+          React.render(<Login />, getContentElement());
         });
       },
 

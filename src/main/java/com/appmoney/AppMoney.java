@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.appmoney.dao.AccountDAO;
-import com.appmoney.dao.AccountDAOImpl;
+import com.appmoney.dao.AccountDAO;
 import com.appmoney.dao.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,7 +20,7 @@ public class AppMoney {
   
   @Bean
   public AccountDAO accountDAO(){
-    return new AccountDAOImpl();
+    return new AccountDAO();
   }
 
   @Bean

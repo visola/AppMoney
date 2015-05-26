@@ -1,6 +1,6 @@
 package com.appmoney.dao;
 
-import com.appmoney.account.Account;
+import com.appmoney.model.Account;
 
 public interface AccountDAO {
   

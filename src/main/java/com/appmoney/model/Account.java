@@ -1,4 +1,4 @@
-package com.appmoney.account;
+package com.appmoney.model;
 
 import java.math.BigDecimal;
 

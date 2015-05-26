@@ -1,8 +1,12 @@
 package com.appmoney.dao;
 
+<<<<<<< HEAD
 import java.util.List;
 
+import com.appmoney.account.Account;
+=======
 import com.appmoney.model.Account;
+>>>>>>> master
 
 public interface AccountDAO {
   

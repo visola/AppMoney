@@ -16,8 +16,13 @@ public class AccountController {
   @Autowired
   private AccountDAO accountDAO;
 
+<<<<<<< HEAD
+  @RequestMapping(method = RequestMethod.POST)
+  public Account createAccount(@RequestBody Account account) {
+=======
   @RequestMapping(method=RequestMethod.POST)
   public Account createAccount(@RequestBody Account account){
+>>>>>>> master
     accountDAO.insert(account);
     return account;
   }

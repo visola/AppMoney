@@ -10,6 +10,18 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE accounts (
+<<<<<<< HEAD
+	id	int NOT NULL primary key,
+	owner   int references owners(id),
+	initial_balance numeric,
+	initial_balance_date timestamp,
+	balance numeric,
+	created timestamp,
+	create_by int references users(id),
+	updated timestamp,
+	updated_by int references users(id)
+);
+=======
   id serial not null primary key,
   owner int references users(id),
   initial_balance decimal(19,4),
@@ -28,3 +40,4 @@ insert into roles (user_id, role) values ((select id from users where email = 'f
 insert into users (email) values ('viniciusisola@gmail.com');
 insert into roles (user_id, role) values ((select id from users where email = 'viniciusisola@gmail.com'), 'ADMIN');
 insert into roles (user_id, role) values ((select id from users where email = 'viniciusisola@gmail.com'), 'USER');
+>>>>>>> master

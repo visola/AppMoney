@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
-import com.appmoney.account.Account;
+import com.appmoney.model.Account;
 
 public class AccountDAOImpl implements AccountDAO {
 

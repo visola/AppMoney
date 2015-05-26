@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class TokenService {
 
+  private static final int TOKEN_EXPIRATION = 8 * 3600 * 1000;
+
   private Map<String, Authentication> authenticationPerToken = new HashMap<>();
   private Map<String, AuthenticationResponse> responsePerToken = new HashMap<>();
 
@@ -39,7 +41,7 @@ public class TokenService {
 
     AuthenticationResponse response = new AuthenticationResponse();
     response.setToken(token);
-    response.setExpires(System.currentTimeMillis() + 8 * 3600 * 1000);
+    response.setExpires(System.currentTimeMillis() + TOKEN_EXPIRATION);
 
     responsePerToken.put(token, response);
     authenticationPerToken.put(token, authentication);

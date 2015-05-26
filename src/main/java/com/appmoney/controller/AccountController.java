@@ -12,14 +12,31 @@ import com.appmoney.dao.AccountDAO;
 @RestController
 @RequestMapping("/api/v1/accounts")
 public class AccountController {
-  
+
   @Autowired
   private AccountDAO accountDAO;
-  
-  @RequestMapping(method=RequestMethod.POST)
-  public Account createAccount(@RequestBody Account account){      
+
+  @RequestMapping(method = RequestMethod.POST)
+  public Account createAccount(@RequestBody Account account) {
     accountDAO.insert(account);
-    return account;    
+    return account;
   }
 
+  @RequestMapping(method = RequestMethod.PUT)
+  public Account updateAccount(@RequestBody Account account) {
+    accountDAO.update(account);
+    return null;
+  }
+  
+  @RequestMapping(method = RequestMethod.DELETE)
+  public Account deleteAccount(@RequestBody int id) {
+    accountDAO.deleteById(id);
+    return null;
+  }
+  
+  @RequestMapping(method = RequestMethod.GET)
+  public Account selectAccounts(int owner) {
+    accountDAO.selectByOwner(owner);
+    return null;
+  }
 }

@@ -11,11 +11,11 @@ CREATE TABLE users
 );
 
 CREATE TABLE accounts (
-	id	int,
+	id	int NOT NULL primary key,
 	owner   int references owners(id),
-	initial_balance   money,
+	initial_balance numeric,
 	initial_balance_date timestamp,
-	balance money,
+	balance numeric,
 	created timestamp,
 	create_by int references users(id),
 	updated timestamp,

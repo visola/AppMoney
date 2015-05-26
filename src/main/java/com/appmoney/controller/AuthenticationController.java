@@ -29,5 +29,4 @@ public class AuthenticationController {
             new UsernamePasswordAuthenticationToken(authentication.getUsername(), authentication.getPassword())));
     return response;
   }
-
 }

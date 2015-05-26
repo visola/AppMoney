@@ -30,7 +30,9 @@ public class TokenService {
   }
 
   public AuthenticationResponse generateToken(Authentication authentication) {
-    Optional<Entry<String, Authentication>> entry = authenticationPerToken.entrySet().stream().filter(e -> e.getValue().equals(authentication)).findFirst();
+    Optional<Entry<String, Authentication>> entry = authenticationPerToken
+        .entrySet().stream().filter(e -> e.getValue().equals(authentication))
+        .findFirst();
     if (entry.isPresent()) {
       return responsePerToken.get(entry.get().getKey());
     }

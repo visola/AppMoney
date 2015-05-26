@@ -16,7 +16,7 @@ CREATE TABLE accounts (
   initial_balance_date timestamp,
   balance decimal(19,4),
   created timestamp,
-  create_by int references users(id),
+  created_by int references users(id),
   updated timestamp,
   updated_by int references users(id)
 );

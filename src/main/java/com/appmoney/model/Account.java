@@ -1,54 +1,90 @@
 package com.appmoney.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class Account {
 
-  private long id;
-  private String owner;
-  private BigDecimal initialAmount;
-  private BigDecimal currentAmount;
-  
-  protected Account() {}
-  
-  public Account(String owner, BigDecimal initialAmount, BigDecimal currentAmount){
-    this.owner = owner;
-    this.initialAmount = initialAmount;
-    this.currentAmount = currentAmount;
+  private int id;
+  private int owner;
+  private BigDecimal initialBalance;
+  private Date initialBalanceDate;
+  private BigDecimal balance;
+  private Date created;
+  private int createdBy;
+  private Date updated;
+  private int updatedBy;
+
+  public BigDecimal getBalance() {
+    return balance;
   }
-  
-  public long getId() {
+
+  public Date getCreated() {
+    return created;
+  }
+
+  public int getCreatedBy() {
+    return createdBy;
+  }
+
+  public int getId() {
     return id;
   }
 
-  public void setId(long id) {
-    this.id = id;
+  public BigDecimal getInitialBalance() {
+    return initialBalance;
   }
 
-  public String getOwner() {
+  public Date getInitialBalanceDate() {
+    return initialBalanceDate;
+  }
+
+  public int getOwner() {
     return owner;
   }
 
-  public void setOwner(String owner) {
+  public Date getUpdated() {
+    return updated;
+  }
+
+  public int getUpdatedBy() {
+    return updatedBy;
+  }
+
+  public void setBalance(BigDecimal balance) {
+    this.balance = balance;
+  }
+
+  public void setCreated(Date created) {
+    this.created = created;
+  }
+
+  public void setCreatedBy(int createdBy) {
+    this.createdBy = createdBy;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public void setInitialBalance(BigDecimal initialBalance) {
+    this.initialBalance = initialBalance;
+  }
+
+  public void setInitialBalanceDate(Date initialBalanceDate) {
+    this.initialBalanceDate = initialBalanceDate;
+  }
+
+  public void setOwner(int owner) {
     this.owner = owner;
   }
 
-  public BigDecimal getInitialAmount() {
-    return initialAmount;
+  public void setUpdated(Date updated) {
+    this.updated = updated;
   }
 
-  public void setInitialAmount(BigDecimal initialAmount) {
-    this.initialAmount = initialAmount;
+  public void setUpdatedBy(int updatedBy) {
+    this.updatedBy = updatedBy;
   }
 
-  public BigDecimal getCurrentAmount() {
-    return currentAmount;
-  }
-
-  public void setCurrentAmount(BigDecimal currentAmount) {
-    this.currentAmount = currentAmount;
-  }
-
- 
-  
 }

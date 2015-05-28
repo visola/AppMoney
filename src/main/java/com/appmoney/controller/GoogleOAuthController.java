@@ -4,9 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
@@ -28,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.appmoney.security.AuthenticationResponse;
 import com.appmoney.security.TokenService;
@@ -88,7 +87,7 @@ public class GoogleOAuthController {
   }
 
   @RequestMapping(method=RequestMethod.GET, value="/authenticate/oauth2callback")
-  public Map<String, Object> receiveRedirect(
+  public ModelAndView receiveRedirect(
       String code,
       String state,
       HttpServletResponse response,
@@ -101,7 +100,7 @@ public class GoogleOAuthController {
       throw new AccessDeniedException("Invalid CSRF token.");
     }
 
-    Map<String, Object> model = new HashMap<>();
+    ModelAndView mv = new ModelAndView("index");
 
     String token = getToken(code);
     String email = getUserEmail(token);
@@ -110,9 +109,10 @@ public class GoogleOAuthController {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(email, "")));
 
-    model.put("email", email);
-    model.put("token", authResponse.getToken());
-    return model;
+    mv.addObject("email", email);
+    mv.addObject("expires", authResponse.getExpires());
+    mv.addObject("token", authResponse.getToken());
+    return mv;
   }
 
   private String getUserEmail(String token) throws Exception {

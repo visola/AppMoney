@@ -1,12 +1,35 @@
-define(["backbone", "react", "jsx!component/Home"], 
-  function (Backbone, React, Home) {
+define(["backbone", "react", "security"], 
+  function (Backbone, React, Security) {
+    var originalRoute = Backbone.Router.prototype.route;
+
+    function getContentElement() {
+      return document.getElementById('content');
+    };
+
     var Router = Backbone.Router.extend({
       routes : {
-        "(/)" : "home"
+        "(/)" : "home",
+        "/login(/)" : "login"
       },
 
       home : function () {
-        React.render(<Home />, document.body);
+        require(["jsx!component/Home"], function (Home) {
+          React.render(<Home />, getContentElement());
+        });
+      },
+
+      login : function () {
+        require(["jsx!component/Login"], function (Login) {
+          React.render(<Login />, getContentElement());
+        });
+      },
+
+      route : function (route, name, callback) {
+        if (Security.isLoggedIn()) {
+          originalRoute.call(this, route, name, callback);
+        } else {
+          this.login();
+        }
       }
     });
 

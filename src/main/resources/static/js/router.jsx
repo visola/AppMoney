@@ -3,7 +3,7 @@ define(["backbone", "react", "security"],
     var originalRoute = Backbone.Router.prototype.route;
 
     function getContentElement() {
-      return document.body;
+      return document.getElementById('content');
     };
 
     var Router = Backbone.Router.extend({

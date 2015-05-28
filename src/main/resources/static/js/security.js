@@ -22,7 +22,6 @@ define(function () {
   };
 
   // If stored auth is expired
-  console.log(storageAuth.expires, new Date().getTime(), (storageAuth.expires - new Date().getTime()) / 1000 );
   if (storageAuth.expires < new Date().getTime()) {
     storageAuth = {email: null, expires:null, token:null};
   }

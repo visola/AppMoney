@@ -2,11 +2,10 @@ define(["react"], function (React) {
   return React.createClass({
     render : function () {
       return (
-        <div>
+        <div className="login">
           <h3>Please login</h3>
           <p>
-            Your session expired. Please login again: <br />
-            <a href="/authenticate/google">Login with Google</a>
+            <a className="google-button btn" href="/authenticate/google">Sign in with Google</a>
           </p>
         </div>);
     }

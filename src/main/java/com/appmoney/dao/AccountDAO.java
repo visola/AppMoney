@@ -1,5 +1,6 @@
 package com.appmoney.dao;
 
+import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +21,21 @@ public class AccountDAO {
   public Account insert(Account account) {
     KeyHolder keyHolder = new GeneratedKeyHolder();
     String sql = "INSERT INTO accounts "
-        + "(owner, initial_balance, initial_balance_date, balance, created, created_by, updated, updated_by) VALUES "
-        + "(:owner, :initialBalance, :initialBalanceDate, :balance, :created, :createdBy, :updated, :updatedBy)";
+        + "(owner, initial_balance, initial_balance_date, balance, created, created_by, updated, updated_by, type) VALUES "
+        + "(:owner, :initialBalance, :initialBalanceDate, :balance, :created, :createdBy, :updated, :updatedBy, :type)";
 
-    jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(account), keyHolder);
+    jdbcTemplate.update(sql, getParameterSource(account), keyHolder);
     account.setId((int) keyHolder.getKeys().get("id"));
     return account;
   }
 
   public Account update(Account account) {
     String sql = "UPDATE accounts SET "
-        + "(initial_balance, initial_balance_date, balance, updated, updated_by) = "
-        + "(:initialBalance, :initialBalanceDate, :balance, :updated, :updatedBy) "
+        + "(initial_balance, initial_balance_date, balance, updated, updated_by, \"type\") = "
+        + "(:initialBalance, :initialBalanceDate, :balance, :updated, :updatedBy, :type) "
         + "WHERE id = :id";
 
-    jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(account));
+    jdbcTemplate.update(sql, getParameterSource(account));
     return account;
   }
 
@@ -50,5 +51,12 @@ public class AccountDAO {
         + "owner = :owner";
 
     return jdbcTemplate.query(sql, new MapSqlParameterSource("owner" , owner), new BeanPropertyRowMapper<>(Account.class));
+  }
+
+
+  private BeanPropertySqlParameterSource getParameterSource(Account account) {
+    BeanPropertySqlParameterSource accountParameterSource = new BeanPropertySqlParameterSource(account);
+    accountParameterSource.registerSqlType("type", Types.VARCHAR);
+    return accountParameterSource;
   }
 }

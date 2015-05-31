@@ -18,7 +18,8 @@ CREATE TABLE accounts (
   created timestamp,
   created_by int references users(id),
   updated timestamp,
-  updated_by int references users(id)
+  updated_by int references users(id),
+  "type" character varying(15)
 );
 
 insert into users (email) values ('fernando.gandini@gmail.com');

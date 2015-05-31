@@ -5,15 +5,16 @@ import java.util.Date;
 
 public class Account {
 
-  private int id;
-  private int owner;
+  private Integer id;
+  private Integer owner;
   private BigDecimal initialBalance;
   private Date initialBalanceDate;
   private BigDecimal balance;
   private Date created;
-  private int createdBy;
+  private Integer createdBy;
   private Date updated;
-  private int updatedBy;
+  private Integer updatedBy;
+  private AccountType type;
 
   public BigDecimal getBalance() {
     return balance;
@@ -23,11 +24,11 @@ public class Account {
     return created;
   }
 
-  public int getCreatedBy() {
+  public Integer getCreatedBy() {
     return createdBy;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -39,7 +40,7 @@ public class Account {
     return initialBalanceDate;
   }
 
-  public int getOwner() {
+  public Integer getOwner() {
     return owner;
   }
 
@@ -47,7 +48,7 @@ public class Account {
     return updated;
   }
 
-  public int getUpdatedBy() {
+  public Integer getUpdatedBy() {
     return updatedBy;
   }
 
@@ -59,11 +60,11 @@ public class Account {
     this.created = created;
   }
 
-  public void setCreatedBy(int createdBy) {
+  public void setCreatedBy(Integer createdBy) {
     this.createdBy = createdBy;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -75,7 +76,7 @@ public class Account {
     this.initialBalanceDate = initialBalanceDate;
   }
 
-  public void setOwner(int owner) {
+  public void setOwner(Integer owner) {
     this.owner = owner;
   }
 
@@ -83,8 +84,16 @@ public class Account {
     this.updated = updated;
   }
 
-  public void setUpdatedBy(int updatedBy) {
+  public void setUpdatedBy(Integer updatedBy) {
     this.updatedBy = updatedBy;
+  }
+
+  public AccountType getType() {
+    return type;
+  }
+
+  public void setType(AccountType type) {
+    this.type = type;
   }
 
 }

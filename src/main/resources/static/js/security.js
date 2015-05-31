@@ -1,4 +1,4 @@
-define(function () {
+define(['jquery'], function ($) {
   var newAuth = {
     email: window.email,
     expires: window.expires,
@@ -26,9 +26,19 @@ define(function () {
     storageAuth = {email: null, expires:null, token:null};
   }
 
-  return {
+  var Security = {
     isLoggedIn : function () {
       return storageAuth.token != null;
     }
   };
+
+  if (Security.isLoggedIn()) {
+    $.ajaxSetup({
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("X-Auth-Token", storageAuth.token);
+      }
+    });
+  }
+
+  return Security;
 });

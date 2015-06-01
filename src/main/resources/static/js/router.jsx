@@ -9,17 +9,22 @@ define(["backbone", "react", "security"],
     var Router = Backbone.Router.extend({
       routes : {
         "(/)" : "home",
-        "/login(/)" : "login"
+        "login(/)" : "login",
+        "accounts/:id(/)" : "editAccount"
+      },
+
+      editAccount: function (id) {
+        console.log("This would show the edit account screen!", id);
       },
 
       home : function () {
-        require(["jsx!component/Home"], function (Home) {
+        require(["jsx!component/page/Home"], function (Home) {
           React.render(<Home />, getContentElement());
         });
       },
 
       login : function () {
-        require(["jsx!component/Login"], function (Login) {
+        require(["jsx!component/page/Login"], function (Login) {
           React.render(<Login />, getContentElement());
         });
       },

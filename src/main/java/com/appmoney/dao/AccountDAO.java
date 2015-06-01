@@ -2,8 +2,10 @@ package com.appmoney.dao;
 
 import java.sql.Types;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -53,10 +55,21 @@ public class AccountDAO {
     return jdbcTemplate.query(sql, new MapSqlParameterSource("owner" , owner), new BeanPropertyRowMapper<>(Account.class));
   }
 
+  public Optional<Account> findById(Integer id) {
+    try {
+      return Optional.of(jdbcTemplate.queryForObject(
+          "SELECT * FROM accounts WHERE id = :id",
+          new MapSqlParameterSource("id", id),
+          new BeanPropertyRowMapper<>(Account.class)));
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
+  }
 
   private BeanPropertySqlParameterSource getParameterSource(Account account) {
     BeanPropertySqlParameterSource accountParameterSource = new BeanPropertySqlParameterSource(account);
     accountParameterSource.registerSqlType("type", Types.VARCHAR);
     return accountParameterSource;
   }
+
 }

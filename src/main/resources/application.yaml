@@ -12,6 +12,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/appmoney
     username: postgres
     password: admin
+  thymeleaf:
+    cache: false
 
 oauth:
   google:

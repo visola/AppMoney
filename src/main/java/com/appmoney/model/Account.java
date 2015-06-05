@@ -6,6 +6,7 @@ import java.util.Date;
 public class Account {
 
   private Integer id;
+  private String name;
   private Integer owner;
   private BigDecimal initialBalance;
   private Date initialBalanceDate;
@@ -38,6 +39,10 @@ public class Account {
 
   public Date getInitialBalanceDate() {
     return initialBalanceDate;
+  }
+
+  public String getName() {
+    return name;
   }
 
   public Integer getOwner() {
@@ -74,6 +79,10 @@ public class Account {
 
   public void setInitialBalanceDate(Date initialBalanceDate) {
     this.initialBalanceDate = initialBalanceDate;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public void setOwner(Integer owner) {

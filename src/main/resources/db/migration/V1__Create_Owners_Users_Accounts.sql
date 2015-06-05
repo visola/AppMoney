@@ -11,6 +11,7 @@ CREATE TABLE roles (
 
 CREATE TABLE accounts (
   id serial not null primary key,
+  name character varying(250) not null,
   owner int references users(id),
   initial_balance decimal(19,4),
   initial_balance_date timestamp,

@@ -23,8 +23,8 @@ public class AccountDAO {
   public Account insert(Account account) {
     KeyHolder keyHolder = new GeneratedKeyHolder();
     String sql = "INSERT INTO accounts "
-        + "(owner, initial_balance, initial_balance_date, balance, created, created_by, updated, updated_by, type) VALUES "
-        + "(:owner, :initialBalance, :initialBalanceDate, :balance, :created, :createdBy, :updated, :updatedBy, :type)";
+        + "(name, owner, initial_balance, initial_balance_date, balance, created, created_by, updated, updated_by, type) VALUES "
+        + "(:name, :owner, :initialBalance, :initialBalanceDate, :balance, :created, :createdBy, :updated, :updatedBy, :type)";
 
     jdbcTemplate.update(sql, getParameterSource(account), keyHolder);
     account.setId((int) keyHolder.getKeys().get("id"));
@@ -33,8 +33,8 @@ public class AccountDAO {
 
   public Account update(Account account) {
     String sql = "UPDATE accounts SET "
-        + "(initial_balance, initial_balance_date, balance, updated, updated_by, \"type\") = "
-        + "(:initialBalance, :initialBalanceDate, :balance, :updated, :updatedBy, :type) "
+        + "(name, initial_balance, initial_balance_date, balance, updated, updated_by, \"type\") = "
+        + "(:name, :initialBalance, :initialBalanceDate, :balance, :updated, :updatedBy, :type) "
         + "WHERE id = :id";
 
     jdbcTemplate.update(sql, getParameterSource(account));

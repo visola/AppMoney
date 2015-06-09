@@ -5,8 +5,7 @@ define(["react", "collection/Accounts", "jsx!component/account/ListAccounts"],
       componentDidMount: function () {
         var _this = this;
         this.state.accounts.fetch().then(function () {
-          _this.state.loading = false;
-          _this.setState(_this.state);
+          _this.setState({loading:false});
         });
       },
 
@@ -14,11 +13,24 @@ define(["react", "collection/Accounts", "jsx!component/account/ListAccounts"],
         return {accounts:new Accounts(), loading: true};
       },
 
+      handleDeleteAccount: function (account) {
+        var _this = this;
+        account.destroy({ 
+          error: function (model, response) {
+            alert("An error happend while deleting your account.");
+          }
+        });
+        this.forceUpdate();
+      },
+
       render : function () {
         if (this.state.loading) {
           return <p>Loading...</p>;
         } else {
-          return <ListAccounts accounts={this.state.accounts.models} />;
+          return <ListAccounts
+                   accounts={this.state.accounts.models}
+                   onDeleteAccount={this.handleDeleteAccount}
+                 />;
         }
       }
     });

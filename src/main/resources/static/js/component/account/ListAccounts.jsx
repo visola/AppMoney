@@ -9,7 +9,9 @@ define(["react", "router"], function (React, Router) {
 
       handleDelete: function (account, e) {
         e.preventDefault();
-        this.props.onDeleteAccount(account);
+        if (confirm("Are you sure you want to delete account: " + account.get('name') + "?")) {
+          this.props.onDeleteAccount(account);
+        }
       },
  
       render : function () {

@@ -21,3 +21,5 @@ oauth:
     clientSecret: hpxc9dDWl331kwMuM9XzEtHv
     redirectUri: http://localhost:8080/authenticate/oauth2callback
     scopes: email
+
+secret: secret

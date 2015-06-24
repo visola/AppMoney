@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.appmoney.dao.AccountDAO;
-import com.appmoney.dao.AccountDAO;
 import com.appmoney.dao.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

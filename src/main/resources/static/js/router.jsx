@@ -14,7 +14,9 @@ define(["backbone", "react", "security"],
       },
 
       editAccount: function (id) {
-        console.log("This would show the edit account screen!", id);
+        require(["jsx!component/page/EditAccount"], function (EditAccount) {
+          React.render(<EditAccount accountId={id}/>, getContentElement());
+        });
       },
 
       home : function () {

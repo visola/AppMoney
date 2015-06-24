@@ -5,6 +5,7 @@ define(["react", "router"], function (React, Router) {
       handleClick: function (account, e) {
         e.preventDefault();
         Router.navigate('/accounts/' + account.id, {trigger:true});
+
       },
  
       render : function () {

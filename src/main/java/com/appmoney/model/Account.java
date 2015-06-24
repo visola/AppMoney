@@ -3,18 +3,34 @@ package com.appmoney.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Account {
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 
+public class Account {
+  
   private Integer id;
+  @NotNull
+  @Size(min=2, max=250)
   private String name;
+  @NotNull
+  @Min(1)
   private Integer owner;
+  @NotNull
+  //@Pattern(regexp = "-?(?:\\d*\\.)?\\d+")
+  //@DecimalMax(value="9999999999999999999.9999")
+  //@DecimalMin(value="-9999999999999999999.9999")
   private BigDecimal initialBalance;
+  @NotNull
+  @Past
   private Date initialBalanceDate;
   private BigDecimal balance;
   private Date created;
   private Integer createdBy;
   private Date updated;
   private Integer updatedBy;
+  @NotNull
   private AccountType type;
 
   public BigDecimal getBalance() {

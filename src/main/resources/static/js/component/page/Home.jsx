@@ -1,5 +1,5 @@
 define(["react", "collection/Accounts", "jsx!component/account/List"],
-  function (React, Accounts, List) {
+  function (React, Accounts, ListAccounts) {
 
     return React.createClass({
       componentDidMount: function () {
@@ -18,7 +18,7 @@ define(["react", "collection/Accounts", "jsx!component/account/List"],
         if (this.state.loading) {
           return <p>Loading...</p>;
         } else {
-          return <List accounts={this.state.accounts.models} />;
+          return <ListAccounts accounts={this.state.accounts.models} />;
         }
       }
     });

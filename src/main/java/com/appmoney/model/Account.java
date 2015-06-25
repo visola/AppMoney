@@ -18,9 +18,6 @@ public class Account {
   @Min(1)
   private Integer owner;
   @NotNull
-  //@Pattern(regexp = "-?(?:\\d*\\.)?\\d+")
-  //@DecimalMax(value="9999999999999999999.9999")
-  //@DecimalMin(value="-9999999999999999999.9999")
   private BigDecimal initialBalance;
   @NotNull
   @Past

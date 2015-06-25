@@ -5,9 +5,8 @@ define(["react", "router"], function (React, Router) {
       handleClick: function (account, e) {
         e.preventDefault();
         Router.navigate('/accounts/' + account.id, {trigger:true});
-
       },
- 
+
       render : function () {
         if (this.props.accounts.length == 0) {
           return <p>You have no accounts.</p>;

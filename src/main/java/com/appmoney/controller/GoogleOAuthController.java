@@ -63,7 +63,7 @@ public class GoogleOAuthController {
   String scopes;
 
   @RequestMapping(method=RequestMethod.GET, value="/authenticate/google")
-  public String redirectToGoogle(HttpServletResponse response) throws UnsupportedEncodingException {
+  public String redirectToGoogle(String path, HttpServletResponse response) throws UnsupportedEncodingException {
     // Set CSRF token
     String csrfToken = UUID.randomUUID().toString();
     response.addCookie(createCsrfTokenCookie(csrfToken, ONE_MINUTE));
@@ -77,7 +77,8 @@ public class GoogleOAuthController {
     uri.append("&redirect_uri=");
     uri.append(URLEncoder.encode(redirectUri, UTF8));
     uri.append("&state=");
-    uri.append(URLEncoder.encode(csrfToken, UTF8));
+    // In the state we send the CSRF token and the page the user originally wanted to go
+    uri.append(URLEncoder.encode(String.format("%s||%s", csrfToken, path), UTF8));
     return uri.toString();
   }
 
@@ -91,7 +92,11 @@ public class GoogleOAuthController {
     // Remove CSRF token
     response.addCookie(createCsrfTokenCookie(null, 0));
 
-    if (!csrfToken.equals(state)) {
+    // State stores CSRF token and path
+    String[] split = state.split("\\|\\|");
+
+    String stateCsrf = split[0];
+    if (!csrfToken.equals(stateCsrf)) {
       throw new AccessDeniedException("Invalid CSRF token.");
     }
 
@@ -105,6 +110,7 @@ public class GoogleOAuthController {
     mv.addObject("email", email);
     mv.addObject("expires", authResponse.getExpires());
     mv.addObject("token", authResponse.getToken());
+    mv.addObject("path", split[1]);
     return mv;
   }
 

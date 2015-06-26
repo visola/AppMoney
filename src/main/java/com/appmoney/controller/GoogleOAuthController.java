@@ -95,7 +95,7 @@ public class GoogleOAuthController {
       throw new AccessDeniedException("Invalid CSRF token.");
     }
 
-    ModelAndView mv = new ModelAndView("index");
+    ModelAndView mv = new ModelAndView("oauth2callback");
 
     String token = getToken(code);
     String email = getUserEmail(token);

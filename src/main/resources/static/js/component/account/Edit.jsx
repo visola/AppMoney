@@ -3,29 +3,29 @@ define(["react", "router", "moment"], function (React, Router, Moment) {
     return React.createClass({
 
       componentDidMount : function() {
-            this.props.account.on("invalid" , function(account, error) {
-                alert(account.get('name') + " " + error);
-            });
+        this.props.account.on("invalid" , function(account, error) {
+          alert(account.get('name') + " " + error);
+        });
       },
 
       componentWillUnmount: function () {
-            this.props.account.off(null, null, this);
+        this.props.account.off(null, null, this);
       },
 
       handleOnChange : function (field, e) {
-            e.preventDefault();
-            this.props.account.set(field, e.target.value);
+        e.preventDefault();
+        this.props.account.set(field, e.target.value);
       },
 
       handleUpdate : function (accoundName, e) {
-          e.preventDefault();
-          if (confirm("You confirm all data to update this account: " + accoundName + "?")) {
-              this.props.onUpdateAccount(this.props.account);
-          }
+        e.preventDefault();
+        if (confirm("You confirm all data to update this account: " + accoundName + "?")) {
+          this.props.onUpdateAccount(this.props.account);
+        }
       },
 
       render : function () {
-          return (
+        return (
         <div className="container">
           <h2>Change account data</h2>
           <form className="form-horizontal" role="form">

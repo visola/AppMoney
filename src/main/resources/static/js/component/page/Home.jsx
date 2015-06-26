@@ -1,4 +1,4 @@
-define(["react", "collection/Accounts", "jsx!component/account/ListAccounts"],
+define(["react", "collection/Accounts", "jsx!component/account/List"],
   function (React, Accounts, ListAccounts) {
 
     return React.createClass({

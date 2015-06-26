@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -26,7 +28,7 @@ public class AccountController {
   private AccountDAO accountDAO;
 
   @RequestMapping(method=RequestMethod.POST)
-  public Account createAccount(@RequestBody Account account, @AuthenticationPrincipal User user){
+  public Account createAccount(@RequestBody @Valid Account account, @AuthenticationPrincipal User user){
     // Make sure we fill basic data with something that makes sense
     account.setCreated(new Date());
     account.setCreatedBy(user.getId());
@@ -43,7 +45,7 @@ public class AccountController {
   }
 
   @RequestMapping(method = RequestMethod.PUT, value="/{id}")
-  public Account updateAccount(@PathVariable int id, @RequestBody Account account, @AuthenticationPrincipal User user) {
+  public Account updateAccount(@PathVariable int id, @RequestBody @Valid Account account, @AuthenticationPrincipal User user) {
     Account loadedAccount = loadAccountAndCheckOwner(id, user.getId());
 
     // Make sure we keep things consistent

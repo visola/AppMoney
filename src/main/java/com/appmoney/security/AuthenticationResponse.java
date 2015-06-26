@@ -5,6 +5,11 @@ public class AuthenticationResponse {
   private String token;
   private Long expires;
 
+  public AuthenticationResponse(String token, Long expires) {
+    this.token = token;
+    this.expires = expires;
+  }
+
   public Long getExpires() {
     return expires;
   }

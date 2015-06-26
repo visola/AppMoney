@@ -20,8 +20,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,9 +40,6 @@ public class GoogleOAuthController {
   private static final String GOOGLE_OAUTH_ENDPOINT = "https://accounts.google.com/o/oauth2/auth";
   private static final String GOOGLE_TOKEN_ENDPOINT = "https://www.googleapis.com/oauth2/v3/token";
   private static final String GOOGLE_EMAIL_ENDPOINT = "https://www.googleapis.com/plus/v1/people/me";
-
-  @Autowired
-  AuthenticationManager authenticationManager;
 
   @Autowired
   HttpClient httpClient;
@@ -68,7 +63,7 @@ public class GoogleOAuthController {
   String scopes;
 
   @RequestMapping(method=RequestMethod.GET, value="/authenticate/google")
-  public String redirectToGoogle(HttpServletResponse response) throws UnsupportedEncodingException {
+  public String redirectToGoogle(String path, HttpServletResponse response) throws UnsupportedEncodingException {
     // Set CSRF token
     String csrfToken = UUID.randomUUID().toString();
     response.addCookie(createCsrfTokenCookie(csrfToken, ONE_MINUTE));
@@ -82,7 +77,8 @@ public class GoogleOAuthController {
     uri.append("&redirect_uri=");
     uri.append(URLEncoder.encode(redirectUri, UTF8));
     uri.append("&state=");
-    uri.append(URLEncoder.encode(csrfToken, UTF8));
+    // In the state we send the CSRF token and the page the user originally wanted to go
+    uri.append(URLEncoder.encode(String.format("%s||%s", csrfToken, path), UTF8));
     return uri.toString();
   }
 
@@ -96,22 +92,25 @@ public class GoogleOAuthController {
     // Remove CSRF token
     response.addCookie(createCsrfTokenCookie(null, 0));
 
-    if (!csrfToken.equals(state)) {
+    // State stores CSRF token and path
+    String[] split = state.split("\\|\\|");
+
+    String stateCsrf = split[0];
+    if (!csrfToken.equals(stateCsrf)) {
       throw new AccessDeniedException("Invalid CSRF token.");
     }
 
-    ModelAndView mv = new ModelAndView("index");
+    ModelAndView mv = new ModelAndView("oauth2callback");
 
     String token = getToken(code);
     String email = getUserEmail(token);
 
-    AuthenticationResponse authResponse = tokenService.generateToken(
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(email, "")));
+    AuthenticationResponse authResponse = tokenService.generateToken(email);
 
     mv.addObject("email", email);
     mv.addObject("expires", authResponse.getExpires());
     mv.addObject("token", authResponse.getToken());
+    mv.addObject("path", split[1]);
     return mv;
   }
 

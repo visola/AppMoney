@@ -1,5 +1,5 @@
-define(["react", "collection/Accounts", "jsx!component/account/List"],
-  function (React, Accounts, ListAccounts) {
+define(["react", "collection/Accounts", "jsx!component/account/Edit"],
+  function (React, Accounts, Edit) {
 
     return React.createClass({
       componentDidMount: function () {
@@ -13,12 +13,11 @@ define(["react", "collection/Accounts", "jsx!component/account/List"],
         return {accounts:new Accounts(), loading: true};
       },
 
-      handleDeleteAccount: function (account) {
-        var _this = this;
-        account.destroy({ 
-          error: function (model, response) {
-            alert("An error happend while deleting your account.");
-          }
+      handleUpdateAccount: function (account) {
+        account.save({
+            error: function (model, response) {
+                alert("An error happened while updating your account.")
+            }
         });
         this.forceUpdate();
       },
@@ -27,9 +26,9 @@ define(["react", "collection/Accounts", "jsx!component/account/List"],
         if (this.state.loading) {
           return <p>Loading...</p>;
         } else {
-          return <ListAccounts
-                   accounts={this.state.accounts.models}
-                   onDeleteAccount={this.handleDeleteAccount}
+          return <Edit 
+                  account={this.state.accounts.get(this.props.accountId)} 
+                  onUpdateAccount={this.handleUpdateAccount}
                  />;
         }
       }

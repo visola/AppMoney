@@ -1,5 +1,5 @@
-define(["react", "collection/Accounts", "jsx!component/account/List"],
-  function (React, Accounts, ListAccounts) {
+define(["react", "router", "collection/Accounts", "jsx!component/account/List"],
+  function (React, router, Accounts, ListAccounts) {
 
     return React.createClass({
       componentDidMount: function () {
@@ -23,14 +23,23 @@ define(["react", "collection/Accounts", "jsx!component/account/List"],
         this.forceUpdate();
       },
 
+      handleNewAccount: function () {
+        router.navigate('/accounts/new',{trigger:true});
+      },
+
       render : function () {
         if (this.state.loading) {
           return <p>Loading...</p>;
         } else {
-          return <ListAccounts
-                   accounts={this.state.accounts.models}
-                   onDeleteAccount={this.handleDeleteAccount}
-                 />;
+          return (<div>
+            <p>
+              <a onClick={this.handleNewAccount}>Create Account</a>
+            </p>
+            <ListAccounts
+              accounts={this.state.accounts.models}
+              onDeleteAccount={this.handleDeleteAccount}
+              />
+            </div>);
         }
       }
     });

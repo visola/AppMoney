@@ -14,8 +14,6 @@ public class Account {
   @NotNull
   @Size(min=2, max=250)
   private String name;
-  @NotNull
-  @Min(1)
   private Integer owner;
   @NotNull
   private BigDecimal initialBalance;

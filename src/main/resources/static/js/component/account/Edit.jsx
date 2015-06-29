@@ -1,71 +1,56 @@
-define(["react", "router", "moment"], function (React, Router, Moment) {
+define(["react", "router", "moment", "jsx!component/Bootstrap"], function (React, Router, Moment, Bootstrap) {
 
-    return React.createClass({
+  var Form = Bootstrap.Form,
+    Input = Bootstrap.Input,
+    Select = Bootstrap.Select;
 
-      componentDidMount : function() {
-        this.props.account.on("invalid" , function(account, error) {
-          alert(account.get('name') + " " + error);
-        });
-      },
+  return React.createClass({
 
-      componentWillUnmount: function () {
-        this.props.account.off(null, null, this);
-      },
+    componentDidMount : function() {
+      this.props.account.on("invalid" , function(account, error) {
+        alert(account.get('name') + " " + error);
+      });
+    },
 
-      handleOnChange : function (field, e) {
-        e.preventDefault();
-        this.props.account.set(field, e.target.value);
-      },
+    componentWillUnmount: function () {
+      this.props.account.off(null, null, this);
+    },
 
-      handleUpdate : function (accoundName, e) {
-        e.preventDefault();
-        if (confirm("You confirm all data to update this account: " + accoundName + "?")) {
-          this.props.onUpdateAccount(this.props.account);
-        }
-      },
+    handleOnChange : function (field, e) {
+      e.preventDefault();
+      this.props.account.set(field, e.target.value);
+    },
 
-      render : function () {
-        return (
-        <div className="container">
-          <h2>Change account data</h2>
-          <form className="form-horizontal" role="form">
-            <div className="form-group">
-              <label className="control-label col-sm-2" >Name:</label>
-              <div className="col-sm-10">
-                <input type="text" className="form-control" id="name" defaultValue={this.props.account.get('name')} onChange={this.handleOnChange.bind(null, 'name')}/>
-              </div>
-            </div>
-            <div className="form-group">
-              <label className="control-label col-sm-2">Initial Balance:</label>
-              <div className="col-sm-10">
-                <input type="number" step="0.01" className="form-control" id="initialBalance" defaultValue={this.props.account.get('initialBalance') || 0} onChange={this.handleOnChange.bind(null, 'initialBalance')}/>
-              </div>
-            </div>
-            <div className="form-group">
-              <label className="control-label col-sm-2" >Initial Balance Date:</label>
-              <div className="col-sm-10">
-                <input type="date" className="form-control" id="initialBalanceDate" defaultValue={Moment(this.props.account.get('initialBalanceDate')).format("YYYY-MM-DD")} onChange={this.handleOnChange.bind(null, 'initialBalanceDate')}/>
-              </div>
-            </div>
-            <div className="form-group">
-              <label className="control-label col-sm-2">Type:</label>
-              <div className="col-sm-10">
-                <select className="form-control" id="type" onChange={this.handleOnChange.bind(null, 'type')}>
-                  <option value="CHECKINGS">Checkings</option>
-                  <option value="CREDIT_CARD">Credit Card</option>
-                  <option value="SAVINGS">Savings</option>
-                  <option value="WALLET">Wallet</option>
-                </select>
-              </div>
-            </div>     
-            <div className="form-group">
-              <div className="col-sm-offset-2 col-sm-10">
-                <button onClick={this.handleUpdate.bind(null, this.props.account.get('name'))} type="submit" className="btn btn-default">Submit</button>
-              </div>
-            </div>
-          </form>
-        </div>);
+    handleUpdate : function (accoundName, e) {
+      e.preventDefault();
+      if (confirm("You confirm all data to update this account: " + accoundName + "?")) {
+        this.props.onUpdateAccount(this.props.account);
       }
-    });
+    },
+
+    render : function () {
+      var title = this.props.account.isNew() ? 'Create new account' : 'Change account data';
+      return (
+      <div className="container">
+        <h2>{title}</h2>
+        <Form>
+          <Input label="Name:" defaultValue={this.props.account.get('name')} onChange={this.handleOnChange.bind(null, 'name')} />
+          <Input label="Initial Balance:" type="number" step="0.01" defaultValue={this.props.account.get('initialBalance') || 0} onChange={this.handleOnChange.bind(null, 'initialBalance')}/>
+          <Input type="date" label="Initial Balance Date:" defaultValue={Moment(this.props.account.get('initialBalanceDate')).format("YYYY-MM-DD")} onChange={this.handleOnChange.bind(null, 'initialBalanceDate')}/>
+          <Select defaultValue={this.props.account.get('type')} label="Type:" onChange={this.handleOnChange.bind(null, 'type')}>
+            <option value="CHECKINGS">Checkings</option>
+            <option value="CREDIT_CARD">Credit Card</option>
+            <option value="SAVINGS">Savings</option>
+            <option value="WALLET">Wallet</option>
+          </Select>
+          <div className="form-group">
+            <div className="col-sm-offset-2 col-sm-10">
+              <button onClick={this.handleUpdate.bind(null, this.props.account.get('name'))} type="submit" className="btn btn-default">Save</button>
+            </div>
+          </div>
+        </Form>
+      </div>);
+    }
+  });
 
 });

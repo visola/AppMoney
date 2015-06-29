@@ -25,9 +25,10 @@ define(["react", "router", "moment"], function (React, Router, Moment) {
       },
 
       render : function () {
+        var title = this.props.account.isNew() ? 'Create new account' : 'Change account data';
         return (
         <div className="container">
-          <h2>Change account data</h2>
+          <h2>{title}</h2>
           <form className="form-horizontal" role="form">
             <div className="form-group">
               <label className="control-label col-sm-2" >Name:</label>

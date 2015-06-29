@@ -3,6 +3,10 @@
   margin: 0 auto;
 }
 
+a:hover{
+  cursor: pointer;
+}
+
 .google-button {
   background: #dd4b39;
   color: white;

@@ -49,27 +49,10 @@ define(["react"], function (React) {
       return (
         <FormControl fieldSize={this.props.fieldSize} label={this.props.label} labelSize={this.props.labelSize}>
           <select className="form-control" {...this.props}>
-            {this.renderOptions()}
+            {this.props.children}
           </select>
         </FormControl>
       );
-    },
-
-    renderOption: function (option) {
-      if (option.type != 'option') {
-        throw new Error('Select component only accepts "option" as children');
-      }
-      var props = option.props;
-      return <option value={props.value}>{props.children}</option>
-    },
-
-    renderOptions: function () {
-      var options = this.props.children,
-        result = [];
-      for (var i = 0; i < options.length; i++) {
-        result.push(this.renderOption(options[i]));
-      }
-      return result;
     }
   });
  

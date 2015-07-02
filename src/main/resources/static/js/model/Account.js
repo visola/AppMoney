@@ -3,7 +3,8 @@ define(["backbone"], function (Backbone) {
   var Account = Backbone.Model.extend({
     defaults: {
       initialBalance: 0,
-      initialBalanceDate: new Date()
+      initialBalanceDate: new Date(),
+      type: "CHECKINGS"
     },
 
     urlRoot: '/api/v1/accounts',

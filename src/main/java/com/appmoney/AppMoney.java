@@ -12,8 +12,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @SpringBootApplication
 public class AppMoney extends WebMvcConfigurerAdapter {
 
@@ -24,11 +22,6 @@ public class AppMoney extends WebMvcConfigurerAdapter {
   @Bean
   public HttpClient httpClient() {
     return HttpClients.createDefault();
-  }
-
-  @Bean
-  public ObjectMapper objectMapper() {
-    return new ObjectMapper();
   }
 
   @Override

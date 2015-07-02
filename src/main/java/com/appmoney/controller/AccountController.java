@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.appmoney.dao.AccountDAO;
+import com.appmoney.dao.AccountDao;
 import com.appmoney.model.Account;
 import com.appmoney.model.ResourceNotFoundException;
 import com.appmoney.model.User;
@@ -25,7 +25,7 @@ import com.appmoney.model.User;
 public class AccountController {
 
   @Autowired
-  private AccountDAO accountDAO;
+  private AccountDao accountDAO;
 
   @RequestMapping(method=RequestMethod.POST)
   public Account createAccount(@RequestBody @Valid Account account, @AuthenticationPrincipal User user){

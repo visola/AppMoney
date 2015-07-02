@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import com.appmoney.model.Account;
 
 @Component
-public class AccountDAO {
+public class AccountDao {
 
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;

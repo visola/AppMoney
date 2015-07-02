@@ -12,8 +12,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
-import com.appmoney.dao.AccountDAO;
-import com.appmoney.dao.UserDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
@@ -21,11 +19,6 @@ public class AppMoney extends WebMvcConfigurerAdapter {
 
   public static void main(String[] args) {
     SpringApplication.run(AppMoney.class, args);    
-  }
-  
-  @Bean
-  public AccountDAO accountDAO(){
-    return new AccountDAO();
   }
 
   @Bean
@@ -36,11 +29,6 @@ public class AppMoney extends WebMvcConfigurerAdapter {
   @Bean
   public ObjectMapper objectMapper() {
     return new ObjectMapper();
-  }
-
-  @Bean
-  public UserDao userDao() {
-    return new UserDao();
   }
 
   @Override

@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class Transaction {
 
   private Integer id;
+  @NotNull @Size(min=2, max=256) private String title;
   @NotNull private BigDecimal value;
   @NotNull private Date happened;
   @NotNull private Integer fromAccountId;
@@ -24,6 +26,14 @@ public class Transaction {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public BigDecimal getValue() {

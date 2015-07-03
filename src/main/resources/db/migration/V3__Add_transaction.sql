@@ -1,5 +1,6 @@
 CREATE TABLE transactions (
   id SERIAL NOT NULL PRIMARY KEY,
+  title CHARACTER VARYING(256) NOT NULL,
   "value" DECIMAL(19,4) NOT NULL,
   happened DATE NOT NULL,
   from_account_id INTEGER NOT NULL REFERENCES accounts(id),

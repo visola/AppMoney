@@ -25,8 +25,8 @@ public class AccountDao {
   public Account insert(Account account) {
     KeyHolder keyHolder = new GeneratedKeyHolder();
     String sql = "INSERT INTO accounts "
-        + "(name, owner, initial_balance, initial_balance_date, balance, created, created_by, updated, updated_by, type) VALUES "
-        + "(:name, :owner, :initialBalance, :initialBalanceDate, :balance, :created, :createdBy, :updated, :updatedBy, :type)";
+        + "(name, owner, initial_balance, initial_balance_date, created, created_by, updated, updated_by, type) VALUES "
+        + "(:name, :owner, :initialBalance, :initialBalanceDate, :created, :createdBy, :updated, :updatedBy, :type)";
 
     jdbcTemplate.update(sql, getParameterSource(account), keyHolder);
     account.setId((int) keyHolder.getKeys().get("id"));
@@ -35,8 +35,8 @@ public class AccountDao {
 
   public Account update(Account account) {
     String sql = "UPDATE accounts SET "
-        + "(name, initial_balance, initial_balance_date, balance, updated, updated_by, \"type\") = "
-        + "(:name, :initialBalance, :initialBalanceDate, :balance, :updated, :updatedBy, :type) "
+        + "(name, initial_balance, initial_balance_date, updated, updated_by, \"type\") = "
+        + "(:name, :initialBalance, :initialBalanceDate, :updated, :updatedBy, :type) "
         + "WHERE id = :id";
 
     jdbcTemplate.update(sql, getParameterSource(account));
@@ -51,8 +51,13 @@ public class AccountDao {
   }
 
   public List<Account> selectByOwner(int owner) {
-    String sql = "SELECT * FROM accounts WHERE "
-        + "owner = :owner";
+    String sql = "SELECT a.*, (a.initial_balance + ("
+        + "   SELECT COALESCE(SUM(value), 0) "
+        + "   FROM transactions t"
+        + "   WHERE t.from_account_id = a.id"
+        + "   AND t.happened BETWEEN a.initial_balance_date AND CURRENT_DATE)) AS balance"
+        + " FROM accounts a"
+        + " WHERE owner = :owner";
 
     return jdbcTemplate.query(sql, new MapSqlParameterSource("owner" , owner), new BeanPropertyRowMapper<>(Account.class));
   }

@@ -32,7 +32,7 @@ define(["react", "router", "moment", "jsx!component/Bootstrap"], function (React
       var title = this.props.account.isNew() ? 'Create new account' : 'Change account data';
       return (
       <div className="container">
-        <h2>{title}</h2>
+        <h3>{title}</h3>
         <Form>
           <Input label="Name:" defaultValue={this.props.account.get('name')} onChange={this.handleOnChange.bind(null, 'name')} />
           <Input label="Initial Balance:" type="number" step="0.01" defaultValue={this.props.account.get('initialBalance') || 0} onChange={this.handleOnChange.bind(null, 'initialBalance')}/>

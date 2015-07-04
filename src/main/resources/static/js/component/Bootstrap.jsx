@@ -7,6 +7,9 @@ define(["react"], function (React) {
         onChange: function (){},
         type: 'text'
       };
+    },
+    getValue: function () {
+      return this.refs['comp'].getDOMNode().value;
     }
   };
 
@@ -36,7 +39,7 @@ define(["react"], function (React) {
     render: function () {
       return (
         <FormControl fieldSize={this.props.fieldSize} label={this.props.label} labelSize={this.props.labelSize}>
-          <input className="form-control" {...this.props} />
+          <input className="form-control" ref="comp" {...this.props} />
         </FormControl>
       );
     }
@@ -48,7 +51,7 @@ define(["react"], function (React) {
     render: function () {
       return (
         <FormControl fieldSize={this.props.fieldSize} label={this.props.label} labelSize={this.props.labelSize}>
-          <select className="form-control" {...this.props}>
+          <select className="form-control" ref="comp" {...this.props}>
             {this.props.children}
           </select>
         </FormControl>

@@ -19,3 +19,7 @@ a:hover{
 .table > tbody > tr > td {
   vertical-align: middle;
 }
+
+table.center th, table.center td {
+  text-align: center;
+}

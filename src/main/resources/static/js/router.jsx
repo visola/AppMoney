@@ -10,7 +10,23 @@ define(["backbone", "react", "security"],
       routes : {
         "(/)" : "home",
         "login(/)" : "login",
-        "accounts/:id(/)" : "editAccount"
+        "accounts/:id(/)" : "editAccount",
+        "debit/:fromId(/)" : "debitAccount",
+        "credit/:fromId(/)" : "creditAccount"
+      },
+
+      _createTransaction: function (fromId, credit) {
+        require(["jsx!component/page/CreateTransaction"], function (CreateTransaction) {
+          React.render(<CreateTransaction fromId={fromId} credit={credit} />, getContentElement());
+        });
+      },
+
+      creditAccount: function (fromId) {
+        this._createTransaction(fromId, true);
+      },
+
+      debitAccount: function (fromId) {
+        this._createTransaction(fromId, false);
       },
 
       editAccount: function (id) {

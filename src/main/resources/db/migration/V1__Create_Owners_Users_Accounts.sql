@@ -15,7 +15,6 @@ CREATE TABLE accounts (
   owner int references users(id),
   initial_balance decimal(19,4),
   initial_balance_date timestamp,
-  balance decimal(19,4),
   created timestamp,
   created_by int references users(id),
   updated timestamp,

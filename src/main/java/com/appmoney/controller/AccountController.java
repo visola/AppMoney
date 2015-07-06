@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.appmoney.dao.AccountDAO;
+import com.appmoney.dao.AccountDao;
 import com.appmoney.model.Account;
 import com.appmoney.model.ResourceNotFoundException;
 import com.appmoney.model.User;
@@ -25,7 +25,7 @@ import com.appmoney.model.User;
 public class AccountController {
 
   @Autowired
-  private AccountDAO accountDAO;
+  private AccountDao accountDao;
 
   @RequestMapping(method=RequestMethod.POST)
   public Account createAccount(@RequestBody @Valid Account account, @AuthenticationPrincipal User user){
@@ -41,7 +41,7 @@ public class AccountController {
       account.setInitialBalanceDate(new Date());
     }
 
-    return accountDAO.insert(account);
+    return accountDao.insert(account);
   }
 
   @RequestMapping(method = RequestMethod.PUT, value="/{id}")
@@ -60,24 +60,24 @@ public class AccountController {
     account.setCreated(loadedAccount.getCreated());
     account.setCreatedBy(loadedAccount.getCreatedBy());
 
-    return accountDAO.update(account);
+    return accountDao.update(account);
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value="/{id}")
   public Account deleteAccount(@PathVariable int id, @AuthenticationPrincipal User user) {
     Account loadedAccount = loadAccountAndCheckOwner(id, user.getId());
-    accountDAO.deleteById(id);
+    accountDao.deleteById(id);
     return loadedAccount;
   }
 
   @RequestMapping(method = RequestMethod.GET)
   public List<Account> selectAccounts(@AuthenticationPrincipal User user) {
-    return accountDAO.selectByOwner(user.getId());
+    return accountDao.selectByOwner(user.getId());
   }
 
   private Account loadAccountAndCheckOwner(Integer accountId, Integer userId) {
     // Try to load existing account
-    Optional<Account> maybeLoadedAccount = accountDAO.findById(accountId);
+    Optional<Account> maybeLoadedAccount = accountDao.findById(accountId);
     if (!maybeLoadedAccount.isPresent()) {
       throw new ResourceNotFoundException(String.format("Account with ID %d not found.", accountId));
     }

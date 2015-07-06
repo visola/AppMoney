@@ -6,21 +6,12 @@ define(["react", "router", "collection/Accounts", "jsx!component/account/List"],
         var _this = this;
         this.state.accounts.fetch().then(function () {
           _this.setState({loading:false});
+          _this.forceUpdate();
         });
       },
 
       getInitialState: function () {
         return {accounts:new Accounts(), loading: true};
-      },
-
-      handleDeleteAccount: function (account) {
-        var _this = this;
-        account.destroy({ 
-          error: function (model, response) {
-            alert("An error happend while deleting your account.");
-          }
-        });
-        this.forceUpdate();
       },
 
       handleNewAccount: function () {
@@ -32,12 +23,9 @@ define(["react", "router", "collection/Accounts", "jsx!component/account/List"],
           return <p>Loading...</p>;
         } else {
           return (<div>
-            <p>
-              <a onClick={this.handleNewAccount}>Create Account</a>
-            </p>
+            <h3>Accounts <small><a onClick={this.handleNewAccount}>Create Account</a></small></h3>
             <ListAccounts
               accounts={this.state.accounts.models}
-              onDeleteAccount={this.handleDeleteAccount}
               />
             </div>);
         }

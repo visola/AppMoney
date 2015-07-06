@@ -2,30 +2,25 @@ define(["react", "router"], function (React, Router) {
 
     return React.createClass({
 
-      handleClick: function (account, e) {
+      handleAddTransaction: function (account, transactionType, e) {
+        Router.navigate(transactionType + '/' + account.id, {trigger:true});
+      },
+
+      handleSelectAccount: function (account, e) {
         e.preventDefault();
         Router.navigate('/accounts/' + account.id, {trigger:true});
       },
 
-      handleDelete: function (account, e) {
-        e.preventDefault();
-        if (confirm("Are you sure you want to delete account: " + account.get('name') + "?")) {
-          this.props.onDeleteAccount(account);
-        }
-      },
- 
       render : function () {
         if (this.props.accounts.length == 0) {
           return <p>You have no accounts.</p>;
         } else {
-          return (<table className="table">
+          return (<table className="table center">
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Type</th>
-                <th>Initial Balance</th>
                 <th>Balance</th>
-                <th>&nbsp;</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -37,11 +32,13 @@ define(["react", "router"], function (React, Router) {
 
       renderAccount: function (account) {
         return (<tr>
-          <td><a href="#" onClick={this.handleClick.bind(null, account)}>{account.get('name')}</a></td>
-          <td>{account.get('type')}</td>
-          <td>$ {account.get('initialBalance') || 0}</td>
+          <td><a href="#" onClick={this.handleSelectAccount.bind(null, account)}>{account.get('name')}</a></td>
           <td>$ {account.get('balance') || 0}</td>
-          <td><a onClick={this.handleDelete.bind(null, account)} className="glyphicon glyphicon-trash btn btn-danger"></a></td>
+          <td>
+            <span onClick={this.handleAddTransaction.bind(null, account, 'credit')} className="glyphicon glyphicon-plus btn btn-success btn-sm"></span>
+            {' '}
+            <span onClick={this.handleAddTransaction.bind(null, account, 'debit')} className="glyphicon glyphicon-minus btn btn-danger btn-sm"></span>
+          </td>
         </tr>);
       },
 

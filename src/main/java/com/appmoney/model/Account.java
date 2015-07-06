@@ -3,7 +3,6 @@ package com.appmoney.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;

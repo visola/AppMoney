@@ -4,15 +4,16 @@ require.config({
     fileExtension: '.jsx'
   },
   paths: {
-    "backbone" : "/js/lib/backbone",
-    "JSXTransformer" : "/js/lib/JSXTransformer",
-    "jquery" : "/js/lib/jquery-2.1.4",
-    "jsx" : "/js/lib/jsx",
-    "moment" : "/js/lib/moment",
-    "react" : "/js/lib/react-with-addons",
-    "text" : "/js/lib/text",
-    "underscore" : "/js/lib/underscore"
-    
+    "backbone" : "lib/backbone",
+    "jquery" : "lib/jquery-2.1.4",
+    "JSXTransformer" : "lib/JSXTransformer",
+    "jsx" : "lib/jsx",
+    "moment" : "lib/moment",
+    "react" : "lib/react-with-addons",
+    "template" : "/template",
+    "text" : "lib/text",
+    "tpl": "lib/tpl",
+    "underscore" : "lib/underscore"
   }
 });
 

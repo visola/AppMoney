@@ -1,9 +1,14 @@
-define(["backbone", "react", "security"], 
-  function (Backbone, React, Security) {
+define(["jquery", "backbone", "react", "security"], 
+  function ($, Backbone, React, Security) {
     var originalRoute = Backbone.Router.prototype.route;
 
     function getContentElement() {
       return document.getElementById('content');
+    };
+
+    function render(view) {
+      view.render();
+      $('#content').html(view.$el);
     };
 
     var Router = Backbone.Router.extend({
@@ -36,8 +41,8 @@ define(["backbone", "react", "security"],
       },
 
       home : function () {
-        require(["jsx!component/page/Home"], function (Home) {
-          React.render(<Home />, getContentElement());
+        require(['view/Home'], function (HomeView) {
+          render(new HomeView());
         });
       },
 

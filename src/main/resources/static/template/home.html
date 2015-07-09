@@ -12,13 +12,13 @@
     </tr>
   </thead>
   <tbody>
-    <% for (var i = 0; i < accounts.length; i++) { %>
+    <% for (var i = 0; i < collection.length; i++) { %>
       <tr>
-        <td><a href="/accounts/<%= accounts[i].id %>"><%= accounts[i].get('name') %></a></td>
-        <td>$ <%= accounts[i].get('balance') %></td>
+        <td><a href="/accounts/<%= collection[i].id %>"><%= collection[i].name %></a></td>
+        <td>$ <%= collection[i].balance %></td>
         <td>
-            <a href="/credit/<%= accounts[i].id %>" class="glyphicon glyphicon-plus btn btn-success btn-sm"></a>
-            <a href="/debit/<%= accounts[i].id %>" class="glyphicon glyphicon-minus btn btn-danger btn-sm"></a>
+            <a href="/credit/<%= collection[i].id %>" class="glyphicon glyphicon-plus btn btn-success btn-sm"></a>
+            <a href="/debit/<%= collection[i].id %>" class="glyphicon glyphicon-minus btn btn-danger btn-sm"></a>
           </td>
       </tr>
     <% } %>

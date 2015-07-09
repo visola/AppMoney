@@ -1,8 +1,12 @@
 define(['underscore', 'jquery', 'backbone', 'router'], function (_, $, Backbone, router) {
-  // Base view idea inspired by: http://stackoverflow.com/questions/6968487/sub-class-a-backbone-view-sub-class-retain-events
   var BaseView = Backbone.View.extend({
+    data: {},
+
+    /**
+     * By default, all links will 
+     */
     events: {
-      'click a' : '__handleLink'
+      'click a:not[data-action]' : '__handleLink'
     },
 
     __handleLink : function (e) {
@@ -13,12 +17,38 @@ define(['underscore', 'jquery', 'backbone', 'router'], function (_, $, Backbone,
       router.navigate(path, {trigger:true});
     },
 
+    prepareCollection: function () {
+      var i,
+        models = this.collection ? this.collection.models : [],
+        result = [];
+
+      for (i = 0; i < models.length; i++) {
+        result.push(_.extend({}, models[i].attributes, this.processAttributes(models[i])));
+      }
+
+      return result;
+    },
+
+    prepareData: function () {
+      return _.extend(this.data, {collection: this.prepareCollection(), model:this.prepareModel()});
+    },
+
+    prepareModel: function () {
+      if (this.model) {
+        return _.extend({}, this.model.attributes, this.processAttributes(this.model));
+      }
+    },
+
+    processAttributes: function (model) {
+      return {};
+    },
+
     render: function () {
       var text;
       if (this.loading) {
         text = "Loading...";
       } else {
-        text = this.template(this);
+        text = this.template(this.prepareData());
       }
       this.$el.html(text);
       return this;

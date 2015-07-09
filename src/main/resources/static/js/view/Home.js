@@ -3,14 +3,12 @@ define(['view/Base', 'tpl!template/home.html', 'collection/Accounts'], function 
     template: HomeTemplate,
 
     initialize: function () {
-      var _this = this,
-        accounts = new Accounts();
-
+      var _this = this;
       this.loading = true;
+      this.collection = new Accounts();
 
-      accounts.fetch().then(function () {
+      this.collection.fetch().then(function () {
         _this.loading = false;
-        _this.accounts = accounts.models;
         _this.render();
       });
     },

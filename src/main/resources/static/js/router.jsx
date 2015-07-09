@@ -35,8 +35,8 @@ define(["jquery", "backbone", "react", "security"],
       },
 
       editAccount: function (id) {
-        require(["jsx!component/page/EditAccount"], function (EditAccount) {
-          React.render(<EditAccount accountId={id}/>, getContentElement());
+        require(['view/account/Edit'], function (EditAccountView) {
+          render(new EditAccountView(id));
         });
       },
 

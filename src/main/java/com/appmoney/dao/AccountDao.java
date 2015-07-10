@@ -57,7 +57,8 @@ public class AccountDao {
         + "   WHERE t.from_account_id = a.id"
         + "   AND t.happened BETWEEN a.initial_balance_date AND CURRENT_DATE)) AS balance"
         + " FROM accounts a"
-        + " WHERE owner = :owner";
+        + " WHERE owner = :owner"
+        + " ORDER BY a.name";
 
     return jdbcTemplate.query(sql, new MapSqlParameterSource("owner" , owner), new BeanPropertyRowMapper<>(Account.class));
   }

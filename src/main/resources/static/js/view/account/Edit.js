@@ -31,11 +31,10 @@ define(['underscore', 'moment', 'view/Base', 'tpl!template/account/edit.html', '
       this.collection.fetch().then(function () {
         _this.loading = false;
 
-        if (accountId) {
+        if (accountId != 'new') {
           _this.model = _this.collection.get(accountId);
           _this.data.title = 'Edit Account';
         } else {
-          _this.model = new Account();
           _this.data.title = 'New Account';
         }
 

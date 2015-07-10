@@ -8,9 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.resource.PathResourceResolver;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 public class AppMoney extends WebMvcConfigurerAdapter {
@@ -22,6 +25,13 @@ public class AppMoney extends WebMvcConfigurerAdapter {
   @Bean
   public HttpClient httpClient() {
     return HttpClients.createDefault();
+  }
+
+  @Bean
+  public ObjectMapper objectMapperBuilder() {
+    return Jackson2ObjectMapperBuilder.json()
+        .simpleDateFormat("yyyy-MM-dd")
+        .build();
   }
 
   @Override

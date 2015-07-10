@@ -3,6 +3,23 @@ define(['underscore', 'moment', 'view/Base', 'tpl!template/account/edit.html', '
 
   return BaseView.extend({
     template: EditTemplate,
+    events: {
+      'submit form' : 'handleSave'
+    },
+
+    handleSave: function (e) {
+      e.preventDefault();
+      this.model.save(this.getFormData(), {
+        wait:true,
+        success: function() {
+          alert("Data saved successfully!");
+        },
+        error: function () {
+          console.log(arguments);
+          alert("Sorry, an error happend. Please try again later.");
+        }
+      });
+    },
 
     initialize: function (accountId) {
       var _this = this;

@@ -47,8 +47,8 @@ define(["jquery", "backbone", "react", "security"],
       },
 
       login : function () {
-        require(["jsx!component/page/Login"], function (Login) {
-          React.render(<Login />, getContentElement());
+        require(["tpl!template/login.html"], function (LoginTemplate) {
+          getContentElement().innerHTML = LoginTemplate();
         });
       },
 

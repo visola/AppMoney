@@ -17,6 +17,6 @@ require.config({
   }
 });
 
-require(['jsx!router'], function () {
+require(['router'], function () {
   Backbone.history.start({pushState: true});
 });

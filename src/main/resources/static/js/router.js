@@ -1,5 +1,5 @@
-define(["jquery", "backbone", "react", "security"], 
-  function ($, Backbone, React, Security) {
+define(["jquery", "backbone", "security"], 
+  function ($, Backbone, Security) {
     var originalRoute = Backbone.Router.prototype.route;
 
     function getContentElement() {

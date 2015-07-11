@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE'
     }
 }
 
@@ -16,17 +16,17 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 
 dependencies {
-    compile('commons-codec:commons-codec:1.10')
-    compile('commons-io:commons-io:2.4')
-    compile('com.zaxxer:HikariCP')
-    compile('org.apache.httpcomponents:httpclient:4.3.6')
-    compile('org.postgresql:postgresql:9.4-1201-jdbc41')
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile('org.springframework.boot:spring-boot-starter-security')
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-jdbc")
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("org.flywaydb:flyway-core")
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'commons-io:commons-io:2.4'
+    compile 'com.zaxxer:HikariCP'
+    compile 'org.apache.httpcomponents:httpclient:4.3.6'
+    compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-jdbc'
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    compile 'org.flywaydb:flyway-core'
 }
 
 task stage (dependsOn: build)

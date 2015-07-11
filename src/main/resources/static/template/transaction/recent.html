@@ -1,0 +1,24 @@
+<h3>Recent Transactions</h3>
+
+<table class="table center recent">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Value</th>
+      <th>Happened</th>
+      <th>Account</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (var i = 0; i < collection.length; i++) { %>
+      <tr>
+        <td><%= collection[i].title %></a></td>
+        <td>$ <%= collection[i].value %></a></td>
+        <td><%= collection[i].happened %></a></td>
+        <td><%= accounts.get(collection[i].toAccountId).get('name') %></a></td>
+        <td><%= categories.get(collection[i].categoryId).get('name') %></a></td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

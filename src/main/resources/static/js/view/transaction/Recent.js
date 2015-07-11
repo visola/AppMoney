@@ -11,8 +11,8 @@ define(['view/Base', 'collection/Transactions', 'collection/Categories', 'collec
       this.loading = true;
 
       Promise.all([transactions.fetch(), accounts.fetch(), categories.fetch()]).then(function () {
-        _this.render();
         _this.loading = false;
+        _this.render();
       });
     }
   });

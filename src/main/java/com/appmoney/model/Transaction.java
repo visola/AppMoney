@@ -12,8 +12,8 @@ public class Transaction {
   @NotNull @Size(min=2, max=256) private String title;
   @NotNull private BigDecimal value;
   @NotNull private Date happened;
-  @NotNull private Integer fromAccountId;
-  private Integer toAccountId;
+  private Integer fromAccountId;
+  @NotNull private Integer toAccountId;
   @NotNull private Integer categoryId;
   private Date created;
   private Integer createdBy;

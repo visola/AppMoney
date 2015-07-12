@@ -29,3 +29,6 @@ insert into roles (user_id, role) values ((select id from users where email = 'f
 insert into users (email) values ('viniciusisola@gmail.com');
 insert into roles (user_id, role) values ((select id from users where email = 'viniciusisola@gmail.com'), 'ADMIN');
 insert into roles (user_id, role) values ((select id from users where email = 'viniciusisola@gmail.com'), 'USER');
+
+insert into users (email) values ('micaela.ito@gmail.com');
+insert into roles (user_id, role) values ((select id from users where email = 'micaela.ito@gmail.com'), 'USER');

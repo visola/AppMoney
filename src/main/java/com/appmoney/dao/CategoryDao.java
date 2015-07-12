@@ -16,7 +16,7 @@ public class CategoryDao {
   private NamedParameterJdbcTemplate jdbcTemplate;
 
   public List<Category> getCategories() {
-    return jdbcTemplate.query("SELECT * FROM categories", new BeanPropertyRowMapper<>(Category.class));
+    return jdbcTemplate.query("SELECT * FROM categories ORDER BY name", new BeanPropertyRowMapper<>(Category.class));
   }
 
 }

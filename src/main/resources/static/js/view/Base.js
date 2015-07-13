@@ -1,4 +1,4 @@
-define(['underscore', 'jquery', 'backbone', 'router'], function (_, $, Backbone, router) {
+define(['underscore', 'jquery', 'backbone', 'router', 'moment'], function (_, $, Backbone, router, moment) {
   var BaseView = Backbone.View.extend({
     data: {},
 
@@ -7,7 +7,7 @@ define(['underscore', 'jquery', 'backbone', 'router'], function (_, $, Backbone,
      * wanted to take the router to where href points to.
      */
     events: {
-      'click a:not[data-action]' : '__handleLink'
+      'click a:not([data-action])' : '__handleLink'
     },
 
     __handleLink : function (e) {
@@ -18,48 +18,12 @@ define(['underscore', 'jquery', 'backbone', 'router'], function (_, $, Backbone,
       router.navigate(path, {trigger:true});
     },
 
-    /**
-     * Fetches data from all inputs in this view and return an object
-     * mapping the input value to the element name attribute.
-     * 
-     * @parm formSelector (String) A selector to specify what form data
-     *       should be loaded from. Defaults to <code>form</code>.
-     */
-    getFormData: function (formSelector) {
-      var data = {};
-
-      if (!formSelector) {
-        formSelector = 'form';
-      }
-
-      this.$(formSelector).find('input, textarea, select').each(function (index, el) {
-        var $el = $(el);
-        data[$el.attr('name')] = $el.val();
-      });
-
-      return data;
-    },
-
-    prepareCollection: function () {
-      var i,
-        models = this.collection ? this.collection.models : [],
-        result = [];
-
-      for (i = 0; i < models.length; i++) {
-        result.push(_.extend({}, models[i].attributes, this.processAttributes(models[i])));
-      }
-
-      return result;
-    },
-
     prepareData: function () {
-      return _.extend(this.data, {collection: this.prepareCollection(), model:this.prepareModel()});
-    },
-
-    prepareModel: function () {
-      if (this.model) {
-        return _.extend({}, this.model.attributes, this.processAttributes(this.model));
-      }
+      return _.extend({
+        collection: this.collection,
+        model: this.model,
+        moment: moment
+      }, this.data);
     },
 
     processAttributes: function (model) {

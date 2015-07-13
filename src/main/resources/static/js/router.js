@@ -16,8 +16,8 @@ define(["jquery", "backbone", "security"],
         "(/)" : "home",
         "login(/)" : "login",
         "accounts/:id(/)" : "editAccount",
-        "debit/:fromId(/)" : "debitAccount",
-        "credit/:fromId(/)" : "creditAccount"
+        "debit/:toId(/)" : "debitAccount",
+        "credit/:toId(/)" : "creditAccount"
       },
 
       _createTransaction: function (toId, credit) {

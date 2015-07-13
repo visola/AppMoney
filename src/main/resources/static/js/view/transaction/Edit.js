@@ -1,17 +1,11 @@
-define(['underscore', 'moment', 'view/Base', 'tpl!template/transaction/edit.html', 'collection/Accounts', 'collection/Categories', 'model/Transaction'],
-    function (_, Moment, BaseView, EditTemplate, Accounts, Categories, Transaction) {
+define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'collection/Accounts', 'collection/Categories', 'model/Transaction'],
+    function (_, BaseFormView, EditTemplate, Accounts, Categories, Transaction) {
 
-  return BaseView.extend({
+  return BaseFormView.extend({
     template: EditTemplate,
-    events: {
-      'submit form' : 'handleSave'
-    },
 
-    handleSave: function (e) {
-      var data = this.getFormData(),
-        value = data.value;
-
-      e.preventDefault();
+    processData: function (data) {
+      var value = data.value;
 
       value = value.replace(/,/g,'.'); // replace comma by dot
       value = Math.abs(parseFloat(value));
@@ -19,19 +13,10 @@ define(['underscore', 'moment', 'view/Base', 'tpl!template/transaction/edit.html
       if (!this.data.credit) {
         value = -1 * value;
       }
+
       data.value = value;
       data.toAccountId = this.data.account.id;
-
-      this.model.save(data, {
-        wait:true,
-        success: function() {
-          alert("Data saved successfully!");
-        },
-        error: function () {
-          console.log(arguments);
-          alert("Sorry, an error happend. Please try again later.");
-        }
-      });
+      return data;
     },
 
     initialize: function (toId, credit) {
@@ -41,7 +26,6 @@ define(['underscore', 'moment', 'view/Base', 'tpl!template/transaction/edit.html
 
       this.loading = true;
 
-      this.data.Moment = Moment;
       this.data.credit = credit;
       this.model = new Transaction();
 

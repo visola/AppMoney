@@ -3,19 +3,19 @@
   <div class="form-group">
     <label class="control-label col-sm-2">Name:</label>
     <div class="col-sm-10">
-      <input class="form-control" name="name" value="<%= model.name %>" />
+      <input class="form-control" name="name" value="<%= model.get('name') %>" />
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2">Initial Balance:</label>
     <div class="col-sm-10">
-      <input class="form-control" type="number" name="initialBalance" value="<%= model.initialBalance %>" />
+      <input class="form-control" type="number" name="initialBalance" value="<%= model.get('initialBalance') %>" />
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2">Initial Balance Date:</label>
     <div class="col-sm-10">
-      <input class="form-control" type="date" name="initialBalanceDate" value="<%= model.initialBalanceDate %>" />
+      <input class="form-control" type="date" name="initialBalanceDate" value="<%= moment(model.get('initialBalanceDate')).format('YYYY-MM-DD') %>" />
     </div>
   </div>
   <div class="form-group">
@@ -24,7 +24,7 @@
       <select class="form-control" name="type">
         <% var types = {'CHECKINGS':'Checkings', 'CREDIT_CARD':'Credit Card', 'SAVINGS':'Savings', 'WALLET':'Wallet'};%>
         <% for (var type in types) {%>
-        <option <%= model.type == type ? 'selected="selected"' : '' %> value="<%= type %>"><%= types[type] %></option>
+        <option <%= model.get('type') == type ? 'selected="selected"' : '' %> value="<%= type %>"><%= types[type] %></option>
         <% }%>
       </select>
     </div>

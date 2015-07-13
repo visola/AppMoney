@@ -1,25 +1,8 @@
-define(['underscore', 'moment', 'view/Base', 'tpl!template/account/edit.html', 'collection/Accounts', 'model/Account'],
-    function (_, Moment, BaseView, EditTemplate, Accounts, Account) {
+define(['underscore', 'view/BaseForm', 'tpl!template/account/edit.html', 'collection/Accounts', 'model/Account'],
+    function (_, BaseFormView, EditTemplate, Accounts, Account) {
 
-  return BaseView.extend({
+  return BaseFormView.extend({
     template: EditTemplate,
-    events: {
-      'submit form' : 'handleSave'
-    },
-
-    handleSave: function (e) {
-      e.preventDefault();
-      this.model.save(this.getFormData(), {
-        wait:true,
-        success: function() {
-          alert("Data saved successfully!");
-        },
-        error: function () {
-          console.log(arguments);
-          alert("Sorry, an error happend. Please try again later.");
-        }
-      });
-    },
 
     initialize: function (accountId) {
       var _this = this;
@@ -41,11 +24,5 @@ define(['underscore', 'moment', 'view/Base', 'tpl!template/account/edit.html', '
         _this.render();
       });
     },
-
-    processAttributes: function (model) {
-      return {
-        initialBalanceDate: Moment(model.get('initialBalanceDate')).format('YYYY-MM-DD')
-      };
-    }
   });
 });

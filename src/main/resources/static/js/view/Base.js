@@ -26,10 +26,6 @@ define(['underscore', 'jquery', 'backbone', 'router', 'moment'], function (_, $,
       }, this.data);
     },
 
-    processAttributes: function (model) {
-      return {};
-    },
-
     render: function () {
       var text;
       if (this.loading) {

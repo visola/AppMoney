@@ -17,7 +17,7 @@
       <% for (var i = 0; i < collection.length; i++) { %>
         <tr>
           <td><a href="/accounts/<%= collection.at(i).id %>"><%= collection.at(i).get('name') %></a></td>
-          <td>$ <%= collection.at(i).get('balance') %></td>
+          <td <%= collection.at(i).get('balance') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('balance')) %></td>
           <td>
               <a href="/credit/<%= collection.at(i).id %>" class="glyphicon glyphicon-plus btn btn-success btn-sm"></a>
               <a href="/debit/<%= collection.at(i).id %>" class="glyphicon glyphicon-minus btn btn-danger btn-sm"></a>

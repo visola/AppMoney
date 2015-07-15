@@ -16,6 +16,14 @@ a:hover{
   text-align: center;
 }
 
+.negative {
+  color: red;
+}
+
+.positive {
+  color: green;
+}
+
 .table > tbody > tr > td {
   vertical-align: middle;
 }

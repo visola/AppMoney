@@ -16,7 +16,7 @@
       <% for (var i = 0; i < collection.length; i++) { %>
         <tr>
           <td><%= collection.at(i).get('title') %></a></td>
-          <td>$ <%= collection.at(i).get('value') %></a></td>
+          <td <%= collection.at(i).get('value') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('value')) %></a></td>
           <td><%= collection.at(i).get('happened') %></a></td>
           <td><%= accounts.get(collection.at(i).get('toAccountId')).get('name') %></a></td>
           <td><%= categories.get(collection.at(i).get('categoryId')).get('name') %></a></td>

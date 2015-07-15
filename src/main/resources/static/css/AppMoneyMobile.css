@@ -1,4 +1,12 @@
 @media only screen and (max-width: 500px) {
+  .negative:before {
+    color: black;
+  }
+
+  .positive:before {
+    color: black;
+  }
+
   table.recent thead{
     display: none
   }

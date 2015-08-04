@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.appmoney.model.UserService;
 import com.appmoney.security.AuthenticationResponse;
 import com.appmoney.security.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -49,6 +50,9 @@ public class GoogleOAuthController {
 
   @Autowired
   TokenService tokenService;
+
+  @Autowired
+  UserService userService;
 
   @Value("${oauth.google.clientId}")
   String clientId;
@@ -102,8 +106,11 @@ public class GoogleOAuthController {
 
     ModelAndView mv = new ModelAndView("oauth2callback");
 
-    String token = getToken(code);
-    String email = getUserEmail(token);
+    String email = getUserEmail(getToken(code));
+
+    if (!userService.exists(email)) {
+      userService.create(email);
+    }
 
     AuthenticationResponse authResponse = tokenService.generateToken(email);
 

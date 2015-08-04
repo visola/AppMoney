@@ -38,9 +38,13 @@ define(['underscore', 'jquery', 'backbone', 'router', 'view/Base'],
      * saves the data using <code>this.model</code>.
      */
     __handleSave: function (e) {
-      var data = this.getFormData();
+      var data = this.getFormData(),
+        submitButton = this.$('button[type=submit]'),
+        originalText = submitButton.html();
 
       e.preventDefault();
+
+      submitButton.attr('disabled', 'disabled')
       data = this.processData(data);
 
       this.model.save(data, {
@@ -50,6 +54,8 @@ define(['underscore', 'jquery', 'backbone', 'router', 'view/Base'],
           router.navigate('/', {trigger:true});
         },
         error: function () {
+          submitButton.html(originalText);
+          submitButton.removeAttr('disabled');
           console.error(arguments);
           alert("Sorry, an error happend. Please try again later.");
         }

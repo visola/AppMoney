@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.appmoney.model.UserService;
+import com.appmoney.model.UserServiceJdbc;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled=true)
@@ -73,7 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Bean
   public UserService userService() {
-    return new UserService();
+    return new UserServiceJdbc();
   }
 
 }

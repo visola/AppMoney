@@ -5,9 +5,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.appmoney.dao.RoleDao;
 import com.appmoney.dao.UserDao;
 
 public class UserService implements UserDetailsService {
+
+  @Autowired
+  RoleDao roleDao;
 
   @Autowired
   UserDao userDao;
@@ -17,6 +21,15 @@ public class UserService implements UserDetailsService {
     User user = userDao.findUserByEmail(username);
     user.setAuthorities(userDao.findUserAuthoritiesByEmail(username));
     return user;
+  }
+
+  public boolean exists(String email) {
+    return userDao.exists(email);
+  }
+
+  public void create(String email) {
+    userDao.create(email);
+    roleDao.addRole(email, "USER");
   }
 
 }

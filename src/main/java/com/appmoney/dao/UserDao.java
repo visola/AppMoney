@@ -35,4 +35,14 @@ public class UserDao {
     return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
   }
 
+  public boolean exists(String email) {
+    return jdbcTemplate.queryForObject("select exists (select 1 from users where email = :email)",
+        new MapSqlParameterSource("email", email),
+        Boolean.class);
+  }
+
+  public void create(String email) {
+    jdbcTemplate.update("insert into users (email) values (:email)", new MapSqlParameterSource("email", email));
+  }
+
 }

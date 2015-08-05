@@ -1,5 +1,6 @@
 package com.appmoney.controller;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.appmoney.dao.AccountDao;
 import com.appmoney.model.Account;
+import com.appmoney.model.Permission;
 import com.appmoney.model.ResourceNotFoundException;
 import com.appmoney.model.User;
 
@@ -34,7 +36,8 @@ public class AccountController {
     account.setCreatedBy(user.getId());
     account.setUpdated(new Date());
     account.setUpdatedBy(user.getId());
-    account.setOwner(user.getId());
+
+    account.setPermissions(Arrays.asList(Permission.READ, Permission.WRITE, Permission.OWNER));
 
     // Set initial balance date to now
     if (account.getInitialBalanceDate() == null) {
@@ -50,7 +53,7 @@ public class AccountController {
 
     // Make sure we keep things consistent
     account.setId(id);
-    account.setOwner(loadedAccount.getOwner());
+    account.setPermissions(loadedAccount.getPermissions());
 
     // Update update dates and by
     account.setUpdated(new Date());
@@ -72,7 +75,7 @@ public class AccountController {
 
   @RequestMapping(method = RequestMethod.GET)
   public List<Account> selectAccounts(@AuthenticationPrincipal User user) {
-    return accountDao.selectByOwner(user.getId());
+    return accountDao.getVisible(user.getId());
   }
 
   private Account loadAccountAndCheckOwner(Integer accountId, Integer userId) {
@@ -83,7 +86,7 @@ public class AccountController {
     }
 
     // Security check
-    if (maybeLoadedAccount.get().getOwner() != userId) {
+    if (maybeLoadedAccount.get().getPermissions().contains(Permission.OWNER)) {
       throw new AccessDeniedException("You do not own this account.");
     }
 

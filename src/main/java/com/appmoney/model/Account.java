@@ -1,7 +1,9 @@
 package com.appmoney.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -13,7 +15,6 @@ public class Account {
   @NotNull
   @Size(min=2, max=250)
   private String name;
-  private Integer owner;
   @NotNull
   private BigDecimal initialBalance;
   @NotNull
@@ -26,6 +27,7 @@ public class Account {
   private Integer updatedBy;
   @NotNull
   private AccountType type;
+  private List<Permission> permissions = new ArrayList<>();
 
   public BigDecimal getBalance() {
     return balance;
@@ -53,10 +55,6 @@ public class Account {
 
   public String getName() {
     return name;
-  }
-
-  public Integer getOwner() {
-    return owner;
   }
 
   public Date getUpdated() {
@@ -95,10 +93,6 @@ public class Account {
     this.name = name;
   }
 
-  public void setOwner(Integer owner) {
-    this.owner = owner;
-  }
-
   public void setUpdated(Date updated) {
     this.updated = updated;
   }
@@ -113,6 +107,14 @@ public class Account {
 
   public void setType(AccountType type) {
     this.type = type;
+  }
+
+  public List<Permission> getPermissions() {
+    return permissions;
+  }
+
+  public void setPermissions(List<Permission> permissions) {
+    this.permissions = permissions;
   }
 
 }

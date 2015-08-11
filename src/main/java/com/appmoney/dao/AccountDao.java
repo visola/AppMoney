@@ -53,11 +53,16 @@ public class AccountDao {
     return account;
   }
 
+  @Transactional
   public void deleteById(int id) {
-    String sql = "DELETE FROM accounts WHERE "
-        + "id = :id";
+    MapSqlParameterSource paramSource = new MapSqlParameterSource("accountId", id);
 
-    jdbcTemplate.update(sql, new MapSqlParameterSource("id", id));
+    String deleteOwnership = "DELETE FROM ownership WHERE account_id = :accountId";
+    jdbcTemplate.update(deleteOwnership, paramSource);
+
+    String deleteAccount = "DELETE FROM accounts WHERE "
+        + "id = :accountId";
+    jdbcTemplate.update(deleteAccount, paramSource);
   }
 
   public List<Account> getVisible(int userId) {

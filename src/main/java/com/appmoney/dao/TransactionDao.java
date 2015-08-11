@@ -40,7 +40,7 @@ public class TransactionDao {
   public Page<Transaction> getRecentTransactions(User user, PageRequest pageRequest) {
     String baseSql = " FROM transactions"
         + " WHERE to_account_id IN ("
-        + "   SELECT account_id FROM ownership WHERE user_id = :userId"
+        + "   SELECT account_id FROM permissions WHERE user_id = :userId"
         + ")";
     String sortAndLimit = " ORDER BY happened DESC"
         + " LIMIT :pageSize OFFSET :offset";
@@ -58,7 +58,7 @@ public class TransactionDao {
   private void checkAnyPermission(Transaction transaction, Permission... permissions) {
     StringBuilder sql = new StringBuilder("SELECT EXISTS ("
         + "SELECT 1"
-        + " FROM ownership"
+        + " FROM permissions"
         + " WHERE user_id = :userId"
         + " AND account_id = :accountId"
         + " AND permission IN (");

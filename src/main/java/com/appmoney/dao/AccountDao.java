@@ -47,7 +47,7 @@ public class AccountDao {
 
     jdbcTemplate.update(sql, getParameterSource(account));
 
-    jdbcTemplate.update("DELETE FROM ownership WHERE account_id = :accountId", new MapSqlParameterSource("accountId", account.getId()));
+    jdbcTemplate.update("DELETE FROM permissions WHERE account_id = :accountId", new MapSqlParameterSource("accountId", account.getId()));
     insertPermissions(account);
 
     return account;
@@ -57,8 +57,8 @@ public class AccountDao {
   public void deleteById(int id) {
     MapSqlParameterSource paramSource = new MapSqlParameterSource("accountId", id);
 
-    String deleteOwnership = "DELETE FROM ownership WHERE account_id = :accountId";
-    jdbcTemplate.update(deleteOwnership, paramSource);
+    String deletePermissions = "DELETE FROM permissions WHERE account_id = :accountId";
+    jdbcTemplate.update(deletePermissions, paramSource);
 
     String deleteAccount = "DELETE FROM accounts WHERE "
         + "id = :accountId";
@@ -72,10 +72,10 @@ public class AccountDao {
         + "   WHERE t.to_account_id = a.id"
         + "   AND t.happened BETWEEN a.initial_balance_date AND CURRENT_DATE)) AS balance"
         + " FROM accounts a"
-        + " WHERE EXISTS (SELECT 1 FROM ownership WHERE user_id = :userId AND account_id = a.id)"
+        + " WHERE EXISTS (SELECT 1 FROM permissions WHERE user_id = :userId AND account_id = a.id)"
         + " ORDER BY a.name";
 
-    String permission = "SELECT permission FROM ownership WHERE user_id = :userId AND account_id = :accountId";
+    String permission = "SELECT permission FROM permissions WHERE user_id = :userId AND account_id = :accountId";
 
     MapSqlParameterSource paramMap = new MapSqlParameterSource("userId" , userId);
 
@@ -109,7 +109,7 @@ public class AccountDao {
     paramMap.addValue("accountId", account.getId());
     for (Permission permission : account.getPermissions()) {
       paramMap.addValue("permission", permission.toString());
-      jdbcTemplate.update("INSERT INTO ownership (user_id, account_id, permission) VALUES (:userId, :accountId, :permission)", paramMap);
+      jdbcTemplate.update("INSERT INTO permissions (user_id, account_id, permission) VALUES (:userId, :accountId, :permission)", paramMap);
     }
   }
 

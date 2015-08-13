@@ -80,7 +80,7 @@ public class AccountController {
 
   private Account loadAccountAndCheckOwner(Integer accountId, Integer userId) {
     // Try to load existing account
-    Optional<Account> maybeLoadedAccount = accountDao.findById(accountId);
+    Optional<Account> maybeLoadedAccount = accountDao.findById(accountId, userId);
     if (!maybeLoadedAccount.isPresent()) {
       throw new ResourceNotFoundException(String.format("Account with ID %d not found.", accountId));
     }

@@ -1,10 +1,33 @@
-define(['underscore', 'router', 'view/BaseForm', 'tpl!template/account/edit.html', 'collection/Accounts', 'model/Account'],
-    function (_, router, BaseFormView, EditTemplate, Accounts, Account) {
+define([
+        'underscore',
+        'bootstrap',
+        'bootstrap-modal',
+        'router',
+        'view/BaseForm',
+        'tpl!template/account/edit.html',
+        'collection/Accounts',
+        'model/Account',
+        'view/permission/Edit'],
+    function (
+        _,
+        Bootstrap,
+        BootstrapModal,
+        router,
+        BaseFormView,
+        EditTemplate,
+        Accounts,
+        Account,
+        EditPermission) {
 
   return BaseFormView.extend({
     template: EditTemplate,
     events: {
-      'click #delete-account' : 'deleteAccount'
+      'click #delete-account' : 'deleteAccount',
+      'click #permissions' : 'changePermissions'
+    },
+
+    changePermissions: function (e) {
+      new Backbone.BootstrapModal(new EditPermission().getModalOptions()).open();
     },
 
     deleteAccount: function (e) {

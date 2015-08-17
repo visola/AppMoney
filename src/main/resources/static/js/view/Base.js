@@ -28,7 +28,7 @@ define(['underscore', 'jquery', 'backbone', 'router', 'moment'], function (_, $,
 
     render: function () {
       var text;
-      if (this.loading) {
+      if (this.loading === true) {
         text = "Loading...";
       } else {
         text = this.template(this.prepareData());

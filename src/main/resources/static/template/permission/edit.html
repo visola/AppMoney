@@ -1,0 +1,25 @@
+<section>
+  <button class="add btn btn-primary">Add</button>
+</section>
+<section>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Read</th>
+        <th>Write</th>
+        <th>Owner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (var i = 0; i < collection.length; i++) { %>
+        <tr>
+          <td><%= collection.at(i).get('user') %></td>
+          <td><%= collection.at(i).get('permissions').indexOf('READ') %></td>
+          <td><%= collection.at(i).get('permissions').indexOf('WRITE') %></td>
+          <td><%= collection.at(i).get('permissions').indexOf('OWNER') %></td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</section>

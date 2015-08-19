@@ -1,7 +1,7 @@
 package com.appmoney.controller;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.appmoney.dao.AccountDao;
 import com.appmoney.dao.PermissionDao;
 import com.appmoney.model.Account;
-import com.appmoney.model.AccountPermission;
+import com.appmoney.model.UserPermissions;
 import com.appmoney.model.Permission;
 import com.appmoney.model.User;
 
@@ -29,7 +29,7 @@ public class PermissionController {
   PermissionDao permissionDao;
 
   @RequestMapping(method=RequestMethod.GET)
-  public List<AccountPermission> getPermissions(@PathVariable int accountId, @AuthenticationPrincipal User user) {
+  public Collection<UserPermissions> getPermissions(@PathVariable int accountId, @AuthenticationPrincipal User user) {
     Optional<Account> account = accountDao.findById(accountId, user.getId());
     if (account.isPresent()) {
       if (account.get().getPermissions().contains(Permission.OWNER)) {

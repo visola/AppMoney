@@ -1,6 +1,6 @@
 package com.appmoney.model;
 
-public class AccountPermission {
+public class UserPermission {
 
   private int accountId;
   private int userId;

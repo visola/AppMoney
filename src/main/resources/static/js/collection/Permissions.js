@@ -1,6 +1,6 @@
-define(["backbone", 'model/Permission'], function (Backbone, Permission) {
+define(["backbone", 'model/UserPermissions'], function (Backbone, UserPermissions) {
   var Permissions = Backbone.Collection.extend({
-    model: Permission,
+    model: UserPermissions,
     initialize: function (accountId) {
       this.accountId = accountId;
     },

@@ -27,7 +27,7 @@ define([
     },
 
     changePermissions: function (e) {
-      new Backbone.BootstrapModal(new EditPermission().getModalOptions()).open();
+      new Backbone.BootstrapModal(new EditPermission(this.model).getModalOptions()).open();
     },
 
     deleteAccount: function (e) {

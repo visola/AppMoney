@@ -11,6 +11,9 @@ define(['jquery'], function ($) {
   }
 
   var Security = {
+    getUserEmail: function () {
+      return storageAuth.email;
+    },
     isLoggedIn : function () {
       return storageAuth.token != null;
     }

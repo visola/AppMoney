@@ -10,6 +10,9 @@ public class UserPermissions {
   private String email;
   private Set<Permission> permissions = new HashSet<>();
 
+  public UserPermissions() {
+  }
+
   public UserPermissions(UserPermission accountPermission) {
     this.accountId = accountPermission.getAccountId();
     this.userId = accountPermission.getUserId();

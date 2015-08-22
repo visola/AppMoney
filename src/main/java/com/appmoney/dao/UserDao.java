@@ -2,9 +2,11 @@ package com.appmoney.dao;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -20,11 +22,15 @@ public class UserDao {
   @Autowired
   NamedParameterJdbcTemplate jdbcTemplate;
 
-  public User findUserByEmail(String email) {
-    return jdbcTemplate.queryForObject(
-        "select id, email as username from users where email = :email",
-        new MapSqlParameterSource("email", email),
-        new BeanPropertyRowMapper<>(User.class));
+  public Optional<User> findUserByEmail(String email) {
+    try {
+      return Optional.of(jdbcTemplate.queryForObject(
+          "select id, email as username from users where email = :email",
+          new MapSqlParameterSource("email", email),
+          new BeanPropertyRowMapper<>(User.class)));
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
   }
 
   public Collection<? extends GrantedAuthority> findUserAuthoritiesByEmail(String email) {
@@ -41,8 +47,9 @@ public class UserDao {
         Boolean.class);
   }
 
-  public void create(String email) {
+  public User create(String email) {
     jdbcTemplate.update("insert into users (email) values (:email)", new MapSqlParameterSource("email", email));
+    return findUserByEmail(email).get();
   }
 
 }

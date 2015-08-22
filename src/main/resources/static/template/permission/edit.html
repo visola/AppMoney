@@ -1,8 +1,8 @@
 <section>
-  <button class="add btn btn-primary">Add</button>
+  <button class="add btn btn-primary">Add User</button>
 </section>
 <section>
-  <table class="table">
+  <table id="permissions-table" class="table">
     <thead>
       <tr>
         <th>User</th>
@@ -19,11 +19,11 @@
           <% for (var p = 0; p < permissions.length; p++) { %>
             <% if (collection.at(i).hasPermission(permissions[p])) { %>
               <td>
-                <span class="glyphicon glyphicon-ok text-success"></span>
+                <span class="glyphicon glyphicon-ok text-success permission" data-permission="<%=permissions[p]%>" data-value="true"></span>
               </td>
             <% } else { %>
               <td>
-                <span class="glyphicon glyphicon-remove text-danger"></span>
+                <span class="glyphicon glyphicon-remove text-danger permission" data-permission="<%=permissions[p]%>" data-value="false"></span>
               </td>
             <% } %>
           <% } %>

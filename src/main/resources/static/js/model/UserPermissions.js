@@ -1,5 +1,8 @@
 define(["backbone"], function (Backbone) {
   var UserPermissions = Backbone.Model.extend({
+    defaults: {
+      permissions: []
+    },
     initialize: function (accountId, userId) {
       this.accountId;
       this.userId;

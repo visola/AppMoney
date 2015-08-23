@@ -21,6 +21,7 @@ import com.appmoney.model.Permission;
 @Component
 public class AccountDao {
 
+  private static final String SELECT_PERMISSIONS_BY_USER_ID_AND_ACCOUNT_ID = "SELECT permission FROM permissions WHERE user_id = :userId AND account_id = :accountId";
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -75,24 +76,28 @@ public class AccountDao {
         + " WHERE EXISTS (SELECT 1 FROM permissions WHERE user_id = :userId AND account_id = a.id)"
         + " ORDER BY a.name";
 
-    String permission = "SELECT permission FROM permissions WHERE user_id = :userId AND account_id = :accountId";
-
     MapSqlParameterSource paramMap = new MapSqlParameterSource("userId" , userId);
 
     List<Account> accounts = jdbcTemplate.query(sql, paramMap, new BeanPropertyRowMapper<>(Account.class));
     for (Account account : accounts) {
       paramMap.addValue("accountId", account.getId());
-      account.setPermissions(jdbcTemplate.query(permission, paramMap, new PermissionRowMapper()));
+      account.setPermissions(jdbcTemplate.query(SELECT_PERMISSIONS_BY_USER_ID_AND_ACCOUNT_ID, paramMap, new PermissionRowMapper()));
     }
     return accounts;
   }
 
-  public Optional<Account> findById(Integer id) {
+  public Optional<Account> findById(Integer accountId, Integer userId) {
     try {
-      return Optional.of(jdbcTemplate.queryForObject(
+      Account account = jdbcTemplate.queryForObject(
           "SELECT * FROM accounts WHERE id = :id",
-          new MapSqlParameterSource("id", id),
-          new BeanPropertyRowMapper<>(Account.class)));
+          new MapSqlParameterSource("id", accountId),
+          new BeanPropertyRowMapper<>(Account.class));
+
+      MapSqlParameterSource paramMap = new MapSqlParameterSource("userId" , userId);
+      paramMap.addValue("accountId", accountId);
+      account.setPermissions(jdbcTemplate.query(SELECT_PERMISSIONS_BY_USER_ID_AND_ACCOUNT_ID, paramMap, new PermissionRowMapper()));
+
+      return Optional.of(account);
     } catch (EmptyResultDataAccessException e) {
       return Optional.empty();
     }

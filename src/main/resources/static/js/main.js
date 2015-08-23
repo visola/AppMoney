@@ -5,6 +5,8 @@ require.config({
   },
   paths: {
     "backbone" : "lib/backbone",
+    "bootstrap" : "lib/bootstrap",
+    "bootstrap-modal": "lib/backbone.bootstrap-modal",
     "jquery" : "lib/jquery-2.1.4",
     "moment" : "lib/moment",
     "template" : "/template",

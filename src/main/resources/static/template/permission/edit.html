@@ -1,0 +1,34 @@
+<section>
+  <button class="add btn btn-primary">Add User</button>
+</section>
+<section>
+  <table id="permissions-table" class="table">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Read</th>
+        <th>Write</th>
+        <th>Owner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (var i = 0; i < collection.length; i++) { %>
+        <tr>
+          <td><%= collection.at(i).get('email') %></td>
+          <% var permissions = ['READ','WRITE','OWNER']; %>
+          <% for (var p = 0; p < permissions.length; p++) { %>
+            <% if (collection.at(i).hasPermission(permissions[p])) { %>
+              <td>
+                <span class="glyphicon glyphicon-ok text-success permission" data-permission="<%=permissions[p]%>" data-value="true"></span>
+              </td>
+            <% } else { %>
+              <td>
+                <span class="glyphicon glyphicon-remove text-danger permission" data-permission="<%=permissions[p]%>" data-value="false"></span>
+              </td>
+            <% } %>
+          <% } %>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</section>

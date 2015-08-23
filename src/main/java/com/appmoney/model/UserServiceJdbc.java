@@ -1,5 +1,7 @@
 package com.appmoney.model;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,9 +20,13 @@ public class UserServiceJdbc implements UserService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userDao.findUserByEmail(username);
-    user.setAuthorities(userDao.findUserAuthoritiesByEmail(username));
-    return user;
+    Optional<User> user = userDao.findUserByEmail(username);
+    if (user.isPresent()) {
+      user.get().setAuthorities(userDao.findUserAuthoritiesByEmail(username));
+      return user.get();
+    } else {
+      throw new UsernameNotFoundException("User "+username+" not found.");
+    }
   }
 
   @Override

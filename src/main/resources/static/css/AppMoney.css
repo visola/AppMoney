@@ -26,6 +26,21 @@ a:hover{
   color: red;
 }
 
+#permissions-table .permission {
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+#permissions-table .permission:active {
+  background: #ccc;
+}
+
+#permissions-table .permission:hover {
+  border: 1px solid #ccc;
+}
+
 .positive {
   color: green;
 }

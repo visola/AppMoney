@@ -4,21 +4,6 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
   return BaseFormView.extend({
     template: EditTemplate,
 
-    processData: function (data) {
-      var value = data.value;
-
-      value = value.replace(/,/g,'.'); // replace comma by dot
-      value = Math.abs(parseFloat(value));
-
-      if (!this.data.credit) {
-        value = -1 * value;
-      }
-
-      data.value = value;
-      data.toAccountId = this.data.account.id;
-      return data;
-    },
-
     initialize: function (toId, credit) {
       var _this = this,
         accounts = this.data.accounts = new Accounts(),
@@ -34,6 +19,21 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
         _this.data.account = accounts.get(toId);
         _this.render();
       });
+    },
+
+    processData: function (data) {
+      var value = data.value;
+
+      value = value.replace(/,/g,'.'); // replace comma by dot
+      value = Math.abs(parseFloat(value));
+
+      if (!this.data.credit) {
+        value = -1 * value;
+      }
+
+      data.value = value;
+      data.toAccountId = this.data.account.id;
+      return data;
     }
   });
 });

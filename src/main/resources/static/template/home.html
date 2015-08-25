@@ -25,8 +25,15 @@
           <td <%= collection.at(i).get('balance') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('balance')) %></td>
           <td>&nbsp;
             <% if (collection.at(i).get('permissions').indexOf('WRITE') >= 0) { %>
-              <a href="/credit/<%= collection.at(i).id %>" class="glyphicon glyphicon-plus btn btn-success btn-sm"></a>
-              <a href="/debit/<%= collection.at(i).id %>" class="glyphicon glyphicon-minus btn btn-danger btn-sm"></a>
+              <% if (this.hasOwnProperty('toAccountId')) { %>
+                <% if (this.toAccountId != collection.at(i).id) { %>
+                  <a href="/transfer/<%= this.toAccountId %>/<%= collection.at(i).id %>" class="glyphicon glyphicon glyphicon-open btn btn-primary btn-sm"></a>
+                <% } %>
+              <% } else { %>
+                <a href="/credit/<%= collection.at(i).id %>" class="glyphicon glyphicon-plus btn btn-success btn-sm"></a>
+                <a href="/debit/<%= collection.at(i).id %>" class="glyphicon glyphicon-minus btn btn-danger btn-sm"></a>
+                <a href="#" data-to="<%= collection.at(i).id %>" class="transferTo glyphicon glyphicon glyphicon-save btn btn-primary btn-sm"></a>
+              <% } %>
             <% } %>
           </td>
         </tr>

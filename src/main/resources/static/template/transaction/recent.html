@@ -18,7 +18,13 @@
           <td><%= collection.at(i).get('title') %></td>
           <td <%= collection.at(i).get('value') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('value')) %></td>
           <td><%= collection.at(i).get('happened') %></td>
-          <td><%= accounts.get(collection.at(i).get('toAccountId')).get('name') %></td>
+          <td>
+            <% if (collection.at(i).get('fromAccountId')) { %>
+              <%= accounts.get(collection.at(i).get('fromAccountId')).get('name') %>
+              ->
+            <% } %>
+            <%= accounts.get(collection.at(i).get('toAccountId')).get('name') %>
+          </td>
           <td><%= categories.get(collection.at(i).get('categoryId')).get('name') %></td>
         </tr>
       <% } %>

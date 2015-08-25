@@ -26,7 +26,9 @@
           <td>&nbsp;
             <% if (collection.at(i).get('permissions').indexOf('WRITE') >= 0) { %>
               <% if (this.hasOwnProperty('toAccountId')) { %>
-                <a href="/transfer/<%= this.toAccountId %>/<%= collection.at(i).id %>" class="glyphicon glyphicon glyphicon-open btn btn-primary btn-sm"></a>
+                <% if (this.toAccountId != collection.at(i).id) { %>
+                  <a href="/transfer/<%= this.toAccountId %>/<%= collection.at(i).id %>" class="glyphicon glyphicon glyphicon-open btn btn-primary btn-sm"></a>
+                <% } %>
               <% } else { %>
                 <a href="/credit/<%= collection.at(i).id %>" class="glyphicon glyphicon-plus btn btn-success btn-sm"></a>
                 <a href="/debit/<%= collection.at(i).id %>" class="glyphicon glyphicon-minus btn btn-danger btn-sm"></a>

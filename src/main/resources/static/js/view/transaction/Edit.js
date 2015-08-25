@@ -24,7 +24,7 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
     processData: function (data) {
       var value = data.value;
 
-      value = value.replace(/,/g,'.'); // replace comma by dot
+      value = value.replace(/,(\d+)$/g,'.$1'); // replace comma by dot
       value = Math.abs(parseFloat(value));
 
       if (!this.data.credit) {

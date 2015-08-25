@@ -17,7 +17,8 @@ define(["jquery", "backbone", "security"],
         "login(/)" : "login",
         "accounts/:id(/)" : "editAccount",
         "debit/:toId(/)" : "debitAccount",
-        "credit/:toId(/)" : "creditAccount"
+        "credit/:toId(/)" : "creditAccount",
+        "transfer/:toId/:fromId(/)" : "transfer"
       },
 
       _createTransaction: function (toId, credit) {
@@ -58,6 +59,12 @@ define(["jquery", "backbone", "security"],
         } else {
           this.login();
         }
+      },
+
+      transfer: function (toAccountId, fromAccountId) {
+        require(["view/transaction/Edit"], function (EditTransactionView) {
+          render(new EditTransactionView(toAccountId, fromAccountId));
+        });
       }
     });
 

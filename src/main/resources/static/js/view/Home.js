@@ -3,6 +3,9 @@ define(['view/Base', 'view/transaction/Recent', 'tpl!template/home.html', 'colle
 
   var HomeView = BaseView.extend({
     template: HomeTemplate,
+    events: {
+      'click .transferTo' : 'transferTo'
+    },
 
     initialize: function () {
       var _this = this;
@@ -24,6 +27,14 @@ define(['view/Base', 'view/transaction/Recent', 'tpl!template/home.html', 'colle
         this.$('#recentTransactions').append(this.recentTransactionsView.$el);
       }
       return this;
+    },
+
+    transferTo: function (e) {
+      var $button = this.$(e.target),
+        toAccountId = $button.data('to');
+      e.preventDefault();
+      this.toAccountId = toAccountId;
+      this.render();
     }
   });
 

@@ -1,4 +1,8 @@
+<% if (credit !== null) { %>
 <h3><%= (credit ? 'Credit' : 'Debit') + ' account - ' + account.get('name') %></h3>
+<% } else { %>
+<h3>Transfer from <%= fromAccount.get('name') %> to <%= account.get('name') %></h3>
+<% } %>
 <form class="form-horizontal" role="form">
   <div class="form-group">
     <label class="control-label col-sm-2">Title:</label>

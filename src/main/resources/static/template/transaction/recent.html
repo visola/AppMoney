@@ -21,7 +21,7 @@
           <td>
             <% if (collection.at(i).get('fromAccountId')) { %>
               <%= accounts.get(collection.at(i).get('fromAccountId')).get('name') %>
-              ->
+              <span class="glyphicon glyphicon-arrow-right"></span>
             <% } %>
             <%= accounts.get(collection.at(i).get('toAccountId')).get('name') %>
           </td>

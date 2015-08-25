@@ -68,9 +68,9 @@ public class AccountDao {
 
   public List<Account> getVisible(int userId) {
     String sql = "SELECT a.*, (a.initial_balance + ("
-        + "   SELECT COALESCE(SUM(value), 0) "
+        + "   SELECT COALESCE(SUM(CASE WHEN a.id = t.to_account_id THEN value WHEN a.id = from_account_id THEN -value END), 0) "
         + "   FROM transactions t"
-        + "   WHERE t.to_account_id = a.id"
+        + "   WHERE t.to_account_id = a.id OR t.from_account_id = a.id"
         + "   AND t.happened BETWEEN a.initial_balance_date AND CURRENT_DATE)) AS balance"
         + " FROM accounts a"
         + " WHERE EXISTS (SELECT 1 FROM permissions WHERE user_id = :userId AND account_id = a.id)"

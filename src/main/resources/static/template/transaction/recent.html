@@ -2,7 +2,7 @@
   <h4>No recent transactions</h4>
 <% } else { %>
   <h3>Recent Transactions</h3>
-  <table class="table center recent">
+  <table class="table center responsive">
     <thead>
       <tr>
         <th>Title</th>
@@ -10,22 +10,24 @@
         <th>Happened</th>
         <th>Account</th>
         <th>Category</th>
+        <th>Comments</th>
       </tr>
     </thead>
     <tbody>
       <% for (var i = 0; i < collection.length; i++) { %>
         <tr>
-          <td><%= collection.at(i).get('title') %></td>
-          <td <%= collection.at(i).get('value') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('value')).toFixed(2) %></td>
-          <td><%= collection.at(i).get('happened') %></td>
-          <td>
+          <td data-column="Title"><%= collection.at(i).get('title') %></td>
+          <td data-column="Value" <%= collection.at(i).get('value') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('value')).toFixed(2) %></td>
+          <td data-column="Happened"><%= collection.at(i).get('happened') %></td>
+          <td data-column="Account">
             <% if (collection.at(i).get('fromAccountId')) { %>
               <%= accounts.get(collection.at(i).get('fromAccountId')).get('name') %>
               <span class="glyphicon glyphicon-arrow-right"></span>
             <% } %>
             <%= accounts.get(collection.at(i).get('toAccountId')).get('name') %>
           </td>
-          <td><%= categories.get(collection.at(i).get('categoryId')).get('name') %></td>
+          <td data-column="Category"><%= categories.get(collection.at(i).get('categoryId')).get('name') %></td>
+          <td data-column="Comments"><%= collection.at(i).get('comments') %></td>
         </tr>
       <% } %>
     </tbody>

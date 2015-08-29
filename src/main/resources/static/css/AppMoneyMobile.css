@@ -7,35 +7,38 @@
     color: black;
   }
 
-  table.recent thead{
+  table:not([class~='responsive']) td {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  table.responsive thead{
     display: none
   }
 
-  table.recent > tbody > tr > td {
+  table.responsive > tbody > tr > td {
     display: block;
     margin: 0;
     padding: 2px;
     text-align: left;
   }
 
-  table.recent td:before {
+  table.responsive td:before {
     display: inline-block;
     padding-right: 10px;
     text-align: right;
     width: 150px
   }
 
-  table.recent td:nth-of-type(1) {
+  table.responsive td:nth-of-type(1) {
     border: none;
   }
 
-  table.recent td:nth-of-type(1):before { content: "Title: ";}
-  table.recent td:nth-of-type(2):before { content: "Value: ";}
-  table.recent td:nth-of-type(3):before { content: "Happened: ";}
-  table.recent td:nth-of-type(4):before { content: "Account: ";}
-  table.recent td:nth-of-type(5):before { content: "Category: ";}
+  table.responsive td:before { content: attr(data-column)' :';}
 
-  table.recent tr {
+  table.responsive tr {
     border: 1px solid #bbb;
     display: block;
     margin: 5px;

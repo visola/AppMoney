@@ -86,7 +86,7 @@ public class AccountController {
     }
 
     // Security check
-    if (maybeLoadedAccount.get().getPermissions().contains(Permission.OWNER)) {
+    if (!maybeLoadedAccount.get().getPermissions().contains(Permission.OWNER)) {
       throw new AccessDeniedException("You do not own this account.");
     }
 

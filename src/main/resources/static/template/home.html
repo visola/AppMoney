@@ -22,7 +22,7 @@
             <% } else { %>
               <%= collection.at(i).get('name') %>
             <% } %>
-          <td <%= collection.at(i).get('balance') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('balance')) %></td>
+          <td <%= collection.at(i).get('balance') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('balance')).toFixed(2) %></td>
           <td>&nbsp;
             <% if (collection.at(i).get('permissions').indexOf('WRITE') >= 0) { %>
               <% if (this.hasOwnProperty('toAccountId')) { %>

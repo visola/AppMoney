@@ -19,6 +19,7 @@ public class Transaction {
   private Integer createdBy;
   private Date updated;
   private Integer updatedBy;
+  private String comments;
 
   public Integer getId() {
     return id;
@@ -106,6 +107,14 @@ public class Transaction {
 
   public void setUpdatedBy(Integer updatedBy) {
     this.updatedBy = updatedBy;
+  }
+
+  public String getComments() {
+    return comments;
+  }
+
+  public void setComments(String comments) {
+    this.comments = comments;
   }
 
 }

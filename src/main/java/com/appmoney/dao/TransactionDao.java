@@ -29,8 +29,8 @@ public class TransactionDao {
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
     String sql = "INSERT INTO transactions "
-        + "(title, value, happened, from_account_id, to_account_id, category_id, created, created_by, updated, updated_by) VALUES "
-        + "(:title, :value, :happened, :fromAccountId, :toAccountId, :categoryId, :created, :createdBy, :updated, :updatedBy)";
+        + "(title, value, happened, from_account_id, to_account_id, category_id, created, created_by, updated, updated_by, comments) VALUES "
+        + "(:title, :value, :happened, :fromAccountId, :toAccountId, :categoryId, :created, :createdBy, :updated, :updatedBy, :comments)";
 
     jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(transaction), keyHolder);
     transaction.setId((int) keyHolder.getKeys().get("id"));

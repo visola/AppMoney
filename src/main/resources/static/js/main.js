@@ -5,6 +5,7 @@ require.config({
   },
   paths: {
     "backbone" : "lib/backbone",
+    "backbone.paginator" : "lib/backbone.paginator",
     "bootstrap" : "lib/bootstrap",
     "bootstrap-modal": "lib/backbone.bootstrap-modal",
     "jquery" : "lib/jquery-2.1.4",

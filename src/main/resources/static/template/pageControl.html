@@ -1,0 +1,9 @@
+<% if (collection.state.totalPages > 1) { %>
+  <ul class="pagination">
+    <li class="previous-page <%= !collection.hasPreviousPage() ? 'disabled' : ''%>"><a data-action href="#">Previous</a></li>
+    <% for (var i = 0; i < collection.state.totalPages; i++) { %>
+      <li <%= i == collection.state.currentPage ? 'class="active"' : '' %>><a data-action href="#"><%= i + 1 %></a></li>
+    <% } %>
+    <li class="next-page <%= !collection.hasNextPage() ? 'disabled' : ''%>"><a data-action href="#">Next</a></li>
+  </ul>
+<% } %>

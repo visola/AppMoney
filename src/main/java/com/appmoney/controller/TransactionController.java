@@ -41,9 +41,9 @@ public class TransactionController {
   @RequestMapping(method=RequestMethod.GET)
   public Page<Transaction> getRecentTransactions(
       @RequestParam(required=false, defaultValue="0") int page,
-      @RequestParam(required=false, defaultValue="10") int pageSize,
+      @RequestParam(required=false, defaultValue="10") int size,
       @AuthenticationPrincipal User user) {
-    PageRequest pageRequest = new PageRequest(page, pageSize);
+    PageRequest pageRequest = new PageRequest(page, size);
     return transactionDao.getRecentTransactions(user, pageRequest);
   }
 

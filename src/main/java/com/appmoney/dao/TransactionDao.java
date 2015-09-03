@@ -41,8 +41,10 @@ public class TransactionDao {
     String baseSql = " FROM transactions"
         + " WHERE to_account_id IN ("
         + "   SELECT account_id FROM permissions WHERE user_id = :userId"
+        + ") OR from_account_id IN ("
+        + "   SELECT account_id FROM permissions WHERE user_id = :userId"
         + ")";
-    String sortAndLimit = " ORDER BY happened DESC"
+    String sortAndLimit = " ORDER BY happened, id DESC"
         + " LIMIT :pageSize OFFSET :offset";
 
     MapSqlParameterSource paramSource = new MapSqlParameterSource("userId" , user.getId());

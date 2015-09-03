@@ -48,9 +48,6 @@ public class AccountDao {
 
     jdbcTemplate.update(sql, getParameterSource(account));
 
-    jdbcTemplate.update("DELETE FROM permissions WHERE account_id = :accountId", new MapSqlParameterSource("accountId", account.getId()));
-    insertPermissions(account);
-
     return account;
   }
 

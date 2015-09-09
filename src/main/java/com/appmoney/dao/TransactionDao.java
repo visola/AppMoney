@@ -91,4 +91,12 @@ public class TransactionDao {
     }
   }
 
+  public void update(Transaction transaction) {
+    String sql = "UPDATE transactions SET (title, value, happened, from_account_id, to_account_id, category_id, created, created_by, updated, updated_by, comments)"
+        + " = (:title, :value, :happened, :fromAccountId, :toAccountId, :categoryId, :created, :createdBy, :updated, :updatedBy, :comments)"
+        + " WHERE id = :id";
+
+    jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(transaction));
+  }
+
 }

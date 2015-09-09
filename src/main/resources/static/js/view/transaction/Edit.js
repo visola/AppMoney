@@ -14,9 +14,18 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
       this.loading = true;
       this.data.fromAccount = null;
 
-      this.data.credit = credit;
-      this.model = new Transaction();
+      if (this.model) {
+        toId = this.model.get('toAccountId');
+        if (this.model.get('fromAccountId') !== null) {
+          fromAccountId = this.model.get('fromAccountId');
+        } else {
+          credit = this.model.get('value') >= 0;
+        }
+      } else {
+        this.model = new Transaction();
+      }
 
+      this.data.credit = credit;
       Promise.all([accounts.fetch(), categories.fetch()]).then(function () {
         _this.loading = false;
         _this.data.account = accounts.get(toId);

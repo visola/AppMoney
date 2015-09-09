@@ -12,6 +12,7 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
         fromAccountId = typeof creditOrFromAccountId == 'string' ? creditOrFromAccountId : null;
 
       this.loading = true;
+      this.data.fromAccount = null;
 
       this.data.credit = credit;
       this.model = new Transaction();
@@ -39,7 +40,7 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
       data.value = value;
       data.toAccountId = this.data.account.id;
 
-      if (this.data.fromAccount !== undefined) {
+      if (this.data.fromAccount) {
         data.fromAccountId = this.data.fromAccount.id;
       }
 

@@ -1,8 +1,10 @@
 package com.appmoney.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -57,7 +59,16 @@ public class TransactionDao {
     return new PageImpl<>(transactions, pageRequest, totalTransactions);
   }
 
-  private void checkAnyPermission(Transaction transaction, Permission... permissions) {
+  public Optional<Transaction> findById(Integer transactionId) {
+    String sql = "SELECT * FROM transactions WHERE id = :id";
+    try {
+      return Optional.of(jdbcTemplate.queryForObject(sql, new MapSqlParameterSource("id", transactionId), new BeanPropertyRowMapper<>(Transaction.class)));
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
+  }
+
+  public void checkAnyPermission(Transaction transaction, Permission... permissions) {
     StringBuilder sql = new StringBuilder("SELECT EXISTS ("
         + "SELECT 1"
         + " FROM permissions"

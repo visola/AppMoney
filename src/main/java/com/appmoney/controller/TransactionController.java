@@ -1,6 +1,7 @@
 package com.appmoney.controller;
 
 import java.util.Date;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.appmoney.dao.TransactionDao;
+import com.appmoney.model.Permission;
 import com.appmoney.model.Transaction;
 import com.appmoney.model.User;
 
@@ -45,6 +48,16 @@ public class TransactionController {
       @AuthenticationPrincipal User user) {
     PageRequest pageRequest = new PageRequest(page, size);
     return transactionDao.getRecentTransactions(user, pageRequest);
+  }
+
+  @RequestMapping(value="/{transactionId}", method=RequestMethod.GET)
+  public Transaction findTransaction(@PathVariable Integer transactionId, @AuthenticationPrincipal User user) {
+    Optional<Transaction> transaction = transactionDao.findById(transactionId);
+    if (transaction.isPresent()) {
+      transactionDao.checkAnyPermission(transaction.get(), Permission.values());
+      return transaction.get();
+    }
+    return null;
   }
 
 }

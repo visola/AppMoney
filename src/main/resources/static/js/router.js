@@ -8,7 +8,7 @@ define(["jquery", "backbone", "security"],
 
     function render(view) {
       view.render();
-      $('#content').html(view.$el);
+      $(getContentElement()).html(view.$el);
     };
 
     var Router = Backbone.Router.extend({
@@ -55,6 +55,7 @@ define(["jquery", "backbone", "security"],
 
       route : function (route, name, callback) {
         if (Security.isLoggedIn()) {
+          getContentElement().innerHTML = '<p>Loading...</p>';
           originalRoute.call(this, route, name, callback);
         } else {
           this.login();

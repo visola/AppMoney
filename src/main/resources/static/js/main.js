@@ -14,7 +14,8 @@ require.config({
     "text" : "lib/text",
     "tpl": "lib/tpl",
     "underscore" : "lib/underscore"
-  }
+  },
+  waitSeconds: 0
 });
 
 require(['router'], function () {

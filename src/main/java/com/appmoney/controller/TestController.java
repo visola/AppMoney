@@ -21,10 +21,6 @@ public class TestController {
   @Autowired
   UserService userService;
 
-  public TestController() {
-    System.out.println("Test");
-  }
-
   @RequestMapping(value="/testLogin", method=RequestMethod.GET)
   public ModelAndView testLogin(String username) {
     if (!userService.exists(username)) {

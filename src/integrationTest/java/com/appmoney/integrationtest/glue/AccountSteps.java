@@ -3,16 +3,13 @@ package com.appmoney.integrationtest.glue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
-import com.appmoney.integrationtest.IntegrationTestConfiguration;
 import com.appmoney.integrationtest.SeleniumHelper;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-@ContextConfiguration(classes={IntegrationTestConfiguration.class})
-public class AccountSteps {
+public class AccountSteps extends BaseGlue {
 
   @Autowired
   SeleniumHelper seleniumHelper;

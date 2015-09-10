@@ -17,7 +17,11 @@
     <tbody>
       <% for (var i = 0; i < collection.length; i++) { %>
         <tr>
-          <td data-column="Title"><%= collection.at(i).get('title') %></td>
+          <td data-column="Title">
+            <a href="/transactions/<%= collection.at(i).id %>">
+              <%= collection.at(i).get('title') %>
+            </a>
+          </td>
           <td data-column="Value" <%= collection.at(i).get('value') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('value')).toFixed(2) %></td>
           <td data-column="Happened"><%= collection.at(i).get('happened') %></td>
           <td data-column="Account">

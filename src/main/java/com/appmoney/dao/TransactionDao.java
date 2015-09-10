@@ -1,8 +1,10 @@
 package com.appmoney.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -57,7 +59,16 @@ public class TransactionDao {
     return new PageImpl<>(transactions, pageRequest, totalTransactions);
   }
 
-  private void checkAnyPermission(Transaction transaction, Permission... permissions) {
+  public Optional<Transaction> findById(Integer transactionId) {
+    String sql = "SELECT * FROM transactions WHERE id = :id";
+    try {
+      return Optional.of(jdbcTemplate.queryForObject(sql, new MapSqlParameterSource("id", transactionId), new BeanPropertyRowMapper<>(Transaction.class)));
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
+  }
+
+  public void checkAnyPermission(Transaction transaction, Permission... permissions) {
     StringBuilder sql = new StringBuilder("SELECT EXISTS ("
         + "SELECT 1"
         + " FROM permissions"
@@ -78,6 +89,14 @@ public class TransactionDao {
     if (!jdbcTemplate.queryForObject(sql.toString(), paramMap, Boolean.class)) {
       throw new RuntimeException("You don't have permission to execute this action");
     }
+  }
+
+  public void update(Transaction transaction) {
+    String sql = "UPDATE transactions SET (title, value, happened, from_account_id, to_account_id, category_id, created, created_by, updated, updated_by, comments)"
+        + " = (:title, :value, :happened, :fromAccountId, :toAccountId, :categoryId, :created, :createdBy, :updated, :updatedBy, :comments)"
+        + " WHERE id = :id";
+
+    jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(transaction));
   }
 
 }

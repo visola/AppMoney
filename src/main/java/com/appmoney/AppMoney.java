@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AppMoney extends WebMvcConfigurerAdapter {
 
   public static void main(String[] args) {
-    SpringApplication.run(AppMoney.class, args);    
+    SpringApplication.run(AppMoney.class, args);
   }
 
   @Bean

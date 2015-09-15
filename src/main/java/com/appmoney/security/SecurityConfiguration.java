@@ -50,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     http
       .authorizeRequests()
-      .antMatchers("/api/v1/authenticate").anonymous()
+      .antMatchers("/api/v1/authenticate", "/testLogin").anonymous()
       .antMatchers(ACTUATOR_ENDPOINTS).hasRole("ADMIN")
       .antMatchers("/api/v1/**").authenticated();
 

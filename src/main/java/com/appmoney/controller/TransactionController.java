@@ -1,6 +1,7 @@
 package com.appmoney.controller;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -43,7 +44,7 @@ public class TransactionController {
 
   @RequestMapping(method=RequestMethod.PUT, value="/{transactionId}")
   public Transaction updateTransaction(@PathVariable Integer transactionId, @RequestBody @Valid Transaction transaction, @AuthenticationPrincipal User user) {
-    if (transactionId != transaction.getId()) {
+    if (!Objects.equals(transactionId, transaction.getId())) {
       throw new RuntimeException("Transaction ID doesn't match the one in the path.");
     }
     Optional<Transaction> maybeLoaded = transactionDao.findById(transactionId);

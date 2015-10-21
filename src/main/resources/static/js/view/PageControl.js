@@ -21,11 +21,19 @@ define(['view/Base', 'tpl!template/pageControl.html'], function (BaseView, PageC
 
       if (!$parent.hasClass('active') && !$parent.hasClass('disabled')) {
         if (isNaN(pageNumber)) {
-          if (text == 'Next') {
-            this.collection.getNextPage(options);
-          }
-          if (text == 'Previous') {
-            this.collection.getPreviousPage(options);
+          switch (text) {
+            case 'Next':
+              this.collection.getNextPage(options);
+              break;
+            case 'Previous':
+              this.collection.getPreviousPage(options);
+              break;
+            case 'First':
+              this.collection.getPage(0, options);
+              break;
+            case 'Last':
+              this.collection.getPage(this.collection.state.totalPages - 1, options);
+              break;
           }
         } else {
           this.collection.getPage(pageNumber - 1, options);

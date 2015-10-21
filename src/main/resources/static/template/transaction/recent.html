@@ -25,11 +25,19 @@
           <td data-column="Value" <%= collection.at(i).get('value') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('value')).toFixed(2) %></td>
           <td data-column="Happened"><%= collection.at(i).get('happened') %></td>
           <td data-column="Account">
-            <% if (collection.at(i).get('fromAccountId')) { %>
-              <%= accounts.get(collection.at(i).get('fromAccountId')).get('name') %>
+            <%
+              var fromAccountId = collection.at(i).get('fromAccountId'),
+                fromAccount = accounts.get(fromAccountId),
+                fromAccountName = fromAccount ? fromAccount.get('name') : '???',
+                toAccountId = collection.at(i).get('toAccountId'),
+                toAccount = accounts.get(toAccountId),
+                toAccountName = toAccount ? toAccount.get('name') : '???';
+            %>
+            <% if (fromAccountId) { %>
+              <%= fromAccountName %>
               <span class="glyphicon glyphicon-arrow-right"></span>
             <% } %>
-            <%= accounts.get(collection.at(i).get('toAccountId')).get('name') %>
+            <%= toAccountName %>
           </td>
           <td data-column="Category"><%= categories.get(collection.at(i).get('categoryId')).get('name') %></td>
           <td data-column="Comments"><%= collection.at(i).get('comments') %></td>

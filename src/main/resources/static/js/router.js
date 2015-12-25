@@ -1,5 +1,5 @@
-define(["jquery", "backbone", "security"], 
-  function ($, Backbone, Security) {
+define(["jquery", "backbone", "security", "tpl!template/menuItem.html"], 
+  function ($, Backbone, Security, MenuItemTemplate) {
     var originalRoute = Backbone.Router.prototype.route;
 
     function getContentElement() {
@@ -19,7 +19,18 @@ define(["jquery", "backbone", "security"],
         "debit/:toId(/)" : "debitAccount",
         "credit/:toId(/)" : "creditAccount",
         "transactions/:id(/)" : "editTransaction",
-        "transfer/:toId/:fromId(/)" : "transfer"
+        "transfer/:toId/:fromId(/)" : "transfer",
+        "categories": "categories"
+      },
+
+      categories: function () {
+        require(["view/categories/Home"], function (CategoriesHomeView) {
+          render(new CategoriesHomeView());
+        });
+      },
+
+      clearMenu: function () {
+        document.getElementById('menu').innerHTML = '';
       },
 
       _createTransaction: function (toId, credit) {
@@ -63,12 +74,30 @@ define(["jquery", "backbone", "security"],
         });
       },
 
+      renderMenu: function () {
+        var i,
+          items = [{title:'Home', link:'/'}, {title:'Categories', link:'/categories'}],
+          menuItem = '';
+
+        for (i = 0; i < items.length; i++) {
+          menuItem += MenuItemTemplate({
+            active: false,
+            title:items[i].title,
+            link:items[i].link
+          });
+        }
+
+        document.getElementById('menu').innerHTML = menuItem;
+      },
+
       route : function (route, name, callback) {
         if (Security.isLoggedIn()) {
           getContentElement().innerHTML = '<p>Loading...</p>';
           originalRoute.call(this, route, name, callback);
+          this.renderMenu();
         } else {
           this.login();
+          this.clearMenu();
         }
       },
 

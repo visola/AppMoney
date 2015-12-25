@@ -1,0 +1,30 @@
+<section class="controls">
+  <span id="new-category" class="btn btn-primary glyphicon glyphicon-plus" title="Create Category"></span>
+</section>
+
+<h2>Categories</h2>
+
+<input class="form-control" type="text" id="search-categories" placeholder="Search" value="<%= query %>"/>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Parent</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% 
+      for (var i = 0; i < filtered.length ; i++) {
+        var parentId = filtered[i].get('parentId');
+        if (filtered[i].get('hidden')) continue;
+    %>
+      <tr id="category-<%= filtered[i].id %>">
+        <td><%= filtered[i].get('name') %></td>
+        <td><%= parentId ? collection.get(parentId).get('name') : ' - ' %></td>
+        <td>&nbsp;</td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

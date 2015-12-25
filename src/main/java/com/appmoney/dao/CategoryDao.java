@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,14 @@ public class CategoryDao {
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<Category> getCategories() {
-    return jdbcTemplate.query("SELECT * FROM categories ORDER BY name", new BeanPropertyRowMapper<>(Category.class));
+  public List<Category> getCategories(int userId) {
+    return jdbcTemplate.query("SELECT c.*"
+        + " FROM categories c"
+        + " LEFT OUTER JOIN categories_users cu"
+        + " ON c.id = cu.category_id AND cu.user_id = :userId"
+        + " WHERE c.created_by IS NULL"
+        + " OR cu.active = 1"
+        + " ORDER BY name", new MapSqlParameterSource("userId" , userId),  new BeanPropertyRowMapper<>(Category.class));
   }
 
 }

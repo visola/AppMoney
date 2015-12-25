@@ -17,12 +17,13 @@ public class CategoryDao {
   private NamedParameterJdbcTemplate jdbcTemplate;
 
   public List<Category> getCategories(int userId) {
-    return jdbcTemplate.query("SELECT c.*"
+    return jdbcTemplate.query("SELECT c.*, cu.active, cu.hidden"
         + " FROM categories c"
         + " LEFT OUTER JOIN categories_users cu"
         + " ON c.id = cu.category_id AND cu.user_id = :userId"
-        + " WHERE c.created_by IS NULL"
-        + " OR cu.active = 1"
+        + " WHERE (c.created_by IS NULL"
+        + " OR cu.active = true)"
+        + " AND cu.hidden <> true"
         + " ORDER BY name", new MapSqlParameterSource("userId" , userId),  new BeanPropertyRowMapper<>(Category.class));
   }
 

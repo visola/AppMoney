@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,12 @@ public class CategoryController {
   @RequestMapping(method=RequestMethod.GET)
   public List<Category> getCategories(@AuthenticationPrincipal User user) {
     return categoryDao.getCategories(user.getId());
+  }
+
+  @RequestMapping(method=RequestMethod.POST)
+  public Category createCategory(@RequestBody Category category, @AuthenticationPrincipal User user) {
+    category.setCreatedBy(user.getId());
+    return categoryDao.create(category);
   }
 
 }

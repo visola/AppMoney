@@ -14,15 +14,15 @@
     <label class="control-label col-sm-2">Category:</label>
     <div class="col-sm-10">
       <select class="form-control" name="categoryId">
-        <option value="0">-- Select --</option>
-        <% var categoryGroups = categories.where({parentId:null}) %>
-        <% for (var i = 0; i < categoryGroups.length ; i++) { %>
-          <optgroup label="<%= categoryGroups[i].get('name') %>">
-            <% var subCategories = categories.where({parentId:categoryGroups[i].id}) %>
-            <% for (var j = 0; j < subCategories.length ; j++) { %>
-              <option value="<%= subCategories[j].id %>" <%= model.get('categoryId') == subCategories[j].id ? 'selected="selected"' : ''%>><%= subCategories[j].get('name') %></option>
-            <% } %>
-          </optgroup>
+        <%
+          var categoryLeafs = categories.filter(function (c) {return categories.where({parentId:c.id}).length == 0});
+          categoryLeafs.sort(function (c1, c2) {
+            console.log(c1);
+            return c1.getLeafName().localeCompare(c2.getLeafName());
+          });
+        %>
+        <% for (var i = 0; i < categoryLeafs.length; i++) { %>
+          <option value="<%= categoryLeafs[i].id %>"><%= categoryLeafs[i].getLeafName() %></option>
         <% } %>
       </select>
     </div>

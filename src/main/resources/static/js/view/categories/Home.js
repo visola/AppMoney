@@ -36,7 +36,7 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
 
       if (value) {
         this.data.filtered = this.collection.filter(function (el, index) {
-          return el.get('name').toLowerCase().indexOf(value.toLowerCase()) >= 0;
+          return el.getLeafName().toLowerCase().indexOf(value.toLowerCase()) >= 0;
         });
       } else {
         this.data.filtered = this.collection.slice(0, this.collection.length);

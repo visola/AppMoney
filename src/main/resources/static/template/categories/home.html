@@ -10,19 +10,28 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Parent</th>
+      <th>Default</th>
       <th>Action</th>
     </tr>
   </thead>
   <tbody>
-    <% 
+    <%
+      filtered.sort(function (c1, c2) {
+        return c1.getLeafName().localeCompare(c2.getLeafName());
+      });
       for (var i = 0; i < filtered.length ; i++) {
         var parentId = filtered[i].get('parentId');
         if (filtered[i].get('hidden')) continue;
     %>
       <tr id="category-<%= filtered[i].id %>">
-        <td><%= filtered[i].get('name') %></td>
-        <td><%= parentId ? collection.get(parentId).get('name') : ' - ' %></td>
+        <td><%= filtered[i].getLeafName() %></td>
+        <td>
+          <% if (filtered[i].get('createdBy') == null) { %>
+            <span class="glyphicon glyphicon-ok"></span>
+          <% } else { %>
+            &nbsp;
+          <% } %>
+        </td>
         <td>&nbsp;</td>
       </tr>
     <% } %>

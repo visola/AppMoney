@@ -42,7 +42,7 @@ define(['underscore', 'jquery', 'backbone', 'router', 'view/Base'],
         submitButton = this.$('button[type=submit]'),
         originalText = submitButton.html();
 
-      if (e && e.hasOwnProperty('preventDefault')) {
+      if (e && e.preventDefault) {
         e.preventDefault();
       }
 

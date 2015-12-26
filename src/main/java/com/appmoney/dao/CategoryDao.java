@@ -23,8 +23,8 @@ public class CategoryDao {
     return jdbcTemplate.query("SELECT c.*, cu.active, cu.hidden"
         + " FROM categories c"
         + " LEFT OUTER JOIN categories_users cu"
-        + " ON c.id = cu.category_id AND (cu.user_id = :userId OR cu.user_id IS NULL)"
-        + " WHERE (c.created_by IS NOT NULL OR cu.active = true)"
+        + " ON c.id = cu.category_id"
+        + " WHERE (c.created_by = :userId OR cu.active = true)"
         + " AND (cu.hidden IS NULL OR cu.hidden <> true)"
         + " ORDER BY name", new MapSqlParameterSource("userId" , userId),  new BeanPropertyRowMapper<>(Category.class));
   }

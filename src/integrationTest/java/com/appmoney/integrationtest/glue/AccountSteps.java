@@ -1,25 +1,24 @@
 package com.appmoney.integrationtest.glue;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.appmoney.integrationtest.SeleniumHelper;
-
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 public class AccountSteps extends BaseGlue {
 
-  @Autowired
-  SeleniumHelper seleniumHelper;
-
-  @Autowired
-  WebDriver driver;
+  @Given("^I have an account with name '(.*)' of type '(.*)'$")
+  public void createAccount(String name, String type) {
+    goToCreateAccountScreen();
+    fillAccountForm(name, type);
+    checkAccountExists(name);
+  }
 
   @Then("^I should see an account with name '(.*)'$")
   public void checkAccountExists(String accountName) {
     driver.navigate().to("http://localhost:8080/");
+    seleniumHelper.waitForText(accountName);
   }
 
   @When("^I fill account form with name '(.*)' of type '(.*)'$")
@@ -29,6 +28,8 @@ public class AccountSteps extends BaseGlue {
     driver.findElement(By.name("initialBalanceDate")).sendKeys("08102015");
     seleniumHelper.selectOption("type", type);
     seleniumHelper.click("Save");
+
+    acceptAlert();
   }
 
   @When("^I go to the create account screen$")

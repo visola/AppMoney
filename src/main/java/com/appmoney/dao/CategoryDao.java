@@ -21,14 +21,12 @@ public class CategoryDao {
   private NamedParameterJdbcTemplate jdbcTemplate;
 
   public List<Category> getCategories(int userId, Boolean includeHidden) {
-    StringBuilder sql = new StringBuilder("SELECT c.*, cu.active, cu.hidden");
+    StringBuilder sql = new StringBuilder("SELECT c.*, cu.hidden");
     sql.append(" FROM categories c");
     sql.append(" LEFT OUTER JOIN categories_users cu");
     sql.append(" ON c.id = cu.category_id AND cu.user_id = :userId");
-    if (includeHidden == true) {
-      sql.append(" WHERE (c.created_by = :userId OR c.created_by IS NULL)");
-    } else {
-      sql.append(" WHERE (c.created_by = :userId OR cu.active = true)");
+    sql.append(" WHERE (c.created_by = :userId OR c.created_by IS NULL)");
+    if (includeHidden != true) {
       sql.append(" AND (cu.hidden IS NULL OR cu.hidden <> true)");
     }
     sql.append(" ORDER BY name");
@@ -57,8 +55,8 @@ public class CategoryDao {
     jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(category));
 
     sql = "UPDATE categories_users SET"
-        + " (active, hidden) = "
-        + " (:active, :hidden)"
+        + " (hidden) = "
+        + " (:hidden)"
         + " WHERE category_id = :id"
         + " AND user_id = " + userId;
 

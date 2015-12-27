@@ -1,6 +1,6 @@
 <section class="controls">
   <span id="new-category" class="btn btn-primary glyphicon glyphicon-plus" title="Create Category"></span>
-  <span id="disable-all-default" class="btn btn-danger glyphicon glyphicon-eye-close" title="Disable and hide default categories"></span>
+  <span id="hide-all-default" class="btn btn-danger glyphicon glyphicon-eye-close" title="Hide default categories"></span>
 </section>
 
 <h2>Categories</h2>
@@ -16,33 +16,41 @@
   </div>
 </form>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Default</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%
-      filtered.sort(function (c1, c2) {
-        return c1.getLeafName().localeCompare(c2.getLeafName());
-      });
-      for (var i = 0; i < filtered.length ; i++) {
-        var parentId = filtered[i].get('parentId');
-    %>
-      <tr id="category-<%= filtered[i].id %>" <%= filtered[i].get('hidden') === true ? 'class="tone-down"' : ''%> >
-        <td><%= filtered[i].getLeafName() %></td>
-        <td>
-          <% if (filtered[i].get('createdBy') == null) { %>
-            <span class="glyphicon glyphicon-ok"></span>
-          <% } else { %>
-            &nbsp;
-          <% } %>
-        </td>
-        <td>&nbsp;</td>
+<% if (filtered.length == 0) { %>
+  <p>No categories found.</p>
+<% } else { %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Default</th>
+        <th>Action</th>
       </tr>
-    <% } %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <%
+        filtered.sort(function (c1, c2) {
+          return c1.getLeafName().localeCompare(c2.getLeafName());
+        });
+        for (var i = 0; i < filtered.length ; i++) {
+          var parentId = filtered[i].get('parentId');
+      %>
+        <tr id="category-<%= filtered[i].id %>" <%= filtered[i].get('hidden') === true ? 'class="tone-down"' : ''%> >
+          <td><%= filtered[i].getLeafName() %></td>
+          <% if (filtered[i].get('createdBy') == null) { %>
+            <td>
+              <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td>
+              <span class="enable-default btn btn-default glyphicon glyphicon-eye-<%= filtered[i].get('hidden') === true ? 'open' : 'close'%>"></span>
+            </td>
+          <% } else { %>
+            <td>&nbsp;</td>
+            <td>
+            </td>
+          <% } %>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+<% } %>

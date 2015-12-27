@@ -5,23 +5,13 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
     template: CategoriesHomeTemplate,
     events: {
       'change #show-hidden' : 'showHidden',
-      'click #disable-all-default' : 'disableAll',
+      'click #hide-all-default' : 'hideAllDefault',
       'click #new-category' : 'create',
       'keyup #search-categories' : 'search'
     },
 
     create: function () {
       new Backbone.BootstrapModal(new EditCategoryView(this.collection).getModalOptions()).open();
-    },
-
-    disableAll: function () {
-      this.collection.forEach(function (c) {
-        if (c.get('active') && c.get('createdBy') === null) {
-          c.set('active', false);
-          c.set('hidden', true);
-        }
-      });
-      this.collection.save();
     },
 
     filter: function (value, force) {
@@ -35,6 +25,15 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
         this.data.filtered = this.collection.slice(0, this.collection.length);
       }
       this.data.query = value;
+    },
+
+    hideAllDefault: function () {
+      this.collection.forEach(function (c) {
+        if (c.get('createdBy') === null) {
+          c.set('hidden', true);
+        }
+      });
+      this.collection.save();
     },
 
     initialize: function () {

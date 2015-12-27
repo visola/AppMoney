@@ -6,7 +6,6 @@ public class Category {
   private String name;
   private Integer parentId;
   private Integer createdBy;
-  private Boolean active;
   private Boolean hidden;
 
   public Integer getId() {
@@ -39,14 +38,6 @@ public class Category {
 
   public void setCreatedBy(Integer createdBy) {
     this.createdBy = createdBy;
-  }
-
-  public Boolean getActive() {
-    return active;
-  }
-
-  public void setActive(Boolean active) {
-    this.active = active;
   }
 
   public Boolean getHidden() {

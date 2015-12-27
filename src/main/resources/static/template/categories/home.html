@@ -1,6 +1,7 @@
 <section class="controls">
   <span id="new-category" class="btn btn-primary glyphicon glyphicon-plus" title="Create Category"></span>
-  <span id="hide-all-default" class="btn btn-danger glyphicon glyphicon-eye-close" title="Hide default categories"></span>
+  <span id="show-all-default" class="btn btn-warning glyphicon glyphicon-eye-open" title="Show default categories"></span>
+  <span id="hide-all-default" class="btn btn-warning glyphicon glyphicon-eye-close" title="Hide default categories"></span>
 </section>
 
 <h2>Categories</h2>
@@ -11,7 +12,7 @@
   </div>
   <div class="checkbox">
     <label>
-      <input id="show-hidden" type="checkbox" <%= collection.showHidden ? 'checked="checked"' : '' %>> Show Hidden
+      <input id="show-hidden" type="checkbox" <%= showHidden ? 'checked="checked"' : '' %>> Show Hidden
     </label>
   </div>
 </form>
@@ -34,6 +35,7 @@
         });
         for (var i = 0; i < filtered.length ; i++) {
           var parentId = filtered[i].get('parentId');
+          if (showHidden !== true && filtered[i].get('hidden') === true) continue;
       %>
         <tr id="category-<%= filtered[i].id %>" <%= filtered[i].get('hidden') === true ? 'class="tone-down"' : ''%> >
           <td><%= filtered[i].getLeafName() %></td>
@@ -42,7 +44,7 @@
               <span class="glyphicon glyphicon-ok"></span>
             </td>
             <td>
-              <span class="enable-default btn btn-default glyphicon glyphicon-eye-<%= filtered[i].get('hidden') === true ? 'open' : 'close'%>"></span>
+              <span class="toggle-default btn btn-default glyphicon glyphicon-eye-<%= filtered[i].get('hidden') === true ? 'open' : 'close'%>" title="Toggle default category visibility"></span>
             </td>
           <% } else { %>
             <td>&nbsp;</td>

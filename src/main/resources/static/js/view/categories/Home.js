@@ -7,7 +7,9 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
       'change #show-hidden' : 'showHidden',
       'click #hide-all-default' : 'hideAllDefault',
       'click #new-category' : 'create',
-      'keyup #search-categories' : 'search'
+      'click .toggle-default' : 'toggleDefault',
+      'keyup #search-categories' : 'search',
+      'click #show-all-default' : 'showAllDefault'
     },
 
     create: function () {
@@ -33,7 +35,7 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
           c.set('hidden', true);
         }
       });
-      this.collection.save();
+      this.collection.save().then(this.render.bind(this));
     },
 
     initialize: function () {
@@ -41,8 +43,11 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
 
       this.data.filtered = [];
       this.data.query = '';
+      this.data.showHidden = false;
 
       this.collection = new Categories();
+      this.collection.showHidden = true;
+
       this.loading = true;
 
       this.collection.fetch().then(function () {
@@ -65,16 +70,26 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
       searchBox.focus();
     },
 
-    showHidden: function () {
-      var _this = this;
-      this.collection.showHidden = !this.collection.showHidden;
-      this.loading = true;
-      this.collection.fetch().then(function () {
-        _this.loading = false;
-        _this.filter(_this.data.query, true);
-        _this.render();
+    showAllDefault: function () {
+      this.collection.forEach(function (c) {
+        if (c.get('createdBy') === null) {
+          c.set('hidden', false);
+        }
       });
+      this.collection.save().then(this.render.bind(this));
+    },
+
+    showHidden: function () {
+      this.data.showHidden = !this.data.showHidden;
       this.render();
+    },
+
+    toggleDefault: function (e) {
+      var $t = $(e.target),
+        categoryId = $t.parent().parent().attr('id').split('-')[1],
+        category = this.collection.get(categoryId);
+      category.set('hidden', !category.get('hidden'));
+      category.save({wait:true}).then(this.render.bind(this));
     }
   });
 

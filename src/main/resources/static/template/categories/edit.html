@@ -11,6 +11,7 @@
       <select class="form-control" name="parentId">
         <option value="-1">-- None --</option>
         <% for (var i = 0; i < collection.length ; i++) { %>
+          <% if (collection.at(i).get('hidden') === true) continue; %>
           <option value="<%= collection.at(i).id %>"><%= collection.at(i).get('name') %></option>
         <% } %>
       </select>

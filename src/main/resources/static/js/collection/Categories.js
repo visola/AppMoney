@@ -12,7 +12,7 @@ define(["backbone", 'model/Category'], function (Backbone, Category) {
       return url;
     },
     save: function (options) {
-      this.sync("update", this, options);
+      return this.sync("update", this, options);
     }
   });
 

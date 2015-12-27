@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +32,12 @@ public class CategoryController {
   public Category createCategory(@RequestBody Category category, @AuthenticationPrincipal User user) {
     category.setCreatedBy(user.getId());
     return categoryDao.create(category);
+  }
+
+  @RequestMapping(method=RequestMethod.PUT, value="/{categoryId}")
+  public Category updateCategory(@PathVariable("categoryId") int categoryId, @RequestBody Category category, @AuthenticationPrincipal User user) {
+    categoryDao.update(category, user.getId());
+    return category;
   }
 
   @RequestMapping(method=RequestMethod.PUT)

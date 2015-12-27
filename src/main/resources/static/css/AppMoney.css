@@ -22,6 +22,15 @@ a:hover{
   text-align: center;
 }
 
+#menu-bar .container-fluid {
+  margin: 0 auto;
+  max-width: 1024px;
+}
+
+#menu-bar .container-fluid div {
+  padding: 0;
+}
+
 .negative {
   color: red;
 }
@@ -51,4 +60,8 @@ a:hover{
 
 table.center th, table.center td {
   text-align: center;
+}
+
+.tone-down {
+  color: #bbb;
 }

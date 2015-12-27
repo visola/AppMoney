@@ -1,6 +1,19 @@
-define(["backbone"], function (Backbone) {
+define(["backbone", 'model/Category'], function (Backbone, Category) {
   var Categories = Backbone.Collection.extend({
-    url: '/api/v1/categories'
+    model: Category,
+    initialize: function () {
+      this.showHidden = false;
+    },
+    url: function () {
+      var url = '/api/v1/categories';
+      if (this.showHidden) {
+        url += '?hidden=true';
+      }
+      return url;
+    },
+    save: function (options) {
+      return this.sync("update", this, options);
+    }
   });
 
   return Categories;

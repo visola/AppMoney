@@ -1,0 +1,59 @@
+<section class="controls">
+  <span id="new-category" class="btn btn-primary glyphicon glyphicon-plus" title="Create Category"></span>
+  <span id="show-all-default" class="btn btn-warning glyphicon glyphicon-eye-open" title="Show default categories"></span>
+  <span id="hide-all-default" class="btn btn-warning glyphicon glyphicon-eye-close" title="Hide default categories"></span>
+</section>
+
+<h2>Categories</h2>
+
+<form class="form-inline">
+  <div class="form-group">
+    <input class="form-control" type="text" id="search-categories" placeholder="Search" value="<%= query %>"/>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input id="show-hidden" type="checkbox" <%= showHidden ? 'checked="checked"' : '' %>> Show Hidden
+    </label>
+  </div>
+</form>
+
+<% if (filtered.length == 0) { %>
+  <p>No categories found.</p>
+<% } else { %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Default</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%
+        filtered.sort(function (c1, c2) {
+          return c1.getLeafName().localeCompare(c2.getLeafName());
+        });
+        for (var i = 0; i < filtered.length ; i++) {
+          var parentId = filtered[i].get('parentId');
+          if (showHidden !== true && filtered[i].get('hidden') === true) continue;
+      %>
+        <tr id="category-<%= filtered[i].id %>" <%= filtered[i].get('hidden') === true ? 'class="tone-down"' : ''%> >
+          <td><%= filtered[i].getLeafName() %></td>
+          <% if (filtered[i].get('createdBy') == null) { %>
+            <td>
+              <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td>
+              <span class="toggle-default btn btn-default glyphicon glyphicon-eye-<%= filtered[i].get('hidden') === true ? 'open' : 'close'%>" title="Toggle default category visibility"></span>
+            </td>
+          <% } else { %>
+            <td>&nbsp;</td>
+            <td>
+              <span class="edit-category btn btn-default glyphicon glyphicon-pencil" title="Edit this category"></span>
+            </td>
+          <% } %>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+<% } %>

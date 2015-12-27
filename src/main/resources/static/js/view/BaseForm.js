@@ -42,7 +42,9 @@ define(['underscore', 'jquery', 'backbone', 'router', 'view/Base'],
         submitButton = this.$('button[type=submit]'),
         originalText = submitButton.html();
 
-      e.preventDefault();
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
 
       submitButton.attr('disabled', 'disabled')
       data = this.processData(data);

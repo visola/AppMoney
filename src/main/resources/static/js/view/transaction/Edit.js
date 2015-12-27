@@ -13,6 +13,7 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
 
       this.loading = true;
       this.data.fromAccount = null;
+      categories.showHidden = true;
 
       if (this.model) {
         toId = this.model.get('toAccountId');

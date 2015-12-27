@@ -12,7 +12,8 @@
         <option value="-1">-- None --</option>
         <% for (var i = 0; i < collection.length ; i++) { %>
           <% if (collection.at(i).get('hidden') === true) continue; %>
-          <option value="<%= collection.at(i).id %>"><%= collection.at(i).get('name') %></option>
+          <% if (model && model.id === collection.at(i).id) continue; %>
+          <option value="<%= collection.at(i).id %>" <%= (model && model.get('parentId') == collection.at(i).id) ? 'selected="selected"' : '' %> ><%= collection.at(i).get('name') %></option>
         <% } %>
       </select>
     </div>

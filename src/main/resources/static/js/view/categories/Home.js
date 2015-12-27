@@ -5,6 +5,7 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
     template: CategoriesHomeTemplate,
     events: {
       'change #show-hidden' : 'showHidden',
+      'click .edit-category' : 'editCategory',
       'click #hide-all-default' : 'hideAllDefault',
       'click #new-category' : 'create',
       'click .toggle-default' : 'toggleDefault',
@@ -14,6 +15,13 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
 
     create: function () {
       new Backbone.BootstrapModal(new EditCategoryView(this.collection).getModalOptions()).open();
+    },
+
+    editCategory: function (e) {
+      var $t = $(e.target),
+        categoryId = $t.parent().parent().attr('id').split('-')[1],
+        category = this.collection.get(categoryId);
+      new Backbone.BootstrapModal(new EditCategoryView(this.collection, category).getModalOptions()).open();
     },
 
     filter: function (value, force) {

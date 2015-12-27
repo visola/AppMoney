@@ -15,9 +15,8 @@
     <div class="col-sm-10">
       <select class="form-control" name="categoryId">
         <%
-          var categoryLeafs = categories.filter(function (c) {return categories.where({parentId:c.id}).length == 0});
+          var categoryLeafs = categories.filter(function (c) {return (c.get('hidden') == false || c.get('hidden') == null) && categories.where({parentId:c.id}).length == 0});
           categoryLeafs.sort(function (c1, c2) {
-            console.log(c1);
             return c1.getLeafName().localeCompare(c2.getLeafName());
           });
         %>

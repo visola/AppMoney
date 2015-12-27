@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.appmoney.model.Category;
 
@@ -19,14 +20,19 @@ public class CategoryDao {
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<Category> getCategories(int userId) {
-    return jdbcTemplate.query("SELECT c.*, cu.active, cu.hidden"
-        + " FROM categories c"
-        + " LEFT OUTER JOIN categories_users cu"
-        + " ON c.id = cu.category_id"
-        + " WHERE (c.created_by = :userId OR cu.active = true)"
-        + " AND (cu.hidden IS NULL OR cu.hidden <> true)"
-        + " ORDER BY name", new MapSqlParameterSource("userId" , userId),  new BeanPropertyRowMapper<>(Category.class));
+  public List<Category> getCategories(int userId, Boolean includeHidden) {
+    StringBuilder sql = new StringBuilder("SELECT c.*, cu.active, cu.hidden");
+    sql.append(" FROM categories c");
+    sql.append(" LEFT OUTER JOIN categories_users cu");
+    sql.append(" ON c.id = cu.category_id AND cu.user_id = :userId");
+    if (includeHidden == true) {
+      sql.append(" WHERE (c.created_by = :userId OR c.created_by IS NULL)");
+    } else {
+      sql.append(" WHERE (c.created_by = :userId OR cu.active = true)");
+      sql.append(" AND (cu.hidden IS NULL OR cu.hidden <> true)");
+    }
+    sql.append(" ORDER BY name");
+    return jdbcTemplate.query(sql.toString(), new MapSqlParameterSource("userId" , userId),  new BeanPropertyRowMapper<>(Category.class));
   }
 
   public Category create(Category category) {
@@ -37,6 +43,26 @@ public class CategoryDao {
 
     jdbcTemplate.update(sql,  new BeanPropertySqlParameterSource(category), keyHolder);
     category.setId((int) keyHolder.getKeys().get("id"));
+
+    return category;
+  }
+
+  @Transactional
+  public Category update(Category category, int userId) {
+    String sql = "UPDATE categories SET"
+        + " (name, parent_id, created_by) ="
+        + " (:name, :parentId, :createdBy)"
+        + " WHERE id = :id";
+
+    jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(category));
+
+    sql = "UPDATE categories_users SET"
+        + " (active, hidden) = "
+        + " (:active, :hidden)"
+        + " WHERE category_id = :id"
+        + " AND user_id = " + userId;
+
+    jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(category));
 
     return category;
   }

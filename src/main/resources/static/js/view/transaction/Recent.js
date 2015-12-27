@@ -9,6 +9,7 @@ define(['view/Base', 'view/PageControl', 'collection/Transactions', 'collection/
         categories = this.data.categories = new Categories(),
         accounts = this.data.accounts = new Accounts(),
         _this = this;
+      categories.showHidden = true;
       this.loading = true;
       this.pageControlView = new PageControlView(transactions, this);
 

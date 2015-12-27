@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.appmoney.dao.CategoryDao;
@@ -21,14 +23,21 @@ public class CategoryController {
   CategoryDao categoryDao;
 
   @RequestMapping(method=RequestMethod.GET)
-  public List<Category> getCategories(@AuthenticationPrincipal User user) {
-    return categoryDao.getCategories(user.getId());
+  public List<Category> getCategories(@RequestParam(defaultValue="false") Boolean hidden, @AuthenticationPrincipal User user) {
+    return categoryDao.getCategories(user.getId(), hidden);
   }
 
   @RequestMapping(method=RequestMethod.POST)
   public Category createCategory(@RequestBody Category category, @AuthenticationPrincipal User user) {
     category.setCreatedBy(user.getId());
     return categoryDao.create(category);
+  }
+
+  @RequestMapping(method=RequestMethod.PUT)
+  @Transactional
+  public List<Category> updateCategories(@RequestBody List<Category> categories, @AuthenticationPrincipal User user) {
+    categories.forEach(c -> categoryDao.update(c, user.getId()));
+    return categories;
   }
 
 }

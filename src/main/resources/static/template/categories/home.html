@@ -1,10 +1,20 @@
 <section class="controls">
   <span id="new-category" class="btn btn-primary glyphicon glyphicon-plus" title="Create Category"></span>
+  <span id="disable-all-default" class="btn btn-danger glyphicon glyphicon-eye-close" title="Disable and hide default categories"></span>
 </section>
 
 <h2>Categories</h2>
 
-<input class="form-control" type="text" id="search-categories" placeholder="Search" value="<%= query %>"/>
+<form class="form-inline">
+  <div class="form-group">
+    <input class="form-control" type="text" id="search-categories" placeholder="Search" value="<%= query %>"/>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input id="show-hidden" type="checkbox" <%= collection.showHidden ? 'checked="checked"' : '' %>> Show Hidden
+    </label>
+  </div>
+</form>
 
 <table class="table table-striped">
   <thead>
@@ -21,9 +31,8 @@
       });
       for (var i = 0; i < filtered.length ; i++) {
         var parentId = filtered[i].get('parentId');
-        if (filtered[i].get('hidden')) continue;
     %>
-      <tr id="category-<%= filtered[i].id %>">
+      <tr id="category-<%= filtered[i].id %>" <%= filtered[i].get('hidden') === true ? 'class="tone-down"' : ''%> >
         <td><%= filtered[i].getLeafName() %></td>
         <td>
           <% if (filtered[i].get('createdBy') == null) { %>

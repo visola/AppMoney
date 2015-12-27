@@ -61,3 +61,7 @@ a:hover{
 table.center th, table.center td {
   text-align: center;
 }
+
+.tone-down {
+  color: #bbb;
+}

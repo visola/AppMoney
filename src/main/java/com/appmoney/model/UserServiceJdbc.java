@@ -7,10 +7,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.appmoney.dao.CategoryDao;
 import com.appmoney.dao.RoleDao;
 import com.appmoney.dao.UserDao;
 
 public class UserServiceJdbc implements UserService {
+
+  @Autowired
+  CategoryDao categoryDao;
 
   @Autowired
   RoleDao roleDao;
@@ -37,8 +41,9 @@ public class UserServiceJdbc implements UserService {
   @Override
   @Transactional
   public void create(String email) {
-    userDao.create(email);
+    User user = userDao.create(email);
     roleDao.addRole(email, "USER");
+    categoryDao.createUserRecords(user.getId());
   }
 
 }

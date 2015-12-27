@@ -45,6 +45,10 @@ public class CategoryDao {
     return category;
   }
 
+  public void createUserRecords(int userId) {
+    jdbcTemplate.update("INSERT INTO categories_users (SELECT c.id, :userId, false FROM categories c)", new MapSqlParameterSource("userId" , userId));
+  }
+
   @Transactional
   public Category update(Category category, int userId) {
     String sql = "UPDATE categories SET"

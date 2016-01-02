@@ -20,12 +20,19 @@ define(["jquery", "backbone", "security", "tpl!template/menuItem.html"],
         "credit/:toId(/)" : "creditAccount",
         "transactions/:id(/)" : "editTransaction",
         "transfer/:toId/:fromId(/)" : "transfer",
-        "categories": "categories"
+        "categories": "categories",
+        "reports/category" : "categoryReport"
       },
 
       categories: function () {
         require(["view/categories/Home"], function (CategoriesHomeView) {
           render(new CategoriesHomeView());
+        });
+      },
+
+      categoryReport: function () {
+        require(['view/report/Category'], function (CategoryReportView) {
+          render(new CategoryReportView());
         });
       },
 
@@ -76,7 +83,10 @@ define(["jquery", "backbone", "security", "tpl!template/menuItem.html"],
 
       renderMenu: function () {
         var i,
-          items = [{title:'Home', link:'/'}, {title:'Categories', link:'/categories'}],
+          items = [
+              {title:'Home', link:'/'},
+              {title:'Categories', link:'/categories'},
+              {title:'Report', link: '/reports/category'}],
           menuItem = '';
 
         for (i = 0; i < items.length; i++) {

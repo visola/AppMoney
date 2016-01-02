@@ -1,3 +1,18 @@
+.chart-legend {
+  float: right;
+  width: 300px;
+}
+
+.chart-legend > .list-group-item {
+  padding: 5px 10px;
+}
+
+.chart-legend .legend-color {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+
 #content {
   max-width: 1024px;
   margin: 0 auto;

@@ -1,0 +1,8 @@
+<div class="chart-legend list-group">
+<% for (var i=0; i < segments.length; i++){ %>
+  <a data-action class="list-group-item">
+    <span class="legend-color" style="background-color:<%=segments[i].fillColor%>"></span>
+    <span class="legend-label"><%= segments[i].label %></span>
+  </a>
+<% } %>
+</div>

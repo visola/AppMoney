@@ -21,20 +21,16 @@ public class ReportController {
 
   @RequestMapping("/totals/per-category")
   public List<Map<String, Object>> perCategory(@AuthenticationPrincipal User user) {
-    String query = "SELECT account, category, year, month, day, ROUND(SUM(ABS(value)), 2) as total"
-        + " FROM ("
-        + "   SELECT DISTINCT a.name as account, c.name as category,"
-        + "   DATE_PART('year', t.happened) as year,"
-        + "   DATE_PART('month', t.happened) - 1 as month,"
-        + "   DATE_PART('day', t.happened) as day,"
-        + "   t.value as value"
-        + "   FROM transactions t"
-        + "   JOIN categories c ON c.id = t.category_id"
-        + "   JOIN permissions p ON p.account_id = t.to_account_id AND t.from_account_id IS NULL"
-        + "   JOIN accounts a ON a.id = t.to_account_id"
-        + "   WHERE p.user_id = :userId"
-        + "   AND t.value < 0"
-        + " ) as t1"
+    String query = "SELECT DISTINCT a.name as account, c.name as category,"
+        + " DATE_PART('year', t.happened) as year,"
+        + " DATE_PART('month', t.happened) - 1 as month,"
+        + " DATE_PART('day', t.happened) as day,"
+        + " SUM(ABS(t.value)) as total"
+        + " FROM transactions t"
+        + " JOIN categories c ON c.id = t.category_id"
+        + " JOIN accounts a ON a.id = t.to_account_id"
+        + " WHERE a.id IN (SELECT p.account_id FROM permissions p WHERE p.user_id = :userId)"
+        + " AND t.value < 0"
         + " GROUP BY account, category, year, month, day";
 
     return jdbcTemplate.queryForList(query, new MapSqlParameterSource("userId" , user.getId()));

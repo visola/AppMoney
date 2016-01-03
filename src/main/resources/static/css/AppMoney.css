@@ -3,6 +3,12 @@
   width: 300px;
 }
 
+.chart-legend .highlight, .chart-legend .list-group-item:hover {
+  background: #ffffdd;
+  color: black;
+  font-weight: bold;
+}
+
 .chart-legend .legend-color {
   display: inline-block;
   height: 10px;

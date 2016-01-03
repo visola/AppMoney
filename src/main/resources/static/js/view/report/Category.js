@@ -1,11 +1,15 @@
-define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'model/Reports', 'tpl!/template/report/category.html', 'tpl!/template/report/categoryLegend.html'],
-    function ($, BaseView, Chart, moment, please, Reports, CategoryReportTemplate, LegendTemplate) {
+define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model/Reports', 'tpl!/template/report/category.html', 'tpl!/template/report/categoryLegend.html'],
+    function ($, BaseView, Chart, moment, Please, TinyColor, Reports, CategoryReportTemplate, LegendTemplate) {
 
   var CategoryReportView = BaseView.extend({
     template: CategoryReportTemplate,
     events: {
       "click .chart-legend a" : 'toggleCategory',
-      "click .chart-legend a span" : 'toggleCategory'
+      "click .chart-legend a span" : 'toggleCategory',
+      "mousemove #chart" : 'mouseOnChart',
+      "mouseout #chart" : 'mouseOffChart',
+      "mouseenter #legend a" : 'mouseOnLegend',
+      "mouseenter #legend a span" : 'mouseOnLegend'
     },
 
     initialize: function () {
@@ -60,6 +64,7 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'model/Reports', 'tp
     filterAndProcessData: function () {
       var i,
         colors = this.colors,
+        highlightColors = this.highlightColors,
         exclude = this.data.exclude,
         _this = this,
         total = 0,
@@ -86,12 +91,17 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'model/Reports', 'tp
       });
 
       if (!colors) {
-        colors = this.colors = please.make_color({colors_returned: result.length, hue: 1, saturation: 0.5});
+        colors = this.colors = Please.make_color({base_color: 'LightCyan', colors_returned: result.length, hue: 1, saturation: 0.5});
+        highlightColors = this.highlightColors = [];
+        for (i = 0; i < colors.length; i++) {
+          highlightColors[i] = '#'+TinyColor(colors[i]).lighten().toHex();
+        }
       }
 
       for (i = 0; i < result.length; i++) {
         total += result[i].value;
         result[i].color = colors[i];
+        result[i].highlight = highlightColors[i];
       }
 
       return {
@@ -99,6 +109,34 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'model/Reports', 'tp
         filtered: result.filter(function (row) {return exclude.indexOf(row.label) < 0}),
         total: total
       };
+    },
+
+    mouseOffChart: function (e) {
+      this.$('#legend a').removeClass('highlight');
+    },
+
+    mouseOnChart: function (e) {
+      var segmentsOn = this.chart.getSegmentsAtEvent(e);
+      this.$('#legend a').removeClass('highlight');
+      if (segmentsOn.length > 0) {
+        this.$("#legend :contains('"+segmentsOn[0].label+"')").parent('a').addClass('highlight');
+      }
+    },
+
+    mouseOnLegend: function (e) {
+      var i,
+        segments = this.chart.segments,
+        $clicked = $(e.target),
+        $legendLink = $clicked[0].tagName == 'A' ? $clicked : $clicked.parent('a'),
+        label = $legendLink.find('.legend-label').text();
+
+      for (i = 0; i < segments.length; i++) {
+        if (segments[i].label == label) {
+          this.chart.showTooltip([segments[i]]);
+          break;
+        }
+      }
+      e.stopPropagation();
     },
 
     toggleCategory: function (e) {

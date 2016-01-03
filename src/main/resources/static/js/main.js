@@ -11,6 +11,7 @@ require.config({
     "please" : "lib/please",
     "template" : "/template",
     "text" : "lib/text",
+    "tiny-color" : "lib/tinycolor",
     "tpl": "lib/tpl",
     "underscore" : "lib/underscore"
   },

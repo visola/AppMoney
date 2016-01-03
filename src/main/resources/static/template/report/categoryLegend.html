@@ -1,8 +1,13 @@
-<div class="chart-legend list-group">
+<div class="list-group">
 <% for (var i=0; i < segments.length; i++){ %>
-  <a data-action class="list-group-item">
-    <span class="legend-color" style="background-color:<%=segments[i].fillColor%>"></span>
+  <a data-action class="list-group-item<%= exclude.indexOf(segments[i].label) >= 0 ? ' exclude' : ''%>">
+    <% if (segments[i].fillColor) { %>
+      <span class="legend-color" style="background-color:<%=segments[i].fillColor%>"></span>
+    <% } else {%>
+      <span class="legend-color"></span>
+    <% } %>
     <span class="legend-label"><%= segments[i].label %></span>
+    <span class="badge">$ <%= segments[i].value.toFixed(2) %></span>
   </a>
 <% } %>
 </div>

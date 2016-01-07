@@ -8,7 +8,7 @@ require.config({
     "chart" : "lib/Chart",
     "jquery" : "lib/jquery-2.1.4",
     "moment" : "lib/moment",
-    "please" : "lib/please",
+    "please" : "lib/Please",
     "template" : "/template",
     "text" : "lib/text",
     "tiny-color" : "lib/tinycolor",

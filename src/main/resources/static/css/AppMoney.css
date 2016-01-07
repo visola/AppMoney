@@ -1,6 +1,5 @@
-.chart-legend {
-  float: right;
-  width: 300px;
+a:hover{
+  cursor: pointer;
 }
 
 .chart-legend .highlight, .chart-legend .list-group-item:hover {
@@ -46,8 +45,9 @@
   margin-top: 0;
 }
 
-a:hover{
-  cursor: pointer;
+#filter {
+  float: right;
+  width: 300px;
 }
 
 .google-button {

@@ -1,11 +1,24 @@
 define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model/Reports', 'tpl!/template/report/category.html', 'tpl!/template/report/categoryLegend.html'],
     function ($, BaseView, Chart, moment, Please, TinyColor, Reports, CategoryReportTemplate, LegendTemplate) {
 
+  const TIME_RANGE_OPTIONS = [
+    {label:'Last 7 days', startDate: moment(), endDate: moment().subtract(7, 'days')},
+    {label:'Last 30 days', startDate: moment(), endDate: moment().subtract(30, 'days')},
+    {label:'Last 3 months', startDate: moment(), endDate: moment().subtract(3, 'months')},
+    {label:'Last 365 days', startDate: moment(), endDate: moment().subtract(365, 'days')},
+    {label:'Last year', startDate: moment().subtract(1, 'year').endOf('year'), endDate: moment().subtract(1, 'year').startOf('year')},
+    {label:'This year', startDate: moment(), endDate: moment().startOf('year')},
+    {label:'This quarter', startDate: moment(), endDate: moment().startOf('quarter')},
+    {label:'This month', startDate: moment(), endDate: moment().startOf('month')},
+    {label:'This week', startDate: moment(), endDate: moment().startOf('week')}
+  ];
+
   var CategoryReportView = BaseView.extend({
     template: CategoryReportTemplate,
     events: {
       "click .chart-legend a" : 'toggleCategory',
       "click .chart-legend a span" : 'toggleCategory',
+      "change [name=time-range]" : 'timeRangeChanged',
       "mousemove #chart" : 'mouseOnChart',
       "mouseout #chart" : 'mouseOffChart',
       "mouseenter #legend a" : 'mouseOnLegend',
@@ -16,8 +29,8 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model
       var _this = this;
       this.loading = true;
       this.data.exclude = [];
-      this.data.startDate = moment();
-      this.data.endDate = moment().subtract(30, 'days');
+      this.data.timeRangeOptions = TIME_RANGE_OPTIONS;
+      this.data.selectedTimeRange = 1;
 
       Reports.totalPerCategory().then(function (response) {
         _this.loading = false;
@@ -69,11 +82,12 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model
         _this = this,
         total = 0,
         result = [],
-        totalPerCategory = {};
+        totalPerCategory = {},
+        pickedTimeRange = TIME_RANGE_OPTIONS[this.data.selectedTimeRange];
 
       this.response
       .filter(function (row) {
-        return moment(row).isBetween(_this.data.endDate, _this.data.startDate);
+        return moment(row).isBetween(pickedTimeRange.endDate, pickedTimeRange.startDate);
       }).forEach(function (row) {
         var total = totalPerCategory[row.category] || 0;
         totalPerCategory[row.category] = total + row.total;
@@ -137,6 +151,12 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model
         }
       }
       e.stopPropagation();
+    },
+
+    timeRangeChanged: function (e) {
+      var val = $(e.target).val();
+      this.data.selectedTimeRange = val;
+      this.drawChart(this.filterAndProcessData());
     },
 
     toggleCategory: function (e) {

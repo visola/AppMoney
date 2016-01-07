@@ -2,4 +2,17 @@
 
 <canvas id="chart" width="600" height="600"></canvas>
 
-<section id="legend" class="chart-legend"></section>
+<section id="filter">
+  <h3>Filter</h3>
+  <div class="form-group">
+    <label for="time-range">Email address</label>
+    <select class="form-control" name="time-range">
+      <% for (var i = 0; i < timeRangeOptions.length; i++) { %>
+        <option value="<%= i %>" <%= selectedTimeRange == i ? 'selected="selected"' : '' %>><%= timeRangeOptions[i].label %></option>
+      <% } %>
+    </select>
+  </div>
+  <label></label>
+  <label>Click to toggle:</label>
+  <section id="legend" class="chart-legend"></section>
+</section>

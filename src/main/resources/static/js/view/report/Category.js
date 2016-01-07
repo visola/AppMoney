@@ -91,7 +91,7 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model
       });
 
       if (!colors) {
-        colors = this.colors = Please.make_color({base_color: 'LightCyan', colors_returned: result.length, hue: 1, saturation: 0.5});
+        colors = this.colors = Please.make_color({colors_returned: result.length, saturation: 0.5});
         highlightColors = this.highlightColors = [];
         for (i = 0; i < colors.length; i++) {
           highlightColors[i] = '#'+TinyColor(colors[i]).lighten().toHex();

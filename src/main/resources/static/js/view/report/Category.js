@@ -155,6 +155,7 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model
 
     timeRangeChanged: function (e) {
       var val = $(e.target).val();
+      this.colors = null;
       this.data.selectedTimeRange = val;
       this.drawChart(this.filterAndProcessData());
     },

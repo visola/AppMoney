@@ -1,3 +1,39 @@
+a:hover{
+  cursor: pointer;
+}
+
+.chart-legend .highlight, .chart-legend .list-group-item:hover {
+  background: #ffffdd;
+  color: black;
+  font-weight: bold;
+}
+
+.chart-legend .legend-color {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+
+.chart-legend .list-group-item {
+  padding: 5px 10px;
+}
+
+.chart-legend .list-group-item.exclude {
+  background: #ddd;
+  color: #bbb;
+}
+
+.chart-legend .list-group-item.exclude .badge {
+  background: transparent;
+  border: 1px solid #bbb;
+  color: #bbb;
+}
+
+.chart-legend .list-group-item.exclude .legend-color {
+  background: transparent !important;
+  border: 1px solid #bbb;
+}
+
 #content {
   max-width: 1024px;
   margin: 0 auto;
@@ -9,8 +45,9 @@
   margin-top: 0;
 }
 
-a:hover{
-  cursor: pointer;
+#filter {
+  float: right;
+  width: 300px;
 }
 
 .google-button {

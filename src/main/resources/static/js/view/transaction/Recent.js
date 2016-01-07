@@ -1,4 +1,4 @@
-define(['view/Base', 'view/PageControl', 'collection/Transactions', 'collection/Categories', 'collection/Accounts', 'tpl!/template/transaction/recent.html',],
+define(['view/Base', 'view/PageControl', 'collection/Transactions', 'collection/Categories', 'collection/Accounts', 'tpl!/template/transaction/recent.html'],
     function (Base, PageControlView, Transactions, Categories, Accounts, RecentTransactionsTemplate) {
 
   var RecentTransactionsView = Base.extend({

@@ -1,6 +1,6 @@
 <% if (collection.state.totalPages > 1) { %>
   <ul class="pagination">
-    <li class="previous-page <%= !collection.hasPreviousPage() ? 'disabled' : ''%>"><a data-action href="#">Previous</a></li>
+    <li class="previous-page <%= !collection.hasPreviousPage() ? 'disabled' : ''%>"><a data-action href="#">Anterior</a></li>
     <%
       var totalPages = collection.state.totalPages,
         currentPage = collection.state.currentPage,
@@ -8,7 +8,7 @@
     %>
 
     <% if (totalPages > 5 && currentPage > toShow - 2) { %>
-      <li><a href="#" data-action>First</a></li>
+      <li><a href="#" data-action>Primeira</a></li>
       <li class="disabled"><a href="#">...</a></li>
     <% } %>
 
@@ -26,9 +26,9 @@
 
     <% if (totalPages > 5 && totalPages - currentPage > toShow - 1) { %>
       <li class="disabled"><a href="#">...</a></li>
-      <li><a href="#" data-action>Last</a></li>
+      <li><a href="#" data-action>Última</a></li>
     <% } %>
 
-    <li class="next-page <%= !collection.hasNextPage() ? 'disabled' : ''%>"><a data-action href="#">Next</a></li>
+    <li class="next-page <%= !collection.hasNextPage() ? 'disabled' : ''%>"><a data-action href="#">Próxima</a></li>
   </ul>
 <% } %>

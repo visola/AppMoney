@@ -102,7 +102,7 @@ define(["jquery", "backbone", "security", "tpl!template/menuItem.html"],
 
       route : function (route, name, callback) {
         if (Security.isLoggedIn()) {
-          getContentElement().innerHTML = '<p>Loading...</p>';
+          getContentElement().innerHTML = '<p>Carregando...</p>';
           originalRoute.call(this, route, name, callback);
           this.renderMenu();
         } else {

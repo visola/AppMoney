@@ -52,14 +52,14 @@ define(['underscore', 'jquery', 'backbone', 'router', 'view/Base'],
       this.model.save(data, {
         wait: true,
         success: function() {
-          alert("Data saved successfully!");
+          alert("Dados salvos corretamente!");
           router.navigate('/', {trigger:true});
         },
         error: function () {
           submitButton.html(originalText);
           submitButton.removeAttr('disabled');
           console.error(arguments);
-          alert("Sorry, an error happend. Please try again later.");
+          alert("Desculpe, algum erro aconteceu. Por favor tente de novo.");
         }
       });
     },

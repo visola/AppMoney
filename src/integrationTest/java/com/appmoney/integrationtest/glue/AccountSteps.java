@@ -27,15 +27,15 @@ public class AccountSteps extends BaseGlue {
     driver.findElement(By.name("initialBalance")).sendKeys("0");
     driver.findElement(By.name("initialBalanceDate")).sendKeys("08102015");
     seleniumHelper.selectOption("type", type);
-    seleniumHelper.click("Save");
+    seleniumHelper.click("Salvar");
 
     acceptAlert();
   }
 
   @When("^I go to the create account screen$")
   public void goToCreateAccountScreen() {
-    seleniumHelper.click("Create Account");
-    seleniumHelper.waitForText("Save");
+    seleniumHelper.click("Criar Conta");
+    seleniumHelper.waitForText("Salvar");
   }
 
 }

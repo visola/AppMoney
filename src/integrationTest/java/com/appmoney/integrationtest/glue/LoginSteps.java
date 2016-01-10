@@ -18,7 +18,7 @@ public class LoginSteps extends BaseGlue{
   @Given("^I am logged in with user '(.*)'$")
   public void loginAsUser(String username) {
     driver.navigate().to("http://localhost:8080/testLogin?username="+username);
-    seleniumHelper.waitForLink("Create Account");
+    seleniumHelper.waitForLink("Criar Conta");
   }
 
 }

@@ -26,7 +26,7 @@ define(['underscore', 'view/Base', 'security', 'tpl!template/permission/edit.htm
     },
 
     addUser: function (e) {
-      var userEmail = prompt('User email address:');
+      var userEmail = prompt('Email do usuário:');
       if (userEmail) {
         this.collection.add(new UserPermissions({email: userEmail, accountId: this.account.id}));
         this.render();
@@ -56,7 +56,7 @@ define(['underscore', 'view/Base', 'security', 'tpl!template/permission/edit.htm
       var _this = this;
       return {
         content: _this,
-        title: "Account Permissions"
+        title: "Permissões da Conta"
       };
     },
 

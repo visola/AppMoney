@@ -31,7 +31,7 @@ define([
     },
 
     deleteAccount: function (e) {
-      var confirmed = confirm("Are you sure you want to delete this account?");
+      var confirmed = confirm("Você tem certeza que quer apagar esta conta?");
 
       if (confirmed === true) {
         this.model.destroy({
@@ -41,7 +41,7 @@ define([
           },
           error: function () {
             console.error(arguments);
-            alert('Sorry, an error happened while deleting this account.');
+            alert('Desculpe, aconteceu um erro enquanto tentávamos apagar a conta.');
           }
         });
       }
@@ -59,9 +59,9 @@ define([
 
         if (accountId != 'new') {
           _this.model = _this.collection.get(accountId);
-          _this.data.title = 'Edit Account';
+          _this.data.title = 'Editar Conta';
         } else {
-          _this.data.title = 'New Account';
+          _this.data.title = 'Nova Conta';
         }
 
         _this.render();

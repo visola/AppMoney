@@ -22,16 +22,16 @@ define(['view/Base', 'tpl!template/pageControl.html'], function (BaseView, PageC
       if (!$parent.hasClass('active') && !$parent.hasClass('disabled')) {
         if (isNaN(pageNumber)) {
           switch (text) {
-            case 'Next':
+            case 'Próxima':
               this.collection.getNextPage(options);
               break;
-            case 'Previous':
+            case 'Anterior':
               this.collection.getPreviousPage(options);
               break;
-            case 'First':
+            case 'Primeira':
               this.collection.getPage(0, options);
               break;
-            case 'Last':
+            case 'Última':
               this.collection.getPage(this.collection.state.totalPages - 1, options);
               break;
           }

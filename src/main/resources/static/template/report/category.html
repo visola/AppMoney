@@ -1,11 +1,11 @@
-<h3>Total per Categories</h3>
+<h3>Total por Categoria</h3>
 
 <canvas id="chart" width="600" height="600"></canvas>
 
 <section id="filter">
-  <h3>Filter</h3>
+  <h3>Filtro</h3>
   <div class="form-group">
-    <label for="time-range">Email address</label>
+    <label for="time-range">Intervalo de data:</label>
     <select class="form-control" name="time-range">
       <% for (var i = 0; i < timeRangeOptions.length; i++) { %>
         <option value="<%= i %>" <%= selectedTimeRange == i ? 'selected="selected"' : '' %>><%= timeRangeOptions[i].label %></option>
@@ -13,6 +13,6 @@
     </select>
   </div>
   <label></label>
-  <label>Click to toggle:</label>
+  <label>Clique para ativar/desativar:</label>
   <section id="legend" class="chart-legend"></section>
 </section>

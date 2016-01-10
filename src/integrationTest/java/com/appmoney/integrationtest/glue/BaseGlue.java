@@ -24,7 +24,7 @@ public class BaseGlue {
 
   public void goToCreateTransactionForm() {
     driver.navigate().to("http://localhost:8080/debit/1");
-    seleniumHelper.waitForText("Title:");
+    seleniumHelper.waitForText("Título:");
   }
 
 }

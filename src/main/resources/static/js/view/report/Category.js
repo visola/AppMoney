@@ -2,15 +2,15 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model
     function ($, BaseView, Chart, moment, Please, TinyColor, Reports, CategoryReportTemplate, LegendTemplate) {
 
   const TIME_RANGE_OPTIONS = [
-    {label:'Last 7 days', startDate: moment(), endDate: moment().subtract(7, 'days')},
-    {label:'Last 30 days', startDate: moment(), endDate: moment().subtract(30, 'days')},
-    {label:'Last 3 months', startDate: moment(), endDate: moment().subtract(3, 'months')},
-    {label:'Last 365 days', startDate: moment(), endDate: moment().subtract(365, 'days')},
-    {label:'Last year', startDate: moment().subtract(1, 'year').endOf('year'), endDate: moment().subtract(1, 'year').startOf('year')},
-    {label:'This year', startDate: moment(), endDate: moment().startOf('year')},
-    {label:'This quarter', startDate: moment(), endDate: moment().startOf('quarter')},
-    {label:'This month', startDate: moment(), endDate: moment().startOf('month')},
-    {label:'This week', startDate: moment(), endDate: moment().startOf('week')}
+    {label:'Últimos 7 dias', startDate: moment(), endDate: moment().subtract(7, 'days')},
+    {label:'Ultimos 30 dias', startDate: moment(), endDate: moment().subtract(30, 'days')},
+    {label:'Últimos 3 meses', startDate: moment(), endDate: moment().subtract(3, 'months')},
+    {label:'Últimos 365 dias', startDate: moment(), endDate: moment().subtract(365, 'days')},
+    {label:'Ano passado', startDate: moment().subtract(1, 'year').endOf('year'), endDate: moment().subtract(1, 'year').startOf('year')},
+    {label:'Este ano', startDate: moment(), endDate: moment().startOf('year')},
+    {label:'Este quartil', startDate: moment(), endDate: moment().startOf('quarter')},
+    {label:'Este mês', startDate: moment(), endDate: moment().startOf('month')},
+    {label:'Esta semana', startDate: moment(), endDate: moment().startOf('week')}
   ];
 
   var CategoryReportView = BaseView.extend({

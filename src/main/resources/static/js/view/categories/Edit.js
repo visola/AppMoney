@@ -14,7 +14,7 @@ define(['view/BaseForm', 'model/Category', 'tpl!template/categories/edit.html'],
     getModalOptions: function () {
       return {
         content: this,
-        title: (this.model.id ? "Edit" : "Create") + " Category"
+        title: (this.model.id ? "Editar" : "Criar") + " Categoria"
       };
     },
 

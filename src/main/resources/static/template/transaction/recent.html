@@ -1,30 +1,30 @@
 <% if (collection.length == 0) { %>
-  <h4>No recent transactions</h4>
+  <h4>Nenhuma transação recente</h4>
 <% } else { %>
-  <h3>Recent Transactions</h3>
+  <h3>Transações Recentes</h3>
   <nav id="paging-before"></nav>
   <table class="table center responsive">
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Value</th>
-        <th>Happened</th>
-        <th>Account</th>
-        <th>Category</th>
-        <th>Comments</th>
+        <th>Título</th>
+        <th>Valor</th>
+        <th>Ocorrido em</th>
+        <th>Conta</th>
+        <th>Categoria</th>
+        <th>Comentários</th>
       </tr>
     </thead>
     <tbody>
       <% for (var i = 0; i < collection.length; i++) { %>
         <tr>
-          <td data-column="Title">
+          <td data-column="Título">
             <a href="/transactions/<%= collection.at(i).id %>">
               <%= collection.at(i).get('title') %>
             </a>
           </td>
-          <td data-column="Value" <%= collection.at(i).get('value') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('value')).toFixed(2) %></td>
-          <td data-column="Happened"><%= collection.at(i).get('happened') %></td>
-          <td data-column="Account">
+          <td data-column="Valor" <%= collection.at(i).get('value') < 0 ? 'class="negative"' : 'class="positive"' %>>$ <%= Math.abs(collection.at(i).get('value')).toFixed(2) %></td>
+          <td data-column="Ocorrido em"><%= collection.at(i).get('happened') %></td>
+          <td data-column="Conta">
             <%
               var fromAccountId = collection.at(i).get('fromAccountId'),
                 fromAccount = accounts.get(fromAccountId),
@@ -39,8 +39,8 @@
             <% } %>
             <%= toAccountName %>
           </td>
-          <td data-column="Category"><%= categories.get(collection.at(i).get('categoryId')).get('name') %></td>
-          <td data-column="Comments"><%= collection.at(i).get('comments') %></td>
+          <td data-column="Categoria"><%= categories.get(collection.at(i).get('categoryId')).get('name') %></td>
+          <td data-column="Comentário"><%= collection.at(i).get('comments') %></td>
         </tr>
       <% } %>
     </tbody>

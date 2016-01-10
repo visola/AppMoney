@@ -89,19 +89,19 @@ public class CategorySteps extends BaseGlue {
   public void editCategory(String name) {
     WebElement categoryRow = seleniumHelper.getElementParent(name);
     categoryRow.findElement(By.className("edit-category")).click();
-    seleniumHelper.waitForText("Edit Category");
+    seleniumHelper.waitForText("Editar Categoria");
   }
 
   @When("I go to the categories screen")
   public void goToCategoriesScreen() {
     driver.navigate().to("http://localhost:8080/categories");
-    seleniumHelper.waitForText("Categories");
+    seleniumHelper.waitForText("Categorias");
   }
 
   public void goToCreateCategoryForm() {
     goToCategoriesScreen();
     seleniumHelper.clickElementById("new-category");
-    seleniumHelper.waitForText("Create Category");
+    seleniumHelper.waitForText("Criar Categoria");
   }
 
   @When("I click show hidden categories")

@@ -1,4 +1,17 @@
 @media only screen and (max-width: 500px) {
+  .chart-container {
+    display: block;
+    height: 95%;
+    margin: 10px auto;
+    width: 95%;
+  }
+
+  #filter {
+    float: none;
+    margin: 10px auto 0;
+    width: 300px;
+  }
+
   .negative:before {
     color: black;
   }

@@ -30,15 +30,12 @@
     </thead>
     <tbody>
       <%
-        filtered.sort(function (c1, c2) {
-          return c1.getLeafName().localeCompare(c2.getLeafName());
-        });
         for (var i = 0; i < filtered.length ; i++) {
           var parentId = filtered[i].get('parentId');
           if (showHidden !== true && filtered[i].get('hidden') === true) continue;
       %>
         <tr id="category-<%= filtered[i].id %>" <%= filtered[i].get('hidden') === true ? 'class="tone-down"' : ''%> >
-          <td><%= filtered[i].getLeafName() %></td>
+          <td><%= filtered[i].getHierarchicalRepresentation('&nbsp;&nbsp;&nbsp;&nbsp;') %></td>
           <% if (filtered[i].get('createdBy') == null) { %>
             <td>
               <span class="glyphicon glyphicon-ok"></span>

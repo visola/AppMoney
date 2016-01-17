@@ -32,7 +32,7 @@ Feature: Categories
     When I go to the categories screen
     And I created a new category with parent called 'Utilities' under 'Bills'
     Then I should see subcategory 'Utilities' under 'Bills' in the category list
-    And I should see 'Bills | Utilities' in the categories combo when adding a transaction
+    And I should see subcategory 'Utilities' under 'Bills' when adding a transaction
 
   Scenario: I edit an existing category
     Given I created a new category called 'Bills'
@@ -52,6 +52,6 @@ Feature: Categories
     And I click edit category on category 'Utilities'
     And I change the category parent to 'House'
     Then I should see subcategory 'Utilities' under 'House' in the category list
-    And I should see 'House | Utilities' in the categories combo when adding a transaction
+    And I should see subcategory 'Utilities' under 'House' when adding a transaction
     And I should not see subcategory 'Utilities' under 'Bills' in the category list
-    And I should not see 'Bills | Utilities' in the categories combo when adding a transaction
+    And I should not see subcategory 'Utilities' under 'Bills' when adding a transaction

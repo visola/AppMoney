@@ -2,6 +2,12 @@ a:hover{
   cursor: pointer;
 }
 
+.chart-container {
+  display: inline-block;
+  height: 600px;
+  width: 600px;
+}
+
 .chart-legend .highlight, .chart-legend .list-group-item:hover {
   background: #ffffdd;
   color: black;

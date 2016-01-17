@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-bar">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
+  <div id="navigation-bar" class="collapse navbar-collapse">
+    <ul id="menu" class="nav navbar-nav">
+      <% for (var i = 0; i < items.length; i++) { %>
+        <li class="<%= items[i].link === activePath ? 'active' : '' %>">
+          <a href="<%= items[i].link %>" ><%= items[i].title %></a>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</div>

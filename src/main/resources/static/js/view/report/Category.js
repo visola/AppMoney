@@ -55,6 +55,7 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model
       chart = this.chart = new Chart(context).Pie(data.filtered, {
         animationSteps: 0,
         animateRotate: false,
+        responsive: true,
         tooltipTemplate: '<%= label %>: $ <%= value.toFixed(2) %>'
       });
       segments = chart.segments;

@@ -1,5 +1,5 @@
-define(["jquery", "backbone", "security", "tpl!template/menuItem.html"], 
-  function ($, Backbone, Security, MenuItemTemplate) {
+define(["jquery", "backbone", "security", "tpl!template/menu.html"], 
+  function ($, Backbone, Security, MenuTemplate) {
     var originalRoute = Backbone.Router.prototype.route;
 
     function getContentElement() {
@@ -82,22 +82,13 @@ define(["jquery", "backbone", "security", "tpl!template/menuItem.html"],
       },
 
       renderMenu: function () {
-        var i,
+        var activePath = window.location.pathname,
           items = [
               {title:'Home', link:'/'},
-              {title:'Categories', link:'/categories'},
-              {title:'Report', link: '/reports/category'}],
-          menuItem = '';
+              {title:'Categorias', link:'/categories'},
+              {title:'Relatório', link: '/reports/category'}];
 
-        for (i = 0; i < items.length; i++) {
-          menuItem += MenuItemTemplate({
-            active: false,
-            title:items[i].title,
-            link:items[i].link
-          });
-        }
-
-        document.getElementById('menu').innerHTML = menuItem;
+        document.getElementById('menu-bar').innerHTML = MenuTemplate({activePath: window.location.pathname, items: items});
       },
 
       route : function (route, name, callback) {

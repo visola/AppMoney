@@ -22,6 +22,7 @@ import com.appmoney.model.Permission;
 public class AccountDao {
 
   private static final String SELECT_PERMISSIONS_BY_USER_ID_AND_ACCOUNT_ID = "SELECT permission FROM permissions WHERE user_id = :userId AND account_id = :accountId";
+
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -52,15 +53,11 @@ public class AccountDao {
   }
 
   @Transactional
-  public void deleteById(int id) {
+  public void deleteById(int id, int userId) {
     MapSqlParameterSource paramSource = new MapSqlParameterSource("accountId", id);
-
-    String deletePermissions = "DELETE FROM permissions WHERE account_id = :accountId";
-    jdbcTemplate.update(deletePermissions, paramSource);
-
-    String deleteAccount = "DELETE FROM accounts WHERE "
-        + "id = :accountId";
-    jdbcTemplate.update(deleteAccount, paramSource);
+    paramSource.addValue("userId", userId);
+    String deleteAccount = "UPDATE accounts SET deleted = CURRENT_TIMESTAMP, deleted_by = :userId WHERE id = :accountId";
+    jdbcTemplate.update(deleteAccount, paramSource); 
   }
 
   public List<Account> getVisible(int userId) {
@@ -71,6 +68,7 @@ public class AccountDao {
         + "   AND t.happened BETWEEN a.initial_balance_date AND CURRENT_DATE)) AS balance"
         + " FROM accounts a"
         + " WHERE EXISTS (SELECT 1 FROM permissions WHERE user_id = :userId AND account_id = a.id)"
+        + " AND deleted IS NULL"
         + " ORDER BY a.name";
 
     MapSqlParameterSource paramMap = new MapSqlParameterSource("userId" , userId);
@@ -86,7 +84,7 @@ public class AccountDao {
   public Optional<Account> findById(Integer accountId, Integer userId) {
     try {
       Account account = jdbcTemplate.queryForObject(
-          "SELECT * FROM accounts WHERE id = :id",
+          "SELECT * FROM accounts WHERE id = :id AND deleted IS NULL",
           new MapSqlParameterSource("id", accountId),
           new BeanPropertyRowMapper<>(Account.class));
 

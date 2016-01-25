@@ -40,12 +40,16 @@ public class TransactionDao {
   }
 
   public Page<Transaction> getRecentTransactions(User user, PageRequest pageRequest) {
+    String selectAccountIds = "SELECT a.id"
+        + " FROM permissions p"
+        + " JOIN accounts a ON p.account_id = a.id"
+        + " WHERE user_id = :userId"
+        + " AND a.deleted IS NULL";
+
     String baseSql = " FROM transactions"
-        + " WHERE to_account_id IN ("
-        + "   SELECT account_id FROM permissions WHERE user_id = :userId"
-        + ") OR from_account_id IN ("
-        + "   SELECT account_id FROM permissions WHERE user_id = :userId"
-        + ")";
+        + " WHERE to_account_id IN (" + selectAccountIds + ")"
+        + " OR from_account_id IN (" + selectAccountIds + ")";
+
     String sortAndLimit = " ORDER BY happened DESC, id"
         + " LIMIT :pageSize OFFSET :offset";
 
@@ -71,10 +75,12 @@ public class TransactionDao {
   public void checkAnyPermission(Transaction transaction, Permission... permissions) {
     StringBuilder sql = new StringBuilder("SELECT EXISTS ("
         + "SELECT 1"
-        + " FROM permissions"
-        + " WHERE user_id = :userId"
-        + " AND account_id = :accountId"
-        + " AND permission IN (");
+        + " FROM permissions p"
+        + " JOIN accounts a ON p.account_id = a.id"
+        + " WHERE p.user_id = :userId"
+        + " AND a.deleted IS NULL"
+        + " AND p.account_id = :accountId"
+        + " AND p.permission IN (");
 
     for (Permission permission : permissions) {
       sql.append("'");

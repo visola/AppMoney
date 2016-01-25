@@ -28,7 +28,7 @@ public class ReportController {
         + " SUM(ABS(t.value)) as total"
         + " FROM transactions t"
         + " JOIN categories c ON c.id = t.category_id"
-        + " JOIN accounts a ON a.id = t.to_account_id"
+        + " JOIN accounts a ON a.id = t.to_account_id AND a.deleted IS NULL"
         + " WHERE a.id IN (SELECT p.account_id FROM permissions p WHERE p.user_id = :userId)"
         + " AND t.value < 0"
         + " GROUP BY account, category, year, month, day";

@@ -69,7 +69,7 @@ public class AccountController {
   @RequestMapping(method = RequestMethod.DELETE, value="/{id}")
   public Account deleteAccount(@PathVariable int id, @AuthenticationPrincipal User user) {
     Account loadedAccount = loadAccountAndCheckOwner(id, user.getId());
-    accountDao.deleteById(id);
+    accountDao.deleteById(id, user.getId());
     return loadedAccount;
   }
 

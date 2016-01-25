@@ -8,6 +8,18 @@ import cucumber.api.java.en.When;
 
 public class AccountSteps extends BaseGlue {
 
+  @Then("^I should see an account with name '(.*)'$")
+  public void checkAccountExists(String accountName) {
+    goToHomeScreen();
+    seleniumHelper.waitForText(accountName);
+  }
+
+  @Then("^I should not see the account with name '(.*)'$")
+  public void checkAccountDoesNotExist(String accountName) {
+    goToHomeScreen();
+    seleniumHelper.checkElementDoesNotExist(accountName);
+  }
+
   @Given("^I have an account with name '(.*)' of type '(.*)'$")
   public void createAccount(String name, String type) {
     goToCreateAccountScreen();
@@ -15,10 +27,11 @@ public class AccountSteps extends BaseGlue {
     checkAccountExists(name);
   }
 
-  @Then("^I should see an account with name '(.*)'$")
-  public void checkAccountExists(String accountName) {
-    driver.navigate().to("http://localhost:8080/");
-    seleniumHelper.waitForText(accountName);
+  @When("^I delete the account$")
+  public void deleteAccount() {
+    driver.findElement(By.id("delete-account")).click();
+    acceptAlert();
+    waitForHomeScreen();
   }
 
   @When("^I fill account form with name '(.*)' of type '(.*)'$")
@@ -36,6 +49,13 @@ public class AccountSteps extends BaseGlue {
   public void goToCreateAccountScreen() {
     seleniumHelper.click("Criar Conta");
     seleniumHelper.waitForText("Salvar");
+  }
+
+  @When("^I go to the edit account screen to edit account with name '(.*)'$")
+  public void goToEditAccountScreen(String accountName) {
+    goToHomeScreen();
+    seleniumHelper.click(accountName);
+    seleniumHelper.waitForText("Editar Conta");
   }
 
 }

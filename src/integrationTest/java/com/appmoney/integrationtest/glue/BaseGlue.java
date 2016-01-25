@@ -27,4 +27,13 @@ public class BaseGlue {
     seleniumHelper.waitForText("Título:");
   }
 
+  public void goToHomeScreen() {
+    driver.navigate().to("http://localhost:8080/");
+    waitForHomeScreen();
+  }
+
+  public void waitForHomeScreen() {
+    seleniumHelper.waitForText("Criar Conta");
+  }
+
 }

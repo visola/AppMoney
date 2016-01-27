@@ -1,8 +1,11 @@
-define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'collection/Accounts', 'collection/Categories', 'model/Transaction'],
-    function (_, BaseFormView, EditTemplate, Accounts, Categories, Transaction) {
+define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'collection/Accounts', 'collection/Categories', 'model/Transaction', 'router'],
+    function (_, BaseFormView, EditTemplate, Accounts, Categories, Transaction, router) {
 
   return BaseFormView.extend({
     template: EditTemplate,
+    events: {
+      'click #delete-transaction' : 'deleteTransaction'
+    },
 
     initialize: function (toId, creditOrFromAccountId) {
       var _this = this,
@@ -35,6 +38,23 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
         }
         _this.render();
       });
+    },
+
+    deleteTransaction: function (e) {
+      var confirmed = confirm("Você tem certeza que quer apagar esta transação?");
+
+      if (confirmed === true) {
+        this.model.destroy({
+          wait:true,
+          success: function () {
+            router.navigate('/',{trigger:true});
+          },
+          error: function () {
+            console.error(arguments);
+            alert('Desculpe, aconteceu um erro enquanto tentávamos apagar a transação.');
+          }
+        });
+      }
     },
 
     processData: function (data) {

@@ -47,8 +47,10 @@ public class TransactionDao {
         + " AND a.deleted IS NULL";
 
     String baseSql = " FROM transactions"
-        + " WHERE to_account_id IN (" + selectAccountIds + ")"
-        + " OR from_account_id IN (" + selectAccountIds + ")";
+        + " WHERE ("
+        + "    to_account_id IN (" + selectAccountIds + ")"
+        + "    OR from_account_id IN (" + selectAccountIds + ")"
+        + ") AND deleted IS NULL";
 
     String sortAndLimit = " ORDER BY happened DESC, id"
         + " LIMIT :pageSize OFFSET :offset";
@@ -103,6 +105,17 @@ public class TransactionDao {
         + " WHERE id = :id";
 
     jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(transaction));
+  }
+
+  public void delete(Integer transactionId, Integer userId) {
+    MapSqlParameterSource paramSource = new MapSqlParameterSource("transactionId", transactionId);
+    paramSource.addValue("userId", userId);
+
+    String sql = "UPDATE transactions SET (deleted, deleted_by)"
+        + " = (CURRENT_TIMESTAMP, :userId)"
+        + " WHERE id = :transactionId";
+
+    jdbcTemplate.update(sql, paramSource);
   }
 
 }

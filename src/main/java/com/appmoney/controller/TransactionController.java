@@ -42,6 +42,17 @@ public class TransactionController {
     return transaction;
   }
 
+  @RequestMapping(method=RequestMethod.DELETE, value="/{transactionId}")
+  public Transaction deletetransction(@PathVariable Integer transactionId, @AuthenticationPrincipal User user) {
+    Optional<Transaction> maybeLoaded = transactionDao.findById(transactionId);
+    if (maybeLoaded.isPresent()) {
+      transactionDao.checkAnyPermission(maybeLoaded.get(), Permission.WRITE, Permission.OWNER);
+      transactionDao.delete(transactionId, user.getId());
+      return maybeLoaded.get();
+    }
+    return null;
+  }
+
   @RequestMapping(method=RequestMethod.PUT, value="/{transactionId}")
   public Transaction updateTransaction(@PathVariable Integer transactionId, @RequestBody @Valid Transaction transaction, @AuthenticationPrincipal User user) {
     if (!Objects.equals(transactionId, transaction.getId())) {

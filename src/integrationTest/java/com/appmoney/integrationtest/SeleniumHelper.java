@@ -49,7 +49,7 @@ public class SeleniumHelper {
   public void selectOption(String selectName, String optionText) {
     Select select = new Select(driver.findElement(By.name(selectName)));
     for (WebElement option: select.getOptions()) {
-      if (option.getText().equals(optionText)) {
+      if (option.getText().contains(optionText)) {
         option.click();
         break;
       }
@@ -60,6 +60,11 @@ public class SeleniumHelper {
     new WebDriverWait(driver, WAIT_TIMEOUT)
       .ignoring(NoAlertPresentException.class)
       .until(ExpectedConditions.alertIsPresent());
+  }
+
+  public void waitForElementWithId(String elementId) {
+    new WebDriverWait(driver, WAIT_TIMEOUT)
+    .until(ExpectedConditions.visibilityOfElementLocated(By.id(elementId)));
   }
 
   public void waitForElementWithClass(String className) {

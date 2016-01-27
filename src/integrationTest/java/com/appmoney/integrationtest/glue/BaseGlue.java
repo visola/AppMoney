@@ -32,6 +32,11 @@ public class BaseGlue {
     waitForHomeScreen();
   }
 
+  public void goToReportsScreen() {
+    driver.navigate().to("http://localhost:8080/reports/category");
+    seleniumHelper.waitForText("Filtro");
+  }
+
   public void waitForHomeScreen() {
     seleniumHelper.waitForText("Criar Conta");
   }

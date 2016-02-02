@@ -28,7 +28,7 @@
     <label class="control-label col-sm-2">Tipo:</label>
     <div class="col-sm-10">
       <select class="form-control" name="type">
-        <% var types = {'CHECKINGS':'Conta Corrente', 'CREDIT_CARD':'Cartão de Crédito', 'SAVINGS':'Poupança', 'WALLET':'Carteira'};%>
+        <% var types = {'CHECKINGS':'Conta Corrente', 'CREDIT_CARD':'Cartão de Crédito', 'SAVINGS':'Poupança', 'WALLET':'Carteira', 'INVESTMENT':'Investimento'};%>
         <% for (var type in types) {%>
         <option <%= model.get('type') == type ? 'selected="selected"' : '' %> value="<%= type %>"><%= types[type] %></option>
         <% }%>

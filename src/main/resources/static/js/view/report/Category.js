@@ -73,6 +73,12 @@ define(['jquery', 'view/Base', 'chart', 'moment', 'please', 'tiny-color', 'model
         exclude: this.data.exclude,
         segments: allData
       }));
+      
+      var categoryTotal = 0;
+      for (i = 0; i < data.filtered.length; i++) {
+            categoryTotal += data.filtered[i].value;
+      }
+      $("#total").text(categoryTotal.toFixed(2));
     },
 
     filterAndProcessData: function () {

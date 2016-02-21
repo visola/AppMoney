@@ -31,7 +31,9 @@
                 fromAccountName = fromAccount ? fromAccount.get('name') : '???',
                 toAccountId = collection.at(i).get('toAccountId'),
                 toAccount = accounts.get(toAccountId),
-                toAccountName = toAccount ? toAccount.get('name') : '???';
+                toAccountName = toAccount ? toAccount.get('name') : '???',
+                category = categories.get(collection.at(i).get('categoryId')),
+                categoryName = category ? category.get('name') : '???';
             %>
             <% if (fromAccountId) { %>
               <%= fromAccountName %>
@@ -39,7 +41,7 @@
             <% } %>
             <%= toAccountName %>
           </td>
-          <td data-column="Categoria"><%= categories.get(collection.at(i).get('categoryId')).get('name') %></td>
+          <td data-column="Categoria"><%= categoryName %></td>
           <td data-column="Comentário"><%= collection.at(i).get('comments') %></td>
         </tr>
       <% } %>

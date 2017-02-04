@@ -21,12 +21,19 @@ define(["jquery", "backbone", "security", "tpl!template/menu.html"],
         "transactions/:id(/)" : "editTransaction",
         "transfer/:toId/:fromId(/)" : "transfer",
         "categories": "categories",
-        "reports/category" : "categoryReport"
+        "reports/category" : "categoryReport",
+        "category_forecast_entry/:id(/)": "categoryForecast"
       },
 
       categories: function () {
         require(["view/categories/Home"], function (CategoriesHomeView) {
           render(new CategoriesHomeView());
+        });
+      },
+
+      categoryForecast: function (id) {
+        require(['view/forecast/category/Edit'], function (EditCategoryForecastView) {
+          render(new EditCategoryForecastView(id));
         });
       },
 

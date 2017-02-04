@@ -9,7 +9,9 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,6 +58,31 @@ public class CategoryForecastEntryController {
     entry.setUpdatedBy(user.getId());
 
     return categoryForecastEntryDao.insert(entry);
+  }
+
+  @RequestMapping(method=RequestMethod.PUT, value="/{id}")
+  @Transactional
+  public CategoryForecastEntry updateEntry(@PathVariable int id,
+                                           @RequestBody @Valid CategoryForecastEntry entry,
+                                           @AuthenticationPrincipal User user) {
+
+    CategoryForecastEntry loaded = categoryForecastEntryDao.findById(id);
+    Optional<Forecast> forecast = forecastDao.findById(loaded.getForecastId(), user.getId());
+
+    if (!forecast.isPresent()) {
+      throw new AccessDeniedException("You do not have permissions to update this forecast.");
+    }
+
+    entry.setId(loaded.getId());
+    entry.setForecastId(forecast.get().getId());
+
+    entry.setCreated(loaded.getCreated());
+    entry.setCreatedBy(loaded.getCreatedBy());
+
+    entry.setUpdated(new Date());
+    entry.setUpdatedBy(user.getId());
+
+    return categoryForecastEntryDao.update(entry);
   }
 
   private Forecast ensureForecast(int userId) {

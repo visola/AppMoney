@@ -37,8 +37,37 @@ public class CategoryForecastEntryDao {
         + " FROM category_forecast_entries"
         + " WHERE forecast_id = :forecastId"
         + " ORDER BY created_by DESC";
-    
+
     return jdbcTemplate.query(sql, new MapSqlParameterSource("forecastId" , forecastId),  new BeanPropertyRowMapper<>(CategoryForecastEntry.class));
+  }
+
+  public CategoryForecastEntry findById(int itemId) {
+    String sql = "SELECT *"
+        + " FROM category_forecast_entries"
+        + " WHERE id = :itemId"
+        + " ORDER BY created_by DESC";
+
+    return jdbcTemplate.queryForObject(
+        sql,
+        new MapSqlParameterSource("itemId" , itemId),
+        new BeanPropertyRowMapper<>(CategoryForecastEntry.class)
+    );
+  }
+
+  public CategoryForecastEntry update(CategoryForecastEntry entry) {
+    String sql = "UPDATE category_forecast_entries"
+        + " SET forecast_id = :forecastId,"
+        + " title = :title,"
+        + " amount = :amount,"
+        + " category_id = :categoryId,"
+        + " created = :created,"
+        + " created_by = :createdBy,"
+        + " updated = :updated,"
+        + " updated_by = :updatedBy"
+        + " WHERE id = :id";
+
+    jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(entry));
+    return entry;
   }
 
 }

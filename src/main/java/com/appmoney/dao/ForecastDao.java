@@ -51,6 +51,26 @@ public class ForecastDao {
 
     try {
       Forecast forecast = jdbcTemplate.queryForObject(sql, paramMap, new BeanPropertyRowMapper<>(Forecast.class));
+
+      paramMap.addValue("forecastId", forecast.getId());
+      forecast.setPermissions(jdbcTemplate.query(SELECT_PERMISSIONS_BY_USER_ID_AND_FORECAST_ID, paramMap, new PermissionRowMapper()));
+      return Optional.of(forecast);
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
+  }
+
+  public Optional<Forecast> findById(int forecastId, int userId) {
+    String sql = "SELECT f.*"
+        + " FROM forecasts f"
+        + " WHERE id = :forecastId"
+        + " AND EXISTS (SELECT 1 FROM forecast_permissions WHERE user_id = :userId AND forecast_id = f.id)";
+
+    MapSqlParameterSource paramMap = new MapSqlParameterSource("userId" , userId);
+    paramMap.addValue("forecastId", forecastId);
+
+    try {
+      Forecast forecast = jdbcTemplate.queryForObject(sql, paramMap, new BeanPropertyRowMapper<>(Forecast.class));
   
       paramMap.addValue("forecastId", forecast.getId());
       forecast.setPermissions(jdbcTemplate.query(SELECT_PERMISSIONS_BY_USER_ID_AND_FORECAST_ID, paramMap, new PermissionRowMapper()));

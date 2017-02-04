@@ -1,0 +1,28 @@
+<h3>
+  Items por Categoria
+  <small><a href="/category_forecast_entry/new">Novo</a></small>
+</h3>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Título</th>
+      <th>Categoria</th>
+      <th>Valor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% console.log(this.categoryEntries) %>
+    <% for (var i = 0; i < this.categoryEntries.length; i++) { %>
+      <tr>
+        <td>
+          <a href="/category_forecast_entry/<%= this.categoryEntries.at(i).id %>">
+            <%= this.categoryEntries.at(i).get('title') %>
+          </a>
+        </td>
+        <td><%= this.categories.get(this.categoryEntries.at(i).get('categoryId')).get('name') %></td>
+        <td>$ <%= Math.abs(this.categoryEntries.at(i).get('amount')).toFixed(2) %></td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

@@ -40,6 +40,10 @@ define([
 
         _this.render();
       });
+    },
+
+    goToAfterSave: function () {
+      return "/forecast";
     }
   });
 });

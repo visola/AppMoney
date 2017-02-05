@@ -21,12 +21,20 @@ define(["jquery", "backbone", "security", "tpl!template/menu.html"],
         "transactions/:id(/)" : "editTransaction",
         "transfer/:toId/:fromId(/)" : "transfer",
         "categories": "categories",
-        "reports/category" : "categoryReport"
+        "reports/category" : "categoryReport",
+        "forecast(/)" : "forecast",
+        "category_forecast_entry/:id(/)": "categoryForecast"
       },
 
       categories: function () {
         require(["view/categories/Home"], function (CategoriesHomeView) {
           render(new CategoriesHomeView());
+        });
+      },
+
+      categoryForecast: function (id) {
+        require(['view/forecast/category/Edit'], function (EditCategoryForecastView) {
+          render(new EditCategoryForecastView(id));
         });
       },
 
@@ -69,6 +77,12 @@ define(["jquery", "backbone", "security", "tpl!template/menu.html"],
         });
       },
 
+      forecast: function () {
+        require(['view/forecast/Home'], function (ForecastHomeView) {
+          render(new ForecastHomeView());
+        });
+      },
+
       home : function () {
         require(['view/Home'], function (HomeView) {
           render(new HomeView());
@@ -86,7 +100,8 @@ define(["jquery", "backbone", "security", "tpl!template/menu.html"],
           items = [
               {title:'Home', link:'/'},
               {title:'Categorias', link:'/categories'},
-              {title:'Relatório', link: '/reports/category'}];
+              {title:'Orçamento', link:'/forecast'},
+              {title:'Relatório', link:'/reports/category'}];
 
         document.getElementById('menu-bar').innerHTML = MenuTemplate({activePath: window.location.pathname, items: items});
       },

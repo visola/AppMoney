@@ -78,6 +78,11 @@ a:hover{
   color: red;
 }
 
+.other {
+  background: #ddd;
+  font-weight: bold;
+}
+
 #permissions-table .permission {
   border: 1px solid transparent;
   border-radius: 5px;

@@ -6,6 +6,7 @@ require.config({
     "bootstrap" : "lib/bootstrap",
     "bootstrap-modal": "lib/backbone.bootstrap-modal",
     "chart" : "lib/Chart",
+    "chart2": "lib/Chart2",
     "jquery" : "lib/jquery-2.1.4",
     "moment" : "lib/moment",
     "please" : "lib/Please",

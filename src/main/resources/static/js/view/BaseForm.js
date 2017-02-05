@@ -40,7 +40,8 @@ define(['underscore', 'jquery', 'backbone', 'router', 'view/Base'],
     __handleSave: function (e) {
       var data = this.getFormData(),
         submitButton = this.$('button[type=submit]'),
-        originalText = submitButton.html();
+        originalText = submitButton.html()
+        _this = this;
 
       if (e && e.preventDefault) {
         e.preventDefault();
@@ -53,7 +54,7 @@ define(['underscore', 'jquery', 'backbone', 'router', 'view/Base'],
         wait: true,
         success: function() {
           alert("Dados salvos corretamente!");
-          router.navigate('/', {trigger:true});
+          router.navigate(_this.goToAfterSave(), {trigger:true});
         },
         error: function () {
           submitButton.html(originalText);
@@ -62,6 +63,10 @@ define(['underscore', 'jquery', 'backbone', 'router', 'view/Base'],
           alert("Desculpe, algum erro aconteceu. Por favor tente de novo.");
         }
       });
+    },
+
+    goToAfterSave: function () {
+      return "/";
     },
 
     processData: function (data) {

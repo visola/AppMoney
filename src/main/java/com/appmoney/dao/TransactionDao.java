@@ -1,5 +1,6 @@
 package com.appmoney.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,6 +117,26 @@ public class TransactionDao {
         + " WHERE id = :transactionId";
 
     jdbcTemplate.update(sql, paramSource);
+  }
+
+  public List<Transaction> findBetween(Date start, Date end, User user) {
+    String selectAccountIds = "SELECT a.id"
+        + " FROM permissions p"
+        + " JOIN accounts a ON p.account_id = a.id"
+        + " WHERE user_id = :userId"
+        + " AND a.deleted IS NULL";
+
+    String sql = " FROM transactions"
+        + " WHERE ("
+        + "    to_account_id IN (" + selectAccountIds + ")"
+        + "    OR from_account_id IN (" + selectAccountIds + ")"
+        + ") AND deleted IS NULL"
+        + " AND happened BETWEEN :start AND :end";
+
+    MapSqlParameterSource paramSource = new MapSqlParameterSource("userId" , user.getId());
+    paramSource.addValue("start", start);
+    paramSource.addValue("end", end);
+    return jdbcTemplate.query("SELECT *"+sql, paramSource, new BeanPropertyRowMapper<>(Transaction.class));
   }
 
 }

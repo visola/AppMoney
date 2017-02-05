@@ -31,8 +31,8 @@ public class ForecastDao {
   public Forecast insert(Forecast forecast) {
     KeyHolder keyHolder = new GeneratedKeyHolder();
     String sql = "INSERT INTO forecasts "
-        + "(created, created_by, updated, updated_by) VALUES "
-        + "(:created, :createdBy, :updated, :updatedBy)";
+        + "(start_day_of_month, created, created_by, updated, updated_by) VALUES "
+        + "(:startDayOfMonth, :created, :createdBy, :updated, :updatedBy)";
 
     jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(forecast), keyHolder);
     forecast.setId((int) keyHolder.getKeys().get("id"));

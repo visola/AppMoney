@@ -1,5 +1,6 @@
 CREATE TABLE forecasts (
   id SERIAL NOT NULL PRIMARY KEY,
+  start_day_of_month INT NOT NULL,
   created timestamp,
   created_by int references users(id),
   updated timestamp,

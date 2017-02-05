@@ -1,6 +1,7 @@
 package com.appmoney.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -74,6 +75,14 @@ public class TransactionController {
       return transaction;
     }
     return null;
+  }
+
+  @RequestMapping(method=RequestMethod.GET, value="/betweenDates")
+  public List<Transaction> getTransactionsBetweenDates(
+      @RequestParam(required=false) long start,
+      @RequestParam(required=false) long end,
+      @AuthenticationPrincipal User user) {
+    return transactionDao.findBetween(new Date(start), new Date(end), user);
   }
 
   @RequestMapping(method=RequestMethod.GET)

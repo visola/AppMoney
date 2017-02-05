@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class Forecast {
 
   private Integer id;
@@ -12,6 +16,7 @@ public class Forecast {
   private Integer createdBy;
   private Date updated;
   private Integer updatedBy;
+  @NotNull @Min(1) @Max(28) private Integer startDayOfMonth = 1;
 
   public Integer getId() {
     return id;
@@ -59,6 +64,14 @@ public class Forecast {
 
   public void setUpdatedBy(Integer updatedBy) {
     this.updatedBy = updatedBy;
+  }
+
+  public Integer getStartDayOfMonth() {
+    return startDayOfMonth;
+  }
+
+  public void setStartDayOfMonth(Integer startDayOfMonth) {
+    this.startDayOfMonth = startDayOfMonth;
   }
 
 }

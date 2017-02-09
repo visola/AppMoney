@@ -21,16 +21,31 @@ public class CategoryDao {
   private NamedParameterJdbcTemplate jdbcTemplate;
 
   public List<Category> getCategories(int userId, Boolean includeHidden) {
-    StringBuilder sql = new StringBuilder("SELECT c.*, cu.hidden");
-    sql.append(" FROM categories c");
-    sql.append(" LEFT OUTER JOIN categories_users cu");
-    sql.append(" ON c.id = cu.category_id AND cu.user_id = :userId");
-    sql.append(" WHERE (c.created_by = :userId OR c.created_by IS NULL)");
+    String sql = "SELECT c.*, cu.hidden"
+        + " FROM categories c"
+        + " LEFT OUTER JOIN shared_categories friends"
+        + "   ON ("
+        + "     NOT c.created_by IS NULL"
+        + "     AND friends.owner_id = c.created_by"
+        + "   )"
+        + " LEFT OUTER JOIN categories_users cu"
+        + "   ON ("
+        + "     c.id = cu.category_id"
+        + "     AND ("
+        + "       cu.user_id = :userId"
+        + "       OR cu.user_id = friends.owner_id"
+        + "     )"
+        + "  )"
+        + " WHERE ("
+        + "   c.created_by IS NULL"
+        + "   OR c.created_by = :userId"
+        + "   OR friends.friend_id = :userId"
+        + ")";
     if (includeHidden != true) {
-      sql.append(" AND (cu.hidden IS NULL OR cu.hidden <> true)");
+      sql += " AND (cu.hidden IS NULL OR cu.hidden <> true)";
     }
-    sql.append(" ORDER BY name");
-    return jdbcTemplate.query(sql.toString(), new MapSqlParameterSource("userId" , userId),  new BeanPropertyRowMapper<>(Category.class));
+    sql += " ORDER BY name";
+    return jdbcTemplate.query(sql, new MapSqlParameterSource("userId" , userId),  new BeanPropertyRowMapper<>(Category.class));
   }
 
   public Category create(Category category) {

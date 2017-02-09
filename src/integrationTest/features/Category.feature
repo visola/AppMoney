@@ -44,7 +44,7 @@ Feature: Categories
     And I should not see 'Bills' in the category list
     And I should not see 'Bills' in the categories combo when adding a transaction
 
-  Scenario: I edit change a category parent
+  Scenario: I edit a category parent
     Given I created a new category called 'Bills'
     And I created a new category called 'House'
     And I created a new category with parent called 'Utilities' under 'Bills'

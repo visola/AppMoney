@@ -44,6 +44,12 @@ define([
 
     goToAfterSave: function () {
       return "/forecast";
+    },
+
+    processData: function (data) {
+      // replace comma by dot
+      data.amount = data.amount.replace(/,(\d+)$/g,'.$1');
+      return data;
     }
   });
 });

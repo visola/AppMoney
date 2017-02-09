@@ -55,9 +55,9 @@ define([
       var i,
         result = {},
         categoriesInForecast = this.getCategoriesInForecast(),
-        transactions = this.transactions;
+        transactions = this.getTransactions();
 
-      transactions.each((t) => {
+      transactions.forEach((t) => {
         var subtotal,
           category = t.get('categoryId'),
           happened = t.get('happened'),
@@ -90,6 +90,10 @@ define([
 
       this.totalPerCategoryPresent = this.calculateTotalPerCategory(startPresent, endPresent);
       this.totalPerCategoryPast = this.calculateTotalPerCategory(startPast, endPast);
+    },
+
+    cleanNumber: function (number) {
+      return Math.round(number * 100) / 100;
     },
 
     drawTimeline: function () {
@@ -142,7 +146,7 @@ define([
         for (i = 0; i < entries.length; i++) {
           y += entries.at(i).get('amount') / 30;
         }
-        result.push(y);
+        result.push(this.cleanNumber(y));
       }
       return result;
     },
@@ -153,10 +157,10 @@ define([
         result = [],
         firstDay = days[0],
         startDay = this.forecast.get('startDayOfMonth'),
-        transactions = this.transactions,
+        transactions = this.getTransactions(),
         startGraph = moment().subtract(this.interval, 'd'),
         previousStart = this.getPreviousStart();
-      transactions.each((t) => {
+      transactions.forEach((t) => {
         var happened = t.get('happened'),
           value = t.get('value');
         if (previousStart.isBefore(happened)
@@ -170,14 +174,14 @@ define([
           y = 0;
         }
 
-        transactions.each((t) => {
+        transactions.forEach((t) => {
           var happened = t.get('happened'),
             value = t.get('value');
           if (startGraph.isSame(happened, 'day') && value < 0) {
             y += Math.abs(value);
           }
         });;
-        result.push(y);
+        result.push(this.cleanNumber(y));
         startGraph.add(1, 'd');
       }
       return result.reverse();
@@ -192,6 +196,12 @@ define([
         day.add(1, 'd');
       }
       return result;
+    },
+
+    getTransactions: function () {
+      return this.transactions.filter((t) => {
+        return t.get('fromAccountId') === null;
+      });
     },
 
     getPreviousStart: function () {

@@ -18,8 +18,13 @@ define(['view/BaseForm', 'model/Category', 'tpl!template/categories/edit.html'],
       };
     },
 
+    goToAfterSave: function () {
+      return "/categories";
+    },
+
     handleOk: function () {
       this.__handleSave();
+      this.$el.modal('hide');
     },
 
     processData: function (data) {

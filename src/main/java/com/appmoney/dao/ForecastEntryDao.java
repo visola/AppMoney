@@ -12,18 +12,18 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.appmoney.model.CategoryForecastEntry;
+import com.appmoney.model.ForecastEntry;
 
 @Component
-public class CategoryForecastEntryDao {
+public class ForecastEntryDao {
 
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;
 
   @Transactional
-  public CategoryForecastEntry insert(CategoryForecastEntry entry) {
+  public ForecastEntry insert(ForecastEntry entry) {
     KeyHolder keyHolder = new GeneratedKeyHolder();
-    String sql = "INSERT INTO category_forecast_entries "
+    String sql = "INSERT INTO forecast_entries "
         + "(forecast_id, title, amount, category_id, created, created_by, updated, updated_by) VALUES "
         + "(:forecastId, :title, :amount, :categoryId, :created, :createdBy, :updated, :updatedBy)";
 
@@ -32,30 +32,30 @@ public class CategoryForecastEntryDao {
     return entry;
   }
 
-  public List<CategoryForecastEntry> getEntries(int forecastId) {
+  public List<ForecastEntry> getEntries(int forecastId) {
     String sql = "SELECT *"
-        + " FROM category_forecast_entries"
+        + " FROM forecast_entries"
         + " WHERE forecast_id = :forecastId"
         + " ORDER BY created_by DESC";
 
-    return jdbcTemplate.query(sql, new MapSqlParameterSource("forecastId" , forecastId),  new BeanPropertyRowMapper<>(CategoryForecastEntry.class));
+    return jdbcTemplate.query(sql, new MapSqlParameterSource("forecastId" , forecastId),  new BeanPropertyRowMapper<>(ForecastEntry.class));
   }
 
-  public CategoryForecastEntry findById(int itemId) {
+  public ForecastEntry findById(int itemId) {
     String sql = "SELECT *"
-        + " FROM category_forecast_entries"
+        + " FROM forecast_entries"
         + " WHERE id = :itemId"
         + " ORDER BY created_by DESC";
 
     return jdbcTemplate.queryForObject(
         sql,
         new MapSqlParameterSource("itemId" , itemId),
-        new BeanPropertyRowMapper<>(CategoryForecastEntry.class)
+        new BeanPropertyRowMapper<>(ForecastEntry.class)
     );
   }
 
-  public CategoryForecastEntry update(CategoryForecastEntry entry) {
-    String sql = "UPDATE category_forecast_entries"
+  public ForecastEntry update(ForecastEntry entry) {
+    String sql = "UPDATE forecast_entries"
         + " SET forecast_id = :forecastId,"
         + " title = :title,"
         + " amount = :amount,"

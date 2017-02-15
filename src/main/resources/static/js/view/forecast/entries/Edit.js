@@ -1,18 +1,18 @@
 define([
         'underscore',
         'view/BaseForm',
-        'tpl!template/forecast/category/edit.html',
-        'collection/CategoryForecastEntries',
+        'tpl!template/forecast/entries/edit.html',
+        'collection/ForecastEntries',
         'collection/Categories',
-        'model/CategoryForecastEntry',
+        'model/ForecastEntry',
         'router'],
     function (
         _,
         BaseFormView,
         EditTemplate,
-        CategoryForecastEntries,
+        ForecastEntries,
         Categories,
-        CategoryForecastEntry,
+        ForecastEntry,
         router) {
 
   return BaseFormView.extend({
@@ -25,8 +25,8 @@ define([
       this.loading = true;
       categories.showHidden = true;
 
-      this.collection = new CategoryForecastEntries();
-      this.model = new CategoryForecastEntry();
+      this.collection = new ForecastEntries();
+      this.model = new ForecastEntry();
 
       Promise.all([this.collection.fetch(), categories.fetch()]).then(function () {
         _this.loading = false;

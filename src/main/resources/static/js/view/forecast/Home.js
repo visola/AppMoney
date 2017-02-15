@@ -5,7 +5,7 @@ define([
   'chart2',
   'moment',
   'collection/Categories',
-  'collection/CategoryForecastEntries',
+  'collection/ForecastEntries',
   'collection/Transactions',
   'model/Forecast',
   'tpl!template/forecast/home.html'
@@ -16,7 +16,7 @@ define([
   Chart,
   moment,
   Categories,
-  CategoryForecastEntries,
+  ForecastEntries,
   Transactions,
   Forecast,
   ForecastHomeTemplate
@@ -33,7 +33,7 @@ define([
       this.days = this.getTimelineDays(this.interval);
 
       this.categories = new Categories();
-      this.categoryEntries = new CategoryForecastEntries();
+      this.entries = new ForecastEntries();
       this.forecast = new Forecast();
       this.loading = true;
 
@@ -41,7 +41,7 @@ define([
         .betweenDates(moment().subtract(60, 'd').unix() * 1000, moment().unix() * 1000);
 
       Promise
-      .all([this.categories.fetch(), this.categoryEntries.fetch(), this.forecast.fetch(), transactionsPromise])
+      .all([this.categories.fetch(), this.entries.fetch(), this.forecast.fetch(), transactionsPromise])
       .then(function (data) {
         _this.transactions = data[3];
         _this.loading = false;
@@ -126,7 +126,7 @@ define([
     },
 
     getCategoriesInForecast: function () {
-      return this.categoryEntries.map(e => e.get('categoryId'));
+      return this.entries.map(e => e.get('categoryId'));
     },
 
     getPlannedTimelineData: function (days) {
@@ -134,7 +134,7 @@ define([
         y = 0,
         startDay = this.forecast.get('startDayOfMonth'),
         firstDay = days[0],
-        entries = this.categoryEntries,
+        entries = this.entries,
         result = [];
 
       entries.each(entry => y += entry.get('amount') * (firstDay + startDay) / 30);

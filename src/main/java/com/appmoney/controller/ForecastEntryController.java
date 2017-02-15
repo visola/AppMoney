@@ -17,28 +17,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.appmoney.dao.CategoryForecastEntryDao;
+import com.appmoney.dao.ForecastEntryDao;
 import com.appmoney.dao.ForecastDao;
-import com.appmoney.model.CategoryForecastEntry;
+import com.appmoney.model.ForecastEntry;
 import com.appmoney.model.Forecast;
 import com.appmoney.model.Permission;
 import com.appmoney.model.User;
 
 @RestController
-@RequestMapping("/api/v1/category_forecast_entries")
-public class CategoryForecastEntryController {
+@RequestMapping("/api/v1/forecast_entries")
+public class ForecastEntryController {
 
   @Autowired
-  CategoryForecastEntryDao categoryForecastEntryDao;
-  
+  ForecastEntryDao forecastEntryDao;
+
   @Autowired
   ForecastDao forecastDao;
 
   @RequestMapping(method=RequestMethod.GET)
-  public List<CategoryForecastEntry> getEntries(@AuthenticationPrincipal User user) {
+  public List<ForecastEntry> getEntries(@AuthenticationPrincipal User user) {
     Optional<Forecast> forecastForUser = forecastDao.getForUser(user.getId());
     if (forecastForUser.isPresent()) {
-      return categoryForecastEntryDao.getEntries(forecastForUser.get().getId());
+      return forecastEntryDao.getEntries(forecastForUser.get().getId());
     }
 
     return new ArrayList<>();
@@ -46,7 +46,7 @@ public class CategoryForecastEntryController {
 
   @RequestMapping(method=RequestMethod.POST)
   @Transactional
-  public CategoryForecastEntry createEntry(@RequestBody @Valid CategoryForecastEntry entry, @AuthenticationPrincipal User user) {
+  public ForecastEntry createEntry(@RequestBody @Valid ForecastEntry entry, @AuthenticationPrincipal User user) {
     Forecast forecast = ensureForecast(user.getId());
 
     entry.setForecastId(forecast.getId());
@@ -57,16 +57,16 @@ public class CategoryForecastEntryController {
     entry.setUpdated(new Date());
     entry.setUpdatedBy(user.getId());
 
-    return categoryForecastEntryDao.insert(entry);
+    return forecastEntryDao.insert(entry);
   }
 
   @RequestMapping(method=RequestMethod.PUT, value="/{id}")
   @Transactional
-  public CategoryForecastEntry updateEntry(@PathVariable int id,
-                                           @RequestBody @Valid CategoryForecastEntry entry,
+  public ForecastEntry updateEntry(@PathVariable int id,
+                                           @RequestBody @Valid ForecastEntry entry,
                                            @AuthenticationPrincipal User user) {
 
-    CategoryForecastEntry loaded = categoryForecastEntryDao.findById(id);
+    ForecastEntry loaded = forecastEntryDao.findById(id);
     Optional<Forecast> forecast = forecastDao.findById(loaded.getForecastId(), user.getId());
 
     if (!forecast.isPresent()) {
@@ -82,7 +82,7 @@ public class CategoryForecastEntryController {
     entry.setUpdated(new Date());
     entry.setUpdatedBy(user.getId());
 
-    return categoryForecastEntryDao.update(entry);
+    return forecastEntryDao.update(entry);
   }
 
   private Forecast ensureForecast(int userId) {

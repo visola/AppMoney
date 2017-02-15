@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class CategoryForecastEntry {
+public class ForecastEntry {
 
   private Integer id;
   private Integer forecastId;

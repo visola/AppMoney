@@ -41,11 +41,13 @@ public class AppMoney extends WebMvcConfigurerAdapter {
     // All resources go to where they should go
     registry
       .addResourceHandler("/**/*.css", "/**/*.html", "/**/*.js", "/**/*.jsx", "/**/*.ttf", "/**/*.woff", "/**/*.woff2")
+      .setCachePeriod(0)
       .addResourceLocations("classpath:/static/");
 
     // Anything else, goes to index.html
     registry
       .addResourceHandler("/", "/**")
+      .setCachePeriod(0)
       .addResourceLocations("classpath:/static/index.html").resourceChain(true)
       .addResolver(new PathResourceResolver() {
         @Override

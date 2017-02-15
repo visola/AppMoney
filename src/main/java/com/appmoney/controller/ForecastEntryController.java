@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.appmoney.dao.ForecastEntryDao;
 import com.appmoney.dao.ForecastDao;
-import com.appmoney.model.ForecastEntry;
 import com.appmoney.model.Forecast;
+import com.appmoney.model.ForecastEntry;
 import com.appmoney.model.Permission;
 import com.appmoney.model.User;
+import com.appmoney.repository.ForecastEntryRepository;
 
 @RestController
 @RequestMapping("/api/v1/forecast_entries")
 public class ForecastEntryController {
 
   @Autowired
-  ForecastEntryDao forecastEntryDao;
+  ForecastEntryRepository forecastEntryRepository;
 
   @Autowired
   ForecastDao forecastDao;
@@ -38,7 +38,7 @@ public class ForecastEntryController {
   public List<ForecastEntry> getEntries(@AuthenticationPrincipal User user) {
     Optional<Forecast> forecastForUser = forecastDao.getForUser(user.getId());
     if (forecastForUser.isPresent()) {
-      return forecastEntryDao.getEntries(forecastForUser.get().getId());
+      return forecastEntryRepository.findByForecastId(forecastForUser.get().getId());
     }
 
     return new ArrayList<>();
@@ -57,7 +57,7 @@ public class ForecastEntryController {
     entry.setUpdated(new Date());
     entry.setUpdatedBy(user.getId());
 
-    return forecastEntryDao.insert(entry);
+    return forecastEntryRepository.save(entry);
   }
 
   @RequestMapping(method=RequestMethod.PUT, value="/{id}")
@@ -66,7 +66,7 @@ public class ForecastEntryController {
                                            @RequestBody @Valid ForecastEntry entry,
                                            @AuthenticationPrincipal User user) {
 
-    ForecastEntry loaded = forecastEntryDao.findById(id);
+    ForecastEntry loaded = forecastEntryRepository.findOne(id);
     Optional<Forecast> forecast = forecastDao.findById(loaded.getForecastId(), user.getId());
 
     if (!forecast.isPresent()) {
@@ -82,7 +82,7 @@ public class ForecastEntryController {
     entry.setUpdated(new Date());
     entry.setUpdatedBy(user.getId());
 
-    return forecastEntryDao.update(entry);
+    return forecastEntryRepository.save(entry);
   }
 
   private Forecast ensureForecast(int userId) {

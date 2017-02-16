@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -20,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.appmoney.dao.ForecastDao;
 import com.appmoney.model.Forecast;
 import com.appmoney.model.ForecastEntry;
+import com.appmoney.model.MonthlyForecastEntryAmount;
 import com.appmoney.model.Permission;
 import com.appmoney.model.User;
 import com.appmoney.repository.ForecastEntryRepository;
+import com.appmoney.repository.MonthlyForecastEntryAmountRepository;
 
 @RestController
 @RequestMapping("/api/v1/forecast_entries")
@@ -32,13 +36,22 @@ public class ForecastEntryController {
   ForecastEntryRepository forecastEntryRepository;
 
   @Autowired
+  MonthlyForecastEntryAmountRepository monthlyForecastEntryAmountRepository;
+
+  @Autowired
   ForecastDao forecastDao;
 
   @RequestMapping(method=RequestMethod.GET)
-  public List<ForecastEntry> getEntries(@AuthenticationPrincipal User user) {
+  public List<ForecastEntryDto> getEntries(@AuthenticationPrincipal User user) {
     Optional<Forecast> forecastForUser = forecastDao.getForUser(user.getId());
     if (forecastForUser.isPresent()) {
-      return forecastEntryRepository.findByForecastId(forecastForUser.get().getId());
+      return monthlyForecastEntryAmountRepository
+          .findByForecastId(forecastForUser.get().getId()).stream()
+          .collect(Collectors.groupingBy(MonthlyForecastEntryAmount::getForecastEntry))
+          .entrySet()
+          .stream()
+          .map(entry -> this.fromEntry(entry.getKey(), entry.getValue()))
+          .collect(Collectors.toList());
     }
 
     return new ArrayList<>();
@@ -46,8 +59,11 @@ public class ForecastEntryController {
 
   @RequestMapping(method=RequestMethod.POST)
   @Transactional
-  public ForecastEntry createEntry(@RequestBody @Valid ForecastEntry entry, @AuthenticationPrincipal User user) {
+  public ForecastEntryDto createEntry(@RequestBody @Valid ForecastEntryDto entryDto, @AuthenticationPrincipal User user) {
     Forecast forecast = ensureForecast(user.getId());
+
+    ForecastEntry entry = new ForecastEntry();
+    BeanUtils.copyProperties(entryDto, entry);
 
     entry.setForecastId(forecast.getId());
 
@@ -57,13 +73,24 @@ public class ForecastEntryController {
     entry.setUpdated(new Date());
     entry.setUpdatedBy(user.getId());
 
-    return forecastEntryRepository.save(entry);
+    forecastEntryRepository.save(entry);
+
+    List<MonthlyForecastEntryAmount> monthlyAmounts = entryDto.getMonthlyAmounts().stream()
+        .map( amountDto -> {
+          MonthlyForecastEntryAmount amount = new MonthlyForecastEntryAmount();
+          BeanUtils.copyProperties(amountDto, amount);
+
+          amount.setForecastEntry(entry);
+          return monthlyForecastEntryAmountRepository.save(amount);
+        }).collect(Collectors.toList());
+
+    return fromEntry(entry, monthlyAmounts);
   }
 
   @RequestMapping(method=RequestMethod.PUT, value="/{id}")
   @Transactional
-  public ForecastEntry updateEntry(@PathVariable int id,
-                                           @RequestBody @Valid ForecastEntry entry,
+  public ForecastEntryDto updateEntry(@PathVariable int id,
+                                           @RequestBody @Valid ForecastEntryDto entryDto,
                                            @AuthenticationPrincipal User user) {
 
     ForecastEntry loaded = forecastEntryRepository.findOne(id);
@@ -72,6 +99,9 @@ public class ForecastEntryController {
     if (!forecast.isPresent()) {
       throw new AccessDeniedException("You do not have permissions to update this forecast.");
     }
+
+    ForecastEntry entry = new ForecastEntry();
+    BeanUtils.copyProperties(entryDto, entry);
 
     entry.setId(loaded.getId());
     entry.setForecastId(forecast.get().getId());
@@ -82,7 +112,20 @@ public class ForecastEntryController {
     entry.setUpdated(new Date());
     entry.setUpdatedBy(user.getId());
 
-    return forecastEntryRepository.save(entry);
+    forecastEntryRepository.save(entry);
+
+    monthlyForecastEntryAmountRepository.deleteByForecastEntryId(id);
+
+    List<MonthlyForecastEntryAmount> monthlyAmounts = entryDto.getMonthlyAmounts().stream()
+        .map( amountDto -> {
+          MonthlyForecastEntryAmount amount = new MonthlyForecastEntryAmount();
+          BeanUtils.copyProperties(amountDto, amount);
+
+          amount.setForecastEntry(entry);
+          return monthlyForecastEntryAmountRepository.save(amount);
+        }).collect(Collectors.toList());
+
+    return fromEntry(entry, monthlyAmounts);
   }
 
   private Forecast ensureForecast(int userId) {
@@ -101,6 +144,19 @@ public class ForecastEntryController {
 
       return forecastDao.insert(toCreate);
     }
+  }
+
+  private ForecastEntryDto fromEntry(ForecastEntry entry, List<MonthlyForecastEntryAmount> monthlyAmounts) {
+    ForecastEntryDto dto = new ForecastEntryDto();
+    BeanUtils.copyProperties(entry, dto);
+    dto.setMonthlyAmounts(monthlyAmounts.stream()
+        .map( a -> {
+          MonthlyForecastEntryAmountDto aDto = new MonthlyForecastEntryAmountDto();
+          BeanUtils.copyProperties(a, aDto);
+          return aDto;
+        })
+        .collect(Collectors.toList()));
+    return dto;
   }
 
 }

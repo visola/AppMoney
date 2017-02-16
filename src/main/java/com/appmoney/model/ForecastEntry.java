@@ -1,6 +1,5 @@
 package com.appmoney.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -17,7 +16,6 @@ public class ForecastEntry {
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Integer id;
   private Integer forecastId;
-  @NotNull private BigDecimal amount;
   @NotNull @Size(min = 2, max = 256) private String title;
   @NotNull private Integer categoryId;
   private Date created;
@@ -39,14 +37,6 @@ public class ForecastEntry {
 
   public void setForecastId(Integer forecastId) {
     this.forecastId = forecastId;
-  }
-
-  public BigDecimal getAmount() {
-    return amount;
-  }
-
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount;
   }
 
   public String getTitle() {

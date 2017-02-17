@@ -24,8 +24,8 @@ define([
       "click #addMonthlyAmount": "addMonthlyAmount",
       "click .removeMonthlyAmount": "removeMonthlyAmount",
 
-      "change table.monthly input,select": "monthlyAmountsChanged",
-      "keyup table.monthly input": "monthlyAmountsChanged"
+      "change input,select": "formChanged",
+      "keyup input": "formChanged"
     },
 
     initialize: function (entryId) {
@@ -101,9 +101,12 @@ define([
       return "/forecast";
     },
 
-    monthlyAmountsChanged: function () {
-      var amountsInForm = this.getMonthlyAmountsFromForm();
-      this.model.set('monthlyAmounts', amountsInForm);
+    formChanged: function () {
+      this.model.set({
+        title: $('[name=title]').val(),
+        categoryId: $('[name=categoryId]').val(),
+        monthlyAmounts: this.getMonthlyAmountsFromForm()
+      });
     },
 
     processData: function (data) {
@@ -114,7 +117,7 @@ define([
     removeMonthlyAmount: function (e) {
       e.preventDefault();
       $(e.target).parents('tr').remove();
-      this.monthlyAmountsChanged();
+      this.formChanged();
     }
   });
 });

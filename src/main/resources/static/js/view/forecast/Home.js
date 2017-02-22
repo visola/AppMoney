@@ -2,6 +2,7 @@ define([
   'jquery',
   'view/Base',
   'bootstrap',
+  'big',
   'chart2',
   'moment',
   'collection/Categories',
@@ -13,6 +14,7 @@ define([
   $,
   BaseView,
   Bootstrap,
+  Big,
   Chart,
   moment,
   Categories,
@@ -27,69 +29,17 @@ define([
     events: {},
 
     initialize: function () {
-      var _this = this;
+      this.interval = 60;
+      this.totalPeriod = this.interval + 31;
 
-      this.interval = 30;
-      this.days = this.getTimelineDays(this.interval);
+      this.visibleDays = this.getTimelineDays(this.interval);
+      this.totalDays = this.getTimelineDays(this.totalPeriod);
 
       this.categories = new Categories();
       this.entries = new ForecastEntries();
       this.forecast = new Forecast();
-      this.loading = true;
 
-      var transactionsPromise = Transactions
-        .betweenDates(moment().subtract(60, 'd').unix() * 1000, moment().unix() * 1000);
-
-      Promise
-      .all([this.categories.fetch(), this.entries.fetch(), this.forecast.fetch(), transactionsPromise])
-      .then(function (data) {
-        _this.transactions = data[3];
-        _this.loading = false;
-        _this.calculateTotals();
-        _this.render();
-        _this.drawTimeline();
-      });
-    },
-
-    calculateTotalPerCategory: function (start, end) {
-      var i,
-        result = {},
-        categoriesInForecast = this.getCategoriesInForecast(),
-        transactions = this.getTransactions();
-
-      transactions.forEach((t) => {
-        var subtotal,
-          category = t.get('categoryId'),
-          happened = t.get('happened'),
-          value = t.get('value');
-
-        if (categoriesInForecast.indexOf(category) < 0) {
-          category = 'other';
-        }
-        if (start.isSameOrBefore(happened, 'day') &&
-            end.isSameOrAfter(happened, 'day')) {
-          subtotal = result[category] || 0;
-          subtotal += value;
-          result[category] = subtotal;
-        }
-      });
-      return result;
-    },
-
-    calculateTotals: function () {
-      var startPast, endPast,
-        endPresent = moment(),
-        startPresent = moment().date(this.forecast.get('startDayOfMonth'));
-
-      if (startPresent.isAfter(endPresent)) {
-        startPresent.subtract(1, 'months');
-      }
-
-      startPast = startPresent.clone().subtract(1, 'months'),
-      endPast = startPresent.clone().subtract(1, 'days');
-
-      this.totalPerCategoryPresent = this.calculateTotalPerCategory(startPresent, endPresent);
-      this.totalPerCategoryPast = this.calculateTotalPerCategory(startPast, endPast);
+      this.recalculate();
     },
 
     cleanNumber: function (number) {
@@ -98,7 +48,6 @@ define([
 
     drawTimeline: function () {
       var chart,
-        days = this.days,
         ctx = $('#timeline');
       if (ctx.length === 0) {
         return;
@@ -107,17 +56,17 @@ define([
       chart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: days,
+          labels: this.visibleDays.map(d => d.date()),
           datasets: [{
             backgroundColor: 'rgba(150, 200, 150, 0.2)',
             borderColor: 'rgba(200, 255, 200, 1)',
-            data: this.getPlannedTimelineData(days),
+            data: this.getPlannedTimelineData(),
             label: 'Planejado',
             lineTension: 0
           },{
             backgroundColor: 'rgba(200, 150, 150, 0.2)',
             borderColor: 'rgba(255, 200, 200, 1)',
-            data: this.getSpentTimelineData(days).reverse(),
+            data: this.getSpentTimelineData(),
             label: 'Realizado',
             lineTension: 0
           }]
@@ -129,62 +78,70 @@ define([
       return this.entries.map(e => e.get('categoryId'));
     },
 
-    getPlannedTimelineData: function (days) {
-      var d, i,
-        y = 0,
+    getEntriesForPeriod: function (offset) {
+      var d, periodStart,
         startDay = this.forecast.get('startDayOfMonth'),
-        firstDay = days[0],
-        entries = this.entries,
-        result = [];
+        periodEnd = moment().date(startDay),
+        result = [],
+        groupedByDay = this.groupedByDay;
 
-      entries.each(entry => y += entry.get('amount') * (firstDay + startDay) / 30);
-
-      for (d = 0; d < days.length; d++) {
-        if (days[d] == startDay) {
-          y = 0;
-        }
-        for (i = 0; i < entries.length; i++) {
-          y += entries.at(i).get('amount') / 30;
-        }
-        result.push(this.cleanNumber(y));
+      if (moment().isSameOrAfter(periodEnd)) {
+        periodEnd = periodEnd.add(1, 'month');
       }
+
+      periodEnd = periodEnd.add(offset, 'month');
+      periodStart = periodEnd.clone().subtract(1, 'month');
+
+      for (d = 0; d < groupedByDay.length; d++) {
+        if (groupedByDay[d].day.isBetween(periodStart, periodEnd, 'day', '[)')) {
+          result.push(groupedByDay[d]);
+        }
+      }
+
       return result;
     },
 
-    getSpentTimelineData: function (days) {
-      var d,
-        y = 0,
-        result = [],
-        firstDay = days[0],
-        startDay = this.forecast.get('startDayOfMonth'),
-        transactions = this.getTransactions(),
-        startGraph = moment().subtract(this.interval, 'd'),
-        previousStart = this.getPreviousStart();
-      transactions.forEach((t) => {
-        var happened = t.get('happened'),
-          value = t.get('value');
-        if (previousStart.isBefore(happened)
-            && startGraph.isAfter(happened)
-            && value < 0) {
-          y += Math.abs(value);
-        }
-      });
-      for (d = 0; d < days.length; d++) {
-        if (days[d] == startDay) {
-          y = 0;
-        }
+    getPlannedTimelineData: function () {
+      return this.getTotalForDays(
+          g => g.entries,
+          e => e.amount
+      );
+    },
 
-        transactions.forEach((t) => {
-          var happened = t.get('happened'),
-            value = t.get('value');
-          if (startGraph.isSame(happened, 'day') && value < 0) {
-            y += Math.abs(value);
-          }
-        });;
-        result.push(this.cleanNumber(y));
-        startGraph.add(1, 'd');
-      }
-      return result.reverse();
+    getPlannedTotalForEntryAndPeriodOffset: function (entryId, periodOffset) {
+      var groupedEntries = this.getEntriesForPeriod(periodOffset);
+      return groupedEntries.reduce( (total, ge) => {
+        return total.plus(ge.entries
+          .filter( e => e.entry.get('id') == entryId )
+          .reduce( (subTotal, e) => subTotal.plus(e.amount), Big(0)));
+      }, Big(0));
+    },
+
+    getSpentTimelineData: function () {
+      return this.getTotalForDays(
+          g => g.transactions,
+          t => Big(t.get('value')).abs()
+      );
+    },
+
+    getSpentTotalForEntryAndPeriodOffset: function (entryId, periodOffset) {
+      var forecastEntry = entryId == -1 ? null : this.entries.get(entryId),
+        groupedEntries = this.getEntriesForPeriod(periodOffset);
+      return groupedEntries.reduce( (total, ge) => {
+        return total.plus(ge.transactions
+          .filter( t => {
+            if (forecastEntry == null) {
+              // Find transactions that doesn't match any entry
+              return ge.entries
+                .filter( (e) => !e.entry.matchesTransaction(t) )
+                .length > 0;
+            } else {
+              // Find the transactions that matches the entry
+              return forecastEntry.matchesTransaction(t);
+            }
+          })
+          .reduce( (subTotal, t) => subTotal.plus(Big(t.get('value')).abs()), Big(0)));
+      }, Big(0));
     },
 
     getTimelineDays: function (interval) {
@@ -192,25 +149,110 @@ define([
         day = moment().subtract(interval, 'd'),
         result = [];
       for (d = 1; d <= interval; d++) {
-        result.push(day.date());
+        result.push(day.clone());
         day.add(1, 'd');
+      }
+      return result;
+    },
+
+    getTotalForDays: function (arrayForDay, getValue) {
+      var d,
+        y = Big(0),
+        visibleDays = this.visibleDays,
+        totalDays = this.totalDays,
+        startDay = this.forecast.get('startDayOfMonth'),
+        groupedByDay = this.groupedByDay,
+        result = [];
+
+      // Calculate initial value before first visible day
+      for (d = 0; d < groupedByDay.length - visibleDays.length; d++) {
+        day = groupedByDay[d].day;
+        if (day.date() == startDay) {
+          y = Big(0);
+        }
+        y = y.plus(arrayForDay(groupedByDay[d]).reduce((total, e) => total.plus(getValue(e)), Big(0)));
+      }
+
+      // Add total
+      for (d = groupedByDay.length - visibleDays.length; d < groupedByDay.length; d++) {
+        day = groupedByDay[d].day;
+        if (day.date() == startDay) {
+          y = Big(0);
+        }
+        y = y.plus(arrayForDay(groupedByDay[d]).reduce((total, e) => total.plus(getValue(e)), Big(0)));
+        result.push(y.toFixed(2));
       }
       return result;
     },
 
     getTransactions: function () {
       return this.transactions.filter((t) => {
-        return t.get('fromAccountId') === null;
+        return t.get('fromAccountId') === null && t.get('value') < 0;
       });
     },
 
-    getPreviousStart: function () {
-      var day = moment().subtract(this.interval, 'd'),
-        startDay = this.forecast.get('startDayOfMonth');
-      while (day.date() != startDay) {
-        day.subtract(1, 'd');
+    groupByDay: function (days) {
+      var i, day, temp, eachDay, entryDay, daysInPeriod, amount,
+        currentPeriodStart, previousPeriodStart, daysBetweenPeriods,
+        startDay = this.forecast.get('startDayOfMonth'),
+        byDay = [];
+      for (i = 0; i < days.length; i++) {
+        day = days[i];
+        currentPeriodStart = day.clone();
+        currentPeriodStart.date(startDay);
+
+        previousPeriodStart = currentPeriodStart.clone();
+        if (day.isBefore(currentPeriodStart)) {
+          previousPeriodStart.subtract(1, 'month');
+        } else {
+          previousPeriodStart.add(1, 'month');
+          temp = currentPeriodStart;
+          currentPeriodStart = previousPeriodStart;
+          previousPeriodStart = temp;
+        }
+
+        daysBetweenPeriods = currentPeriodStart.diff(previousPeriodStart, 'days');
+        eachDay = {day: day, entries: [], transactions: []};
+        byDay.push(eachDay);
+        this.entries.forEach(e => {
+          if (day.isSameOrAfter(e.getMinimumDate())) {
+            amount = new Big(e.getAmountForDay(day, startDay));
+            eachDay.entries.push({
+              amount: amount.div(daysBetweenPeriods),
+              entry: e
+            });
+          }
+        });
+
+        this.getTransactions().forEach(t => {
+          var tDay = moment(t.get('happened'));
+          if (tDay.isSame(day, 'day')) {
+            eachDay.transactions.push(t);
+          }
+        });
       }
-      return day;
+      return byDay;
+    },
+
+    postAppend: function () {
+      this.drawTimeline();
+    },
+
+    recalculate: function () {
+      this.loading = true;
+
+      var transactionsPromise = Transactions
+        .betweenDates(moment().subtract(this.totalPeriod, 'd').unix() * 1000, moment().unix() * 1000);
+
+      Promise
+      .all([this.categories.fetch(), this.entries.fetch(), this.forecast.fetch(), transactionsPromise])
+      .then(data => {
+        this.transactions = data[3];
+        this.loading = false;
+
+        this.groupedByDay = this.groupByDay(this.totalDays);
+        this.render();
+      });
     }
   });
 });

@@ -3,6 +3,7 @@ require.config({
   paths: {
     "backbone" : "lib/backbone",
     "backbone.paginator" : "lib/backbone.paginator",
+    "big" : "lib/big.min",
     "bootstrap" : "lib/bootstrap",
     "bootstrap-modal": "lib/backbone.bootstrap-modal",
     "chart" : "lib/Chart",

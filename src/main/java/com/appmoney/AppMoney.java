@@ -2,6 +2,8 @@ package com.appmoney;
 
 import java.io.IOException;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.boot.SpringApplication;
@@ -9,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -32,6 +35,13 @@ public class AppMoney extends WebMvcConfigurerAdapter {
     return Jackson2ObjectMapperBuilder.json()
         .simpleDateFormat("yyyy-MM-dd")
         .build();
+  }
+
+  @Bean
+  public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
+      JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+      jpaTransactionManager.setEntityManagerFactory(emf);
+      return jpaTransactionManager;
   }
 
   @Override

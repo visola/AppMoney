@@ -10,14 +10,13 @@
 <% if (this.entries.length === 0) { %>
   <p>Nenhum item neste orçamento. Crie um <a href="/forecast_entries/new">novo</a> item para começar.</p>
 <% } else { %>
-  <table class="table table-striped">
+  <table class="table table-striped table-hover">
     <thead>
       <tr>
         <th>Título</th>
         <th>Categoria</th>
         <th>Realizado Anterior</th>
         <th>Planejado</th>
-        <th>Realizado Atual</th>
         <th>Diferença (Atual - Planejado)</th>
       </tr>
     </thead>
@@ -31,23 +30,24 @@
           </td>
           <td><%= this.categories.get(this.entries.at(i).get('categoryId')).get('name') %></td>
           <%
-            var planned = Math.abs(this.entries.at(i).get('amount')).toFixed(2);
-            var present = Math.abs(this.totalPerCategoryPresent[this.entries.at(i).get('categoryId')] || 0).toFixed(2);
+            let spentTotal = this.getSpentTotalForEntryAndPeriodOffset(this.entries.at(i).id, -1);
+            let plannedTotal = this.getPlannedTotalForEntryAndPeriodOffset(this.entries.at(i).id, -1);
           %>
-          <td>$ <%= Math.abs(this.totalPerCategoryPast[this.entries.at(i).get('categoryId')] || 0).toFixed(2) %></td>
-          <td>$ <%= planned %></td>
-          <td>$ <%= present %></td>
-          <td class="<%= planned - present < 0 ? 'negative' : '' %>">$ <%= Math.abs(planned - present).toFixed(2) %></td>
+          <td>$ <%= spentTotal.toFixed(2) %></td>
+          <td>$ <%= plannedTotal.toFixed(2) %></td>
+          <td class="<%= plannedTotal.minus(spentTotal).gte(0) ? 'positive' : 'negative' %>">
+            $ <%= (plannedTotal.minus(spentTotal).toFixed(2)) %>
+          </td>
         </tr>
       <% } %>
       <tr class="other">
-        <td colspan="2">
+        <td></td>
+        <td>
           Outros
         </td>
-        <td class="value">$ <%= Math.abs(this.totalPerCategoryPast['other'] || 0).toFixed(2) %></td>
+        <td>$ <%= this.getSpentTotalForEntryAndPeriodOffset(-1, -1).toFixed(2) %></td>
         <td>&nbsp;</td>
-        <td class="value">$ <%= Math.abs(this.totalPerCategoryPresent['other'] || 0).toFixed(2) %></td>
-        <td>&nbsp;</td>
+        <td>$ <%= this.getSpentTotalForEntryAndPeriodOffset(-1, 0).toFixed(2) %></td>
       </tr>
     </tbody>
   </table>

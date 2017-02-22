@@ -51,6 +51,10 @@ dependencies {
   integrationTestCompile 'org.springframework:spring-test'
 }
 
+bootRun {
+   jvmArgs = ["-Dspring.profiles.active=test"]
+}
+
 eclipse {
   classpath {
     plusConfigurations += [configurations.integrationTestCompile]

@@ -1,17 +1,21 @@
 package com.appmoney;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.persistence.EntityManagerFactory;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -24,6 +28,9 @@ public class AppMoney extends WebMvcConfigurerAdapter {
   public static void main(String[] args) {
     SpringApplication.run(AppMoney.class, args);
   }
+
+  @Autowired
+  private Environment environment;
 
   @Bean
   public HttpClient httpClient() {
@@ -49,10 +56,14 @@ public class AppMoney extends WebMvcConfigurerAdapter {
     // Static configuration to support Backbone's push state
 
     // All resources go to where they should go
-    registry
+    ResourceHandlerRegistration registration = registry
       .addResourceHandler("/**/*.css", "/**/*.html", "/**/*.js", "/**/*.jsx", "/**/*.ttf", "/**/*.woff", "/**/*.woff2")
       .setCachePeriod(0)
       .addResourceLocations("classpath:/static/");
+
+    if (Arrays.binarySearch(environment.getActiveProfiles(), "test") >= 0) {
+      registration.addResourceLocations("classpath:/static-test/");
+    }
 
     // Anything else, goes to index.html
     registry

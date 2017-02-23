@@ -1,53 +1,63 @@
-<% if (this.categoryEntries.length !== 0) { %>
+<% if (this.entries.length !== 0) { %>
   <canvas id="timeline" width="600" height="100"></canvas>
 <% } %>
 
 <h3>
-  Items por Categoria
-  <small><a href="/category_forecast_entry/new">Novo</a></small>
+  Items do Orçamento
+  <small><a href="/forecast_entries/new">Novo</a></small>
 </h3>
 
-<% if (this.categoryEntries.length === 0) { %>
-  <p>Nenhum item neste orçamento. Crie um <a href="/category_forecast_entry/new">novo</a> item para começar.</p>
+<% if (this.entries.length === 0) { %>
+  <p>Nenhum item neste orçamento. Crie um <a href="/forecast_entries/new">novo</a> item para começar.</p>
 <% } else { %>
-  <table class="table table-striped">
+  <table class="table table-striped table-hover">
     <thead>
       <tr>
         <th>Título</th>
         <th>Categoria</th>
         <th>Realizado Anterior</th>
-        <th>Planejado</th>
+        <th>Planejado Anterior</th>
+        <th>Diferença Anterior</th>
         <th>Realizado Atual</th>
-        <th>Diferença (Atual - Planejado)</th>
+        <th>Planejado Atual</th>
+        <th>Diferença Atual</th>
       </tr>
     </thead>
     <tbody>
-      <% for (var i = 0; i < this.categoryEntries.length; i++) { %>
+      <%
+        var row,
+          tableData = this.getTableData();
+        for (var i = 0; i < tableData.length; i++) {
+          row = tableData[i];
+      %>
         <tr>
           <td>
-            <a href="/category_forecast_entry/<%= this.categoryEntries.at(i).id %>">
-              <%= this.categoryEntries.at(i).get('title') %>
+            <a href="/forecast_entries/<%= row.entry.get('id') %>">
+              <%= row.entry.get('title') %>
             </a>
           </td>
-          <td><%= this.categories.get(this.categoryEntries.at(i).get('categoryId')).get('name') %></td>
-          <%
-            var planned = Math.abs(this.categoryEntries.at(i).get('amount')).toFixed(2);
-            var present = Math.abs(this.totalPerCategoryPresent[this.categoryEntries.at(i).get('categoryId')] || 0).toFixed(2);
-          %>
-          <td>$ <%= Math.abs(this.totalPerCategoryPast[this.categoryEntries.at(i).get('categoryId')] || 0).toFixed(2) %></td>
-          <td>$ <%= planned %></td>
-          <td>$ <%= present %></td>
-          <td class="<%= planned - present < 0 ? 'negative' : '' %>">$ <%= Math.abs(planned - present).toFixed(2) %></td>
+          <td><%= row.category.get('name') %></td>
+          <td>$ <%= row.spentTotalPreviousPeriod.toFixed(2) %></td>
+          <td>$ <%= row.plannedTotalPreviousPeriod.toFixed(2) %></td>
+          <td class="<%= row.plannedTotalPreviousPeriod.minus(row.spentTotalPreviousPeriod).gte(0) ? 'positive' : 'negative' %>">
+            $ <%= (row.plannedTotalPreviousPeriod.minus(row.spentTotalPreviousPeriod).toFixed(2)) %>
+          </td>
+          <td>$ <%= row.spentTotalThisPeriod.toFixed(2) %></td>
+          <td>$ <%= row.plannedTotalThisPeriod.toFixed(2) %></td>
+          <td class="<%= row.plannedTotalThisPeriod.minus(row.spentTotalThisPeriod).gte(0) ? 'positive' : 'negative' %>">
+            $ <%= (row.plannedTotalThisPeriod.minus(row.spentTotalThisPeriod).toFixed(2)) %>
+          </td>
         </tr>
       <% } %>
       <tr class="other">
-        <td colspan="2">
+        <td></td>
+        <td>
           Outros
         </td>
-        <td class="value">$ <%= Math.abs(this.totalPerCategoryPast['other'] || 0).toFixed(2) %></td>
-        <td>&nbsp;</td>
-        <td class="value">$ <%= Math.abs(this.totalPerCategoryPresent['other'] || 0).toFixed(2) %></td>
-        <td>&nbsp;</td>
+        <td>$ <%= this.getSpentTotalForEntryAndPeriodOffset(-1, -1).toFixed(2) %></td>
+        <td colspan="2">&nbsp;</td>
+        <td>$ <%= this.getSpentTotalForEntryAndPeriodOffset(-1, 0).toFixed(2) %></td>
+        <td colspan="2">&nbsp;</td>
       </tr>
     </tbody>
   </table>

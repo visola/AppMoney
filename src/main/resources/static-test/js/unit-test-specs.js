@@ -15,11 +15,36 @@ require.config({
     "text" : "lib/text",
     "tiny-color" : "lib/tinycolor",
     "tpl": "lib/tpl",
-    "underscore" : "lib/underscore"
+    "underscore" : "lib/underscore",
+
+    "chai": "lib/test/chai",
+    "mocha": "lib/test/mocha",
+    "sinon": "lib/test/sinon-1.17.7"
   },
-  waitSeconds: 0
+  waitSeconds: 0,
+  shim: {
+    'mocha': {
+      deps: [ 'jquery' ],
+      exports: 'mocha'
+    }
+  },
+  map: {
+    '*': {
+      'router': 'mockRouter'
+    }
+  }
 });
 
-require(['router'], function () {
-  Backbone.history.start({pushState: true});
+define(['mocha'], function (mocha) {
+  mocha.setup({
+    slow: 300,
+    ui: 'bdd'
+  });
+
+  require([
+    'spec/model/ForecastEntry',
+    'spec/view/forecast/Home'
+  ], function () {
+    mocha.run();
+  });
 });

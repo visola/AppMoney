@@ -34,8 +34,11 @@ define(['underscore', 'jquery', 'backbone', 'router', 'moment'], function (_, $,
         text = this.template(this.prepareData());
       }
       this.$el.html(text);
+      this.postAppend();
       return this;
-    }
+    },
+
+    postAppend: function () {}
   });
 
   BaseView.extend = function (child) {

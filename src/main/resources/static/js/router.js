@@ -23,18 +23,12 @@ define(["jquery", "backbone", "security", "tpl!template/menu.html"],
         "categories": "categories",
         "reports/category" : "categoryReport",
         "forecast(/)" : "forecast",
-        "category_forecast_entry/:id(/)": "categoryForecast"
+        "forecast_entries/:id(/)": "forecastEntries"
       },
 
       categories: function () {
         require(["view/categories/Home"], function (CategoriesHomeView) {
           render(new CategoriesHomeView());
-        });
-      },
-
-      categoryForecast: function (id) {
-        require(['view/forecast/category/Edit'], function (EditCategoryForecastView) {
-          render(new EditCategoryForecastView(id));
         });
       },
 
@@ -80,6 +74,12 @@ define(["jquery", "backbone", "security", "tpl!template/menu.html"],
       forecast: function () {
         require(['view/forecast/Home'], function (ForecastHomeView) {
           render(new ForecastHomeView());
+        });
+      },
+
+      forecastEntries: function (id) {
+        require(['view/forecast/entries/Edit'], function (EditForecastEntryView) {
+          render(new EditForecastEntryView(id));
         });
       },
 

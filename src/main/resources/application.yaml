@@ -12,6 +12,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/appmoney
     username: postgres
     password: admin
+  jpa:
+    hibernate:
+      ddl-auto: validate
   thymeleaf:
     cache: false
 

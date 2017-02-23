@@ -110,6 +110,12 @@ table.center th, table.center td {
   text-align: center;
 }
 
+.table-hover > tbody > tr:hover > td {
+  background: #ffffdd;
+  border-bottom: 1px solid #aaa;
+  border-top: 1px solid #aaa;
+}
+
 .tone-down {
   color: #bbb;
 }

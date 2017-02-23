@@ -36,11 +36,11 @@ dependencies {
   compile 'org.apache.httpcomponents:httpclient:4.3.6'
   compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
   compile 'org.springframework.boot:spring-boot-starter-actuator'
-  compile 'org.springframework.boot:spring-boot-starter-jta-bitronix'
-  compile 'org.springframework.boot:spring-boot-starter-security'
-  compile 'org.springframework.boot:spring-boot-starter-web'
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
   compile 'org.springframework.boot:spring-boot-starter-jdbc'
+  compile 'org.springframework.boot:spring-boot-starter-security'
   compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  compile 'org.springframework.boot:spring-boot-starter-web'
   compile 'org.springframework.data:spring-data-commons:1.10.1.RELEASE'
   compile 'org.flywaydb:flyway-core'
 
@@ -49,6 +49,10 @@ dependencies {
   integrationTestCompile 'info.cukes:cucumber-spring:1.2.4'
   integrationTestCompile 'org.seleniumhq.selenium:selenium-java:2.41.0'
   integrationTestCompile 'org.springframework:spring-test'
+}
+
+bootRun {
+   jvmArgs = ["-Dspring.profiles.active=test"]
 }
 
 eclipse {

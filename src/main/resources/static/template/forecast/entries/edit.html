@@ -1,0 +1,71 @@
+<h3><%= title %></h3>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label class="control-label col-sm-2">Título:</label>
+    <div class="col-sm-10">
+      <input class="form-control" name="title" value="<%= model.get('title') %>" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2">Categoria:</label>
+    <div class="col-sm-10">
+      <select class="form-control" name="categoryId">
+        <% for (var i = 0; i < categories.length; i++) { %>
+          <% if (categories.at(i).get('hidden') === true) continue; %>
+          <option value="<%= categories.at(i).id %>" <%= model.get('categoryId') == categories.at(i).id ? 'selected="selected"' : '' %>>
+            <%= categories.at(i).getHierarchicalRepresentation('&nbsp;&nbsp;&nbsp;&nbsp;') %>
+           </option>
+        <% } %>
+      </select>
+    </div>
+  </div>
+</form>
+<div class="row">
+  <div class="col-sm-12">
+    <table class="table monthly">
+      <thead>
+        <tr>
+          <th>Valor</th>
+          <th>Mês</th>
+          <th>Ano</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% var amounts = model.get('monthlyAmounts'); %>
+        <% var months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]; %>
+        <% for (var i = 0; i < amounts.length; i++) { %>
+        <tr>
+          <td>
+            <input class="amount" type="decimal" name="amount_<%= i %>" value="<%= amounts[i].amount %>" />
+          </td>
+          <td>
+            <select class="month" name="month_<%= i %>">
+              <% for (var j = 0; j < months.length; j++) { %>
+                <option value="<%= j + 1 %>" <%= amounts[i].month - 1 == j ? 'selected="selected"' : '' %> ><%= months[j] %></option>
+              <% } %>
+            </select>
+          </td>
+          <td>
+            <input class="year" type="decimal" name="year_<%= i %>" value="<%= amounts[i].year %>" />
+          </td>
+          <td><button id="remove_<%= i %>" class="removeMonthlyAmount btn btn-danger glyphicon glyphicon-trash"></button></td>
+        </tr>
+        <% } %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4" class="text-right">
+            <button id="addMonthlyAmount" class="btn btn-default">Adicionar</button>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+<div class="form-group">
+  <div class="col-sm-10 col-sm-offset-11">
+    <button type="submit" class="btn btn-default">Salvar</button>
+  </div>
+</div>
+

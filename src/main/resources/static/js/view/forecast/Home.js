@@ -171,7 +171,7 @@ define([
       var d,
         day = moment().subtract(interval, 'd'),
         result = [];
-      for (d = 1; d <= interval; d++) {
+      for (d = 1; d <= interval + 1; d++) {
         result.push(day.clone());
         day.add(1, 'd');
       }

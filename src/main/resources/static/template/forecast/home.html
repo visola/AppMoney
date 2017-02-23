@@ -16,27 +16,36 @@
         <th>Título</th>
         <th>Categoria</th>
         <th>Realizado Anterior</th>
-        <th>Planejado</th>
-        <th>Diferença (Atual - Planejado)</th>
+        <th>Planejado Anterior</th>
+        <th>Diferença Anterior</th>
+        <th>Realizado Atual</th>
+        <th>Planejado Atual</th>
+        <th>Diferença Atual</th>
       </tr>
     </thead>
     <tbody>
-      <% for (var i = 0; i < this.entries.length; i++) { %>
+      <%
+        var row,
+          tableData = this.getTableData();
+        for (var i = 0; i < tableData.length; i++) {
+          row = tableData[i];
+      %>
         <tr>
           <td>
-            <a href="/forecast_entries/<%= this.entries.at(i).id %>">
-              <%= this.entries.at(i).get('title') %>
+            <a href="/forecast_entries/<%= row.entry.get('id') %>">
+              <%= row.entry.get('title') %>
             </a>
           </td>
-          <td><%= this.categories.get(this.entries.at(i).get('categoryId')).get('name') %></td>
-          <%
-            let spentTotal = this.getSpentTotalForEntryAndPeriodOffset(this.entries.at(i).id, -1);
-            let plannedTotal = this.getPlannedTotalForEntryAndPeriodOffset(this.entries.at(i).id, -1);
-          %>
-          <td>$ <%= spentTotal.toFixed(2) %></td>
-          <td>$ <%= plannedTotal.toFixed(2) %></td>
-          <td class="<%= plannedTotal.minus(spentTotal).gte(0) ? 'positive' : 'negative' %>">
-            $ <%= (plannedTotal.minus(spentTotal).toFixed(2)) %>
+          <td><%= row.category.get('name') %></td>
+          <td>$ <%= row.spentTotalPreviousPeriod.toFixed(2) %></td>
+          <td>$ <%= row.plannedTotalPreviousPeriod.toFixed(2) %></td>
+          <td class="<%= row.plannedTotalPreviousPeriod.minus(row.spentTotalPreviousPeriod).gte(0) ? 'positive' : 'negative' %>">
+            $ <%= (row.plannedTotalPreviousPeriod.minus(row.spentTotalPreviousPeriod).toFixed(2)) %>
+          </td>
+          <td>$ <%= row.spentTotalThisPeriod.toFixed(2) %></td>
+          <td>$ <%= row.plannedTotalThisPeriod.toFixed(2) %></td>
+          <td class="<%= row.plannedTotalThisPeriod.minus(row.spentTotalThisPeriod).gte(0) ? 'positive' : 'negative' %>">
+            $ <%= (row.plannedTotalThisPeriod.minus(row.spentTotalThisPeriod).toFixed(2)) %>
           </td>
         </tr>
       <% } %>
@@ -46,8 +55,9 @@
           Outros
         </td>
         <td>$ <%= this.getSpentTotalForEntryAndPeriodOffset(-1, -1).toFixed(2) %></td>
-        <td>&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
         <td>$ <%= this.getSpentTotalForEntryAndPeriodOffset(-1, 0).toFixed(2) %></td>
+        <td colspan="2">&nbsp;</td>
       </tr>
     </tbody>
   </table>

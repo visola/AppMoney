@@ -144,6 +144,29 @@ define([
       }, Big(0));
     },
 
+    getTableData: function () {
+      var i, entry, entryId,
+        result = [];
+      for (i = 0; i < this.entries.length; i++) {
+        entry = this.entries.at(i);
+        entryId = entry.get('id');
+        result.push({
+          category: this.categories.get(entry.get('categoryId')),
+          entry: entry,
+          plannedTotalPreviousPeriod: this.getPlannedTotalForEntryAndPeriodOffset(entryId, -1),
+          plannedTotalThisPeriod: this.getPlannedTotalForEntryAndPeriodOffset(entryId, 0),
+          spentTotalPreviousPeriod: this.getSpentTotalForEntryAndPeriodOffset(entryId, -1),
+          spentTotalThisPeriod: this.getSpentTotalForEntryAndPeriodOffset(entryId, 0)
+        });
+      }
+
+      result.sort( (row1, row2) => {
+        return row1.entry.get('title').localeCompare(row2.entry.get('title'));
+      });
+
+      return result;
+    },
+
     getTimelineDays: function (interval) {
       var d,
         day = moment().subtract(interval, 'd'),

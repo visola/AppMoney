@@ -20,6 +20,7 @@ public class Transaction {
   private Date updated;
   private Integer updatedBy;
   private String comments;
+  private Integer forecastEntryId;
 
   public Integer getId() {
     return id;
@@ -115,6 +116,14 @@ public class Transaction {
 
   public void setComments(String comments) {
     this.comments = comments;
+  }
+
+  public Integer getForecastEntryId() {
+    return forecastEntryId;
+  }
+
+  public void setForecastEntryId(Integer forecastEntryId) {
+    this.forecastEntryId = forecastEntryId;
   }
 
 }

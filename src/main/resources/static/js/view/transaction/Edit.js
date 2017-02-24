@@ -1,5 +1,22 @@
-define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'collection/Accounts', 'collection/Categories', 'model/Transaction', 'router'],
-    function (_, BaseFormView, EditTemplate, Accounts, Categories, Transaction, router) {
+define([
+  'underscore',
+  'view/BaseForm',
+  'tpl!template/transaction/edit.html',
+  'collection/Accounts',
+  'collection/Categories',
+  'collection/ForecastEntries',
+  'model/Transaction',
+  'router'
+], function (
+  _,
+  BaseFormView,
+  EditTemplate,
+  Accounts,
+  Categories,
+  ForecastEntries,
+  Transaction,
+  router
+) {
 
   return BaseFormView.extend({
     template: EditTemplate,
@@ -11,6 +28,7 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
       var _this = this,
         accounts = this.data.accounts = new Accounts(),
         categories = this.data.categories = new Categories(),
+        forecastEntries = this.data.forecastEntries = new ForecastEntries(),
         credit = typeof creditOrFromAccountId == 'boolean' ? creditOrFromAccountId : null,
         fromAccountId = typeof creditOrFromAccountId == 'string' ? creditOrFromAccountId : null;
 
@@ -30,7 +48,7 @@ define(['underscore', 'view/BaseForm', 'tpl!template/transaction/edit.html', 'co
       }
 
       this.data.credit = credit;
-      Promise.all([accounts.fetch(), categories.fetch()]).then(function () {
+      Promise.all([accounts.fetch(), categories.fetch(), forecastEntries.fetch()]).then(function () {
         _this.loading = false;
         _this.data.account = accounts.get(toId);
         if (fromAccountId !== null) {

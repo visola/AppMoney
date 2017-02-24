@@ -39,6 +39,20 @@
     </div>
   </div>
   <div class="form-group">
+    <label class="control-label col-sm-2">Item do Orçamento:</label>
+    <div class="col-sm-10">
+      <select class="form-control" name="forecastEntryId">
+        <option value="">--</option>
+        <%
+          var entries = forecastEntries.sortBy('title');
+          for (var i = 0; i < entries.length; i++) {
+        %>
+          <option value="<%= entries[i].id %>" <%= model.get('forecastEntryId') == entries[i].id ? 'selected="selected"' : '' %>><%= entries[i].get('title') %></option>
+        <% } %>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
     <label class="control-label col-sm-2">Comentários:</label>
     <div class="col-sm-10">
       <textarea class="form-control" name="comments"><%= model.get('comments') %></textarea>

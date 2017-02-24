@@ -32,8 +32,8 @@ public class TransactionDao {
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
     String sql = "INSERT INTO transactions "
-        + "(title, value, happened, from_account_id, to_account_id, category_id, created, created_by, updated, updated_by, comments) VALUES "
-        + "(:title, :value, :happened, :fromAccountId, :toAccountId, :categoryId, :created, :createdBy, :updated, :updatedBy, :comments)";
+        + "(title, value, happened, from_account_id, to_account_id, category_id, created, created_by, updated, updated_by, comments, forecast_entry_id) VALUES "
+        + "(:title, :value, :happened, :fromAccountId, :toAccountId, :categoryId, :created, :createdBy, :updated, :updatedBy, :comments, :forecastEntryId)";
 
     jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(transaction), keyHolder);
     transaction.setId((int) keyHolder.getKeys().get("id"));
@@ -101,8 +101,9 @@ public class TransactionDao {
   }
 
   public void update(Transaction transaction) {
-    String sql = "UPDATE transactions SET (title, value, happened, from_account_id, to_account_id, category_id, created, created_by, updated, updated_by, comments)"
-        + " = (:title, :value, :happened, :fromAccountId, :toAccountId, :categoryId, :created, :createdBy, :updated, :updatedBy, :comments)"
+    String sql = "UPDATE transactions"
+        + " SET (title, value, happened, from_account_id, to_account_id, category_id, created, created_by, updated, updated_by, comments, forecast_entry_id)"
+        + " = (:title, :value, :happened, :fromAccountId, :toAccountId, :categoryId, :created, :createdBy, :updated, :updatedBy, :comments, :forecastEntryId)"
         + " WHERE id = :id";
 
     jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(transaction));

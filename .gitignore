@@ -2,7 +2,8 @@
 .classpath
 .gradle/
 .settings/
-application.yaml
+
+/application.yaml
 
 bin/
 build/

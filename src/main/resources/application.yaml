@@ -20,8 +20,8 @@ spring:
 
 oauth:
   google:
-    clientId: 960331671953-des925sr54tqc64q6bl1pp7gcduk5tu2.apps.googleusercontent.com
-    clientSecret: hpxc9dDWl331kwMuM9XzEtHv
+    clientId: ${GOOGLE_CLIENT_ID}
+    clientSecret: ${GOOGLE_CLIENT_SECRET}
     redirectUri: http://localhost:8080/authenticate/oauth2callback
     scopes: email
 

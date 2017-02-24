@@ -73,15 +73,6 @@ define(["chai", "moment", "model/ForecastEntry", "model/Transaction"], function 
 
         expect(forecastEntry.matchesTransaction(transaction)).to.be.eq(false);
       });
-
-      it("doesn't match a transaction that's not mapped to it and it's not the same category", function () {
-        var transaction = new Transaction({
-          categoryId: 10,
-          forecastEntryId: 10
-        });
-
-        expect(forecastEntry.matchesTransaction(transaction)).to.be.eq(false);
-      });
     });
   });
 

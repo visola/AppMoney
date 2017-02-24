@@ -29,6 +29,10 @@ define(["backbone", "moment"], function (Backbone, moment) {
     },
 
     matchesTransaction: function (transaction) {
+      var forecastEntryId = transaction.get('forecastEntryId');
+      if (forecastEntryId != null) {
+        return forecastEntryId == this.get('id');
+      }
       return this.get('categoryId') == transaction.get('categoryId');
     }
   });

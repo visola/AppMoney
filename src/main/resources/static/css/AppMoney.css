@@ -116,6 +116,12 @@ table.center th, table.center td {
   border-top: 1px solid #aaa;
 }
 
+tfoot > tr.total {
+  background: #ccc;
+  font-weight: bold;
+  text-align: center;
+}
+
 .tone-down {
   color: #bbb;
 }

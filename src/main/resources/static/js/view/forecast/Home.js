@@ -2,6 +2,7 @@ define([
   'jquery',
   'view/Base',
   'bootstrap',
+  'bootstrap-modal',
   'big',
   'chart2',
   'moment',
@@ -9,11 +10,13 @@ define([
   'collection/ForecastEntries',
   'collection/Transactions',
   'model/Forecast',
+  'view/transaction/List',
   'tpl!template/forecast/home.html'
 ], function(
   $,
   BaseView,
   Bootstrap,
+  BootstrapModal,
   Big,
   Chart,
   moment,
@@ -21,12 +24,15 @@ define([
   ForecastEntries,
   Transactions,
   Forecast,
+  ListTransactionsView,
   ForecastHomeTemplate
 ) {
 
   return BaseView.extend({
     template: ForecastHomeTemplate,
-    events: {},
+    events: {
+      'click .show-transactions' : 'showTransactions'
+    },
 
     initialize: function () {
       this.interval = 60;
@@ -276,6 +282,32 @@ define([
         this.groupedByDay = this.groupByDay(this.totalDays);
         this.render();
       });
+    },
+
+    showTransactions: function(e) {
+      var amountForDay, transactions, total,
+        $el = $(e.target),
+        id = $el.attr('id'),
+        entryId = parseInt(id.split('-')[2]),
+        period = id.indexOf('actual') >= 0 ? 0 : -1,
+        entries = this.getEntriesForPeriod(period),
+        entry = this.entries.get(entryId);
+      e.preventDefault();
+      transactions = entries.map(e => e.transactions)
+        .reduce( (result, ts) => result.concat(ts), [])
+        .sort( (t1, t2) => t1.get('happened').localeCompare(t2.get('happened')));
+
+      amountForDay = Big(entry.getAmountForDay(entries[0].day, this.forecast.get('startDayOfMonth'))).toFixed(2);
+      total = Big(transactions.reduce( (total, t) => total += t.get('value'), 0)).abs().toFixed(2);
+
+      new Backbone.BootstrapModal(
+        new ListTransactionsView(
+          "Transações dentro de: " + entry.get('title'),
+          `Planejado: $ ${amountForDay}, Realizado: $ ${total}`,
+          this.categories,
+          transactions)
+        .getModalOptions()
+      ).open();
     }
   });
 });

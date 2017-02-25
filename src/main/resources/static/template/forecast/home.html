@@ -37,12 +37,28 @@
             </a>
           </td>
           <td><%= row.category.get('name') %></td>
-          <td>$ <%= row.spentTotalPreviousPeriod.toFixed(2) %></td>
+          <td>
+            <% if (row.spentTotalPreviousPeriod.gt(0)) { %>
+              <a href="#" data-action class="show-transactions" id="show-previous-<%= row.entry.get('id') %>">
+                $ <%= row.spentTotalPreviousPeriod.toFixed(2) %>
+              </a>
+            <% } else { %>
+              $ <%= row.spentTotalPreviousPeriod.toFixed(2) %>
+            <% } %>
+          </td>
           <td>$ <%= row.plannedTotalPreviousPeriod.toFixed(2) %></td>
           <td class="<%= row.plannedTotalPreviousPeriod.minus(row.spentTotalPreviousPeriod).gte(0) ? 'positive' : 'negative' %>">
             $ <%= (row.plannedTotalPreviousPeriod.minus(row.spentTotalPreviousPeriod).toFixed(2)) %>
           </td>
-          <td>$ <%= row.spentTotalThisPeriod.toFixed(2) %></td>
+          <td>
+            <% if (row.spentTotalThisPeriod.gt(0)) { %>
+              <a href="#" data-action class="show-transactions" id="show-actual-<%= row.entry.get('id') %>">
+                $ <%= row.spentTotalThisPeriod.toFixed(2) %>
+              </a>
+            <% } else { %>
+              $ <%= row.spentTotalThisPeriod.toFixed(2) %>
+            <% } %>
+          </td>
           <td>$ <%= row.plannedTotalThisPeriod.toFixed(2) %></td>
           <td class="<%= row.plannedTotalThisPeriod.minus(row.spentTotalThisPeriod).gte(0) ? 'positive' : 'negative' %>">
             $ <%= (row.plannedTotalThisPeriod.minus(row.spentTotalThisPeriod).toFixed(2)) %>

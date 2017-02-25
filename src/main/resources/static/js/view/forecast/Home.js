@@ -295,6 +295,7 @@ define([
       e.preventDefault();
       transactions = entries.map(e => e.transactions)
         .reduce( (result, ts) => result.concat(ts), [])
+        .filter( (t) => entry.matchesTransaction(t) )
         .sort( (t1, t2) => t1.get('happened').localeCompare(t2.get('happened')));
 
       amountForDay = Big(entry.getAmountForDay(entries[0].day, this.forecast.get('startDayOfMonth'))).toFixed(2);

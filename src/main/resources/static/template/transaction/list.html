@@ -12,7 +12,11 @@
       for (var i = 0; i < transactions.length; i++) {
     %>
       <tr>
-        <td><%= transactions[i].get('title') %></td>
+        <td>
+          <a href="/transactions/<%= transactions[i].get('id') %>">
+            <%= transactions[i].get('title') %>
+          </a>
+        </td>
         <td><%= transactions[i].get('happened') %></td>
         <td>$ <%= Math.abs(transactions[i].get('value')).toFixed(2) %></td>
       </tr>

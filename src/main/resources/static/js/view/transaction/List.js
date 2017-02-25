@@ -3,6 +3,9 @@ define(['view/Base', 'tpl!/template/transaction/list.html'],
 
   return BaseView.extend({
     template: ListTransactionsTemplate,
+    events: {
+      'click a' : 'hide'
+    },
 
     initialize: function (title, totalLine, categories, transactions) {
       this.categories = categories;
@@ -16,6 +19,10 @@ define(['view/Base', 'tpl!/template/transaction/list.html'],
         content: this,
         title: this.title
       };
+    },
+
+    hide: function () {
+      this.$el.parents(".modal").modal("hide");
     }
   });
 });

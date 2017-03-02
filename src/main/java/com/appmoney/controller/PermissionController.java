@@ -21,7 +21,7 @@ import com.appmoney.model.Permission;
 import com.appmoney.model.User;
 import com.appmoney.model.UserPermission;
 import com.appmoney.model.UserPermissions;
-import com.appmoney.repository.UserRepository;
+import com.appmoney.model.UserService;
 
 @RestController
 @RequestMapping("/api/v1/accounts/{accountId}/permissions")
@@ -34,7 +34,7 @@ public class PermissionController {
   PermissionDao permissionDao;
 
   @Autowired
-  UserRepository userRepository;
+  UserService userService;
 
   @RequestMapping(method=RequestMethod.GET)
   public Collection<UserPermissions> getPermissions(@PathVariable int accountId, @AuthenticationPrincipal User user) {
@@ -75,9 +75,9 @@ public class PermissionController {
   }
 
   private User ensureUser(String email) {
-    Optional<User> u = userRepository.maybeFindByUsername(email);
+    Optional<User> u = userService.maybeFindByUsername(email);
     if (!u.isPresent()) {
-      u = Optional.of(userRepository.create(email));
+      u = Optional.of(userService.create(email));
     }
     return u.get();
   }

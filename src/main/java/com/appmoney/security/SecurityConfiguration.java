@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -16,7 +16,7 @@ import com.appmoney.model.UserService;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled=true)
-@EnableWebMvcSecurity
+@EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   private static final String [] ACTUATOR_ENDPOINTS = {
@@ -34,13 +34,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Value("${admin.username}")
   String adminUsername;
-  
+
   @Value("${user.password}")
   String userPassword;
-  
+
   @Value("${user.username}")
   String userUsername;
-  
+
   @Autowired
   private UserService userService;
 

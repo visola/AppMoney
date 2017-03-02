@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE'
     }
 }
 
@@ -13,7 +13,7 @@ repositories {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
 configurations {
   integrationTestCompile.extendsFrom testCompile
@@ -41,14 +41,13 @@ dependencies {
   compile 'org.springframework.boot:spring-boot-starter-security'
   compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
   compile 'org.springframework.boot:spring-boot-starter-web'
-  compile 'org.springframework.data:spring-data-commons:1.10.1.RELEASE'
   compile 'org.flywaydb:flyway-core'
 
   integrationTestCompile 'info.cukes:cucumber-java8:1.2.4'
   integrationTestCompile 'info.cukes:cucumber-junit:1.2.4'
   integrationTestCompile 'info.cukes:cucumber-spring:1.2.4'
   integrationTestCompile 'org.seleniumhq.selenium:selenium-java:2.41.0'
-  integrationTestCompile 'org.springframework:spring-test'
+  integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
 bootRun {

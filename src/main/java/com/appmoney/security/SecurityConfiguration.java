@@ -13,7 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.appmoney.model.UserService;
-import com.appmoney.model.UserServiceJdbc;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled=true)
@@ -41,6 +40,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   
   @Value("${user.username}")
   String userUsername;
+  
+  @Autowired
+  private UserService userService;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -59,7 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userService());
+    auth.userDetailsService(userService);
   }
 
   @Bean
@@ -70,11 +72,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   public TokenService tokenService() {
     return new TokenService();
-  }
-
-  @Bean
-  public UserService userService() {
-    return new UserServiceJdbc();
   }
 
 }

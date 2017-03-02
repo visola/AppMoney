@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.appmoney.dao.AccountDao;
 import com.appmoney.dao.PermissionDao;
-import com.appmoney.dao.UserDao;
 import com.appmoney.model.Account;
 import com.appmoney.model.Permission;
 import com.appmoney.model.User;
 import com.appmoney.model.UserPermission;
 import com.appmoney.model.UserPermissions;
+import com.appmoney.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/v1/accounts/{accountId}/permissions")
@@ -34,7 +34,7 @@ public class PermissionController {
   PermissionDao permissionDao;
 
   @Autowired
-  UserDao userDao;
+  UserRepository userRepository;
 
   @RequestMapping(method=RequestMethod.GET)
   public Collection<UserPermissions> getPermissions(@PathVariable int accountId, @AuthenticationPrincipal User user) {
@@ -75,9 +75,9 @@ public class PermissionController {
   }
 
   private User ensureUser(String email) {
-    Optional<User> u = userDao.findUserByEmail(email);
+    Optional<User> u = userRepository.maybeFindByUsername(email);
     if (!u.isPresent()) {
-      u = Optional.of(userDao.create(email));
+      u = Optional.of(userRepository.create(email));
     }
     return u.get();
   }

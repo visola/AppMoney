@@ -1,34 +1,47 @@
 package com.appmoney.model;
 
-import java.time.LocalDate;
-import java.util.Collection;
+import java.util.Calendar;
+import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Entity
+@Table(name="users")
 public class User implements UserDetails {
 
   private static final long serialVersionUID = 1L;
 
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @Id
   private Integer id;
 
-  private Collection<? extends GrantedAuthority> authorities;
   private String password = "";
   private String username;
-  private LocalDate expiresOn;
-  private LocalDate lockedOn;
-  private LocalDate passwordExpired;
-  private LocalDate disabled;
+  private Calendar expiresOn;
+  private Calendar lockedOn;
+  private Calendar passwordExpired;
+  private Calendar disabled;
 
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  @ManyToMany(fetch = FetchType.EAGER)
+  private List<Authority> authorities;
+
+  public List<Authority> getAuthorities() {
     return authorities;
   }
 
-  public LocalDate getDisabled() {
+  public Calendar getDisabled() {
     return disabled;
   }
 
-  public LocalDate getExpiresOn() {
+  public Calendar getExpiresOn() {
     return expiresOn;
   }
 
@@ -36,7 +49,7 @@ public class User implements UserDetails {
     return id;
   }
 
-  public LocalDate getLockedOn() {
+  public Calendar getLockedOn() {
     return lockedOn;
   }
 
@@ -44,7 +57,7 @@ public class User implements UserDetails {
     return password;
   }
 
-  public LocalDate getPasswordExpired() {
+  public Calendar getPasswordExpired() {
     return passwordExpired;
   }
 
@@ -54,33 +67,33 @@ public class User implements UserDetails {
 
   @Override
   public boolean isAccountNonExpired() {
-    return expiresOn == null || expiresOn.isBefore(LocalDate.now());
+    return expiresOn == null || expiresOn.before(Calendar.getInstance());
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return lockedOn == null || lockedOn.isBefore(LocalDate.now());
+    return lockedOn == null || lockedOn.before(Calendar.getInstance());
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return passwordExpired == null || passwordExpired.isBefore(LocalDate.now());
+    return passwordExpired == null || passwordExpired.before(Calendar.getInstance());
   }
 
   @Override
   public boolean isEnabled() {
-    return disabled == null || disabled.isAfter(LocalDate.now());
+    return disabled == null || disabled.after(Calendar.getInstance());
   }
 
-  public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+  public void setAuthorities(List<Authority> authorities) {
     this.authorities = authorities;
   }
 
-  public void setDisabled(LocalDate disabled) {
+  public void setDisabled(Calendar disabled) {
     this.disabled = disabled;
   }
 
-  public void setExpiresOn(LocalDate expiresOn) {
+  public void setExpiresOn(Calendar expiresOn) {
     this.expiresOn = expiresOn;
   }
 
@@ -88,7 +101,7 @@ public class User implements UserDetails {
     this.id = id;
   }
 
-  public void setLockedOn(LocalDate lockedOn) {
+  public void setLockedOn(Calendar lockedOn) {
     this.lockedOn = lockedOn;
   }
 
@@ -96,7 +109,7 @@ public class User implements UserDetails {
     this.password = password;
   }
 
-  public void setPasswordExpired(LocalDate passwordExpired) {
+  public void setPasswordExpired(Calendar passwordExpired) {
     this.passwordExpired = passwordExpired;
   }
 

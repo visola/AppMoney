@@ -4,24 +4,24 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
   var HomeView = BaseView.extend({
     template: CategoriesHomeTemplate,
     events: {
-      'change #show-hidden' : 'showHidden',
       'click .edit-category' : 'editCategory',
-      'click #hide-all-default' : 'hideAllDefault',
       'click #new-category' : 'create',
-      'click .toggle-default' : 'toggleDefault',
-      'keyup #search-categories' : 'search',
-      'click #show-all-default' : 'showAllDefault'
+      'keyup #search-categories' : 'search'
     },
 
     create: function () {
-      new Backbone.BootstrapModal(new EditCategoryView(this.collection).getModalOptions()).open();
+      let modal = new Backbone.BootstrapModal(new EditCategoryView(this.collection).getModalOptions());
+      modal.open();
+      modal.$el.on('hidden.bs.modal', this.load.bind(this));
     },
 
     editCategory: function (e) {
       var $t = $(e.target),
         categoryId = $t.parent().parent().attr('id').split('-')[1],
-        category = this.collection.get(categoryId);
-      new Backbone.BootstrapModal(new EditCategoryView(this.collection, category).getModalOptions()).open();
+        category = this.collection.get(categoryId),
+        modal = new Backbone.BootstrapModal(new EditCategoryView(this.collection, category).getModalOptions());
+      modal.open();
+      modal.$el.on('hidden.bs.modal', this.load.bind(this));
     },
 
     filter: function (value, force) {
@@ -29,6 +29,9 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
 
       if (value) {
         this.data.filtered = this.collection.filter(function (el, index) {
+          if (el.get('owner').username.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+            return true;
+          }
           return el.getLeafName().toLowerCase().indexOf(value.toLowerCase()) >= 0;
         });
       } else {
@@ -37,31 +40,22 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
       this.data.query = value;
     },
 
-    hideAllDefault: function () {
-      this.collection.forEach(function (c) {
-        if (c.get('createdBy') === null) {
-          c.set('hidden', true);
-        }
-      });
-      this.collection.save().then(this.render.bind(this));
-    },
-
     initialize: function () {
-      var _this = this;
-
       this.data.filtered = [];
       this.data.query = '';
-      this.data.showHidden = false;
+
+      this.load();
+    },
+
+    load: function () {
+      this.loading = true;
+      this.render();
 
       this.collection = new Categories();
-      this.collection.showHidden = true;
-
-      this.loading = true;
-
-      this.collection.fetch().then(function () {
-        _this.loading = false;
-        _this.data.filtered = _this.collection.slice(0, _this.collection.length);
-        _this.render();
+      this.collection.fetch().then(() => {
+        this.loading = false;
+        this.data.filtered = this.collection.slice(0, this.collection.length);
+        this.render();
       });
     },
 
@@ -76,28 +70,6 @@ define(['jquery', 'view/Base', 'bootstrap', 'bootstrap-modal', 'view/categories/
       searchBox.selectionStart = value.length;
       searchBox.selectionStart = value.length;
       searchBox.focus();
-    },
-
-    showAllDefault: function () {
-      this.collection.forEach(function (c) {
-        if (c.get('createdBy') === null) {
-          c.set('hidden', false);
-        }
-      });
-      this.collection.save().then(this.render.bind(this));
-    },
-
-    showHidden: function () {
-      this.data.showHidden = !this.data.showHidden;
-      this.render();
-    },
-
-    toggleDefault: function (e) {
-      var $t = $(e.target),
-        categoryId = $t.parent().parent().attr('id').split('-')[1],
-        category = this.collection.get(categoryId);
-      category.set('hidden', !category.get('hidden'));
-      category.save({wait:true}).then(this.render.bind(this));
     }
   });
 

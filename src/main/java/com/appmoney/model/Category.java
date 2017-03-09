@@ -1,12 +1,27 @@
 package com.appmoney.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@Entity
+@JsonSerialize(using=CategorySerializer.class)
 public class Category {
 
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
   private Integer id;
   private String name;
-  private Integer parentId;
-  private Integer createdBy;
-  private Boolean hidden;
+
+  @ManyToOne
+  private Category parent;
+
+  @ManyToOne
+  private User owner;
 
   public Integer getId() {
     return id;
@@ -24,28 +39,20 @@ public class Category {
     this.name = name;
   }
 
-  public Integer getParentId() {
-    return parentId;
+  public Category getParent() {
+    return parent;
   }
 
-  public void setParentId(Integer parentId) {
-    this.parentId = parentId;
+  public void setParent(Category parent) {
+    this.parent = parent;
   }
 
-  public Integer getCreatedBy() {
-    return createdBy;
+  public User getOwner() {
+    return owner;
   }
 
-  public void setCreatedBy(Integer createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public Boolean getHidden() {
-    return hidden;
-  }
-
-  public void setHidden(Boolean hidden) {
-    this.hidden = hidden;
+  public void setOwner(User owner) {
+    this.owner = owner;
   }
 
 }

@@ -5,11 +5,13 @@ define(["backbone"], function (Backbone) {
 
     getDepth: function () {
       var n = 0,
-        parent = this.collection.get(this.get('parentId'));
+        parentId = this.get('parent') ? this.get('parent').id : null,
+        parent = parentId != null ? this.collection.get(parentId) : null;
 
       while (parent != null) {
         n++;
-        parent = this.collection.get(parent.get('parentId'));
+        parentId = parent.get('parent') ? parent.get('parent').id : null;
+        parent = parentId != null ? this.collection.get(parentId) : null;
       }
 
       return n;
@@ -27,7 +29,7 @@ define(["backbone"], function (Backbone) {
     },
 
     getLeafName: function () {
-      var parentId = this.get('parentId');
+      var parentId = this.get('parent') ? this.get('parent').id : null;
       if (parentId === null) {
         return this.get('name');
       } else {

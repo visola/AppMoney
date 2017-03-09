@@ -1,11 +1,15 @@
 package com.appmoney.model;
 
+import java.util.Optional;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
 
-  void create(String email);
+  User create(String username);
 
-  boolean exists(String email);
+  boolean exists(String username);
+
+  Optional<User> maybeFindByUsername(String username);
 
 }

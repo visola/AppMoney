@@ -39,7 +39,10 @@ define(["jquery", "backbone", "security", "tpl!template/menu.html"],
       },
 
       clearMenu: function () {
-        document.getElementById('menu').innerHTML = '';
+        let menuElement = document.getElementById('menu');
+        if (menuElement) {
+          menuElement.innerHTML = '';
+        }
       },
 
       _createTransaction: function (toId, credit) {

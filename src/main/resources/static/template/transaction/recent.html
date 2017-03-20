@@ -26,22 +26,15 @@
           <td data-column="Ocorrido em"><%= collection.at(i).get('happened') %></td>
           <td data-column="Conta">
             <%
-              var fromAccountId = collection.at(i).get('fromAccountId'),
-                fromAccount = accounts.get(fromAccountId),
-                fromAccountName = fromAccount ? fromAccount.get('name') : '???',
-                toAccountId = collection.at(i).get('toAccountId'),
-                toAccount = accounts.get(toAccountId),
-                toAccountName = toAccount ? toAccount.get('name') : '???',
-                category = categories.get(collection.at(i).get('categoryId')),
-                categoryName = category ? category.get('name') : '???';
+              var fromAccount = collection.at(i).get('fromAccount');
+              if (fromAccount) {
             %>
-            <% if (fromAccountId) { %>
               <%= fromAccountName %>
               <span class="glyphicon glyphicon-arrow-right"></span>
             <% } %>
-            <%= toAccountName %>
+            <%= collection.at(i).get('toAccount').name %>
           </td>
-          <td data-column="Categoria"><%= categoryName %></td>
+          <td data-column="Categoria"><%= collection.at(i).get('category').name %></td>
           <td data-column="Comentário"><%= collection.at(i).get('comments') %></td>
         </tr>
       <% } %>

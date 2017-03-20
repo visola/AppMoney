@@ -14,24 +14,37 @@
       </tr>
     </thead>
     <tbody>
-      <% var total = 0 %>
-      <% for (var i = 0; i < collection.length; i++) { %>
+      <%
+        var total = 0;
+        var validBalanceCount = 0;
+      %>
+      <%
+        for (var i = 0; i < collection.length; i++) {
+          let account = collection.at(i);
+      %>
         <tr>
           <td>
-            <% if (collection.at(i).get('permissions').indexOf('OWNER') >= 0) { %>
-              <a href="/accounts/<%= collection.at(i).id %>"><%= collection.at(i).get('name') %></a></td>
+            <% if (this.hasPermission(account.get('id'), ['OWNER'])) { %>
+              <a href="/accounts/<%= account.id %>"><%= account.get('name') %></a></td>
             <% } else { %>
-              <%= collection.at(i).get('name') %>
+              <%= account.get('name') %>
             <% } %>
-            <% var balance = collection.at(i).get('balance') %>
-            <% total += balance %>
-            <% if (balance < 0) { %>
-              <td class="negative" >$ <%= Math.abs(balance).toFixed(2) %></td>
+            <% var balance = account.get('balance') %>
+            <% if (balance == null) { %>
+              <td class="blurred" >$ <%= Math.abs(account.get('initialBalance')).toFixed(2) %></td>
             <% } else { %>
-              <td class="positive" >$ <%= Math.abs(balance).toFixed(2) %></td>
+              <%
+                validBalanceCount++;
+                total += balance;
+              %>
+              <% if (balance < 0) { %>
+                <td class="negative" >$ <%= Math.abs(balance).toFixed(2) %></td>
+              <% } else { %>
+                <td class="positive" >$ <%= Math.abs(balance).toFixed(2) %></td>
+              <% } %>
             <% } %>
            <td>&nbsp;
-            <% if (collection.at(i).get('permissions').indexOf('WRITE') >= 0) { %>
+            <% if (this.hasPermission(account.get('id'), ['OWNER', 'WRITE'])) { %>
               <% if (this.hasOwnProperty('toAccountId')) { %>
                 <% if (this.toAccountId != collection.at(i).id) { %>
                   <a href="/transfer/<%= this.toAccountId %>/<%= collection.at(i).id %>" class="glyphicon glyphicon glyphicon-open btn btn-primary btn-sm"></a>
@@ -47,9 +60,13 @@
       <% } %>
       <tr>
         <td>
-          <p><strong>Total</strong></p>        
+          <p><strong>Total</strong></p>
         </td>
-        <td <%= total < 0 ? 'class="negative"' : 'class="positive"' %>>$ <strong><%= Math.abs(total).toFixed(2) %></strong></td>
+        <% if (validBalanceCount > 0) { %>
+          <td <%= total < 0 ? 'class="negative"' : 'class="positive"' %>>$ <strong><%= Math.abs(total).toFixed(2) %></strong></td>
+        <% } else { %>
+          <td class="blurred">$ 00.00</td>
+        <% } %>
         <td/>
       </tr>
     </tbody>

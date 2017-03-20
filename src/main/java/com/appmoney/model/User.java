@@ -13,6 +13,8 @@ import javax.persistence.Table;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="users")
 public class User implements UserDetails {
@@ -22,9 +24,10 @@ public class User implements UserDetails {
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   @Id
   private Integer id;
-
-  private String password = "";
   private String username;
+
+  @JsonIgnore
+  private String password = "";
   private Calendar expiresOn;
   private Calendar lockedOn;
   private Calendar passwordExpired;

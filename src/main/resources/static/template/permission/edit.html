@@ -7,23 +7,30 @@
       <tr>
         <th>Usuário</th>
         <th>Leitura</th>
-        <th>Escrever</th>
+        <th>Escrita</th>
         <th>Dono</th>
       </tr>
     </thead>
     <tbody>
-      <% for (var i = 0; i < collection.length; i++) { %>
+      <%
+        let groupedByUser = collection.groupBy(p => p.get('user').username);
+        let allPermissions = ["READ", "WRITE", "OWNER"];
+        for (var username in userEmails) {
+          let permissions = groupedByUser[username];
+      %>
         <tr>
-          <td><%= collection.at(i).get('email') %></td>
-          <% var permissions = ['READ','WRITE','OWNER']; %>
-          <% for (var p = 0; p < permissions.length; p++) { %>
-            <% if (collection.at(i).hasPermission(permissions[p])) { %>
+          <td><%= username %></td>
+          <%
+            for (let i = 0; i < allPermissions.length; i++) {
+              let hasPermission = permissions && permissions.filter(p => p.get('permission') == allPermissions[i]).length > 0;
+              if (hasPermission) {
+          %>
               <td>
-                <span class="glyphicon glyphicon-ok text-success permission" data-permission="<%=permissions[p]%>" data-value="true"></span>
+                <span class="glyphicon glyphicon-ok text-success permission" data-permission="<%=allPermissions[i]%>" data-value="true"></span>
               </td>
             <% } else { %>
               <td>
-                <span class="glyphicon glyphicon-remove text-danger permission" data-permission="<%=permissions[p]%>" data-value="false"></span>
+                <span class="glyphicon glyphicon-remove text-danger permission" data-permission="<%=allPermissions[i]%>" data-value="false"></span>
               </td>
             <% } %>
           <% } %>

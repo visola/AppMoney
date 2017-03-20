@@ -2,6 +2,11 @@ a:hover{
   cursor: pointer;
 }
 
+.blurred {
+  color: transparent;
+  text-shadow: 0 0 10px black;
+}
+
 .chart-container {
   display: inline-block;
   height: 600px;

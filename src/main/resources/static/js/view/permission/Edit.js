@@ -1,5 +1,5 @@
-define(['underscore', 'view/Base', 'security', 'tpl!template/permission/edit.html', 'collection/AccountPermissions', 'model/UserPermissions'],
-    function (_, BaseView, Security, EditPermission, AccountPermissions, UserPermissions) {
+define(['underscore', 'view/Base', 'security', 'tpl!template/permission/edit.html', 'collection/AccountPermissions', 'model/UserAccountPermission'],
+    function (_, BaseView, Security, EditPermission, AccountPermissions, UserAccountPermission) {
 
   return BaseView.extend({
     template: EditPermission,
@@ -9,26 +9,27 @@ define(['underscore', 'view/Base', 'security', 'tpl!template/permission/edit.htm
     },
 
     initialize: function (account) {
-      var _this = this;
-
       this.bind('ok', this.handleOk);
 
       this.account = account;
       this.collection = new AccountPermissions(account.id);
 
       this.loading = true;
-      this.collection.fetch().then(function () {
-        _this.loading = false;
-        _this.data.permissions = {};
-        _this.data.userEmail = Security.getUserEmail();
-        _this.render();
+      this.collection.fetch().then(() => {
+        this.loading = false;
+        this.data.userEmail = Security.getUserEmail();
+        this.data.userEmails = {};
+        this.collection.models
+          .map(p => p.get('user'))
+          .forEach(u => this.data.userEmails[u.username] = {id: u.id, username: u.username});
+        this.render();
       });
     },
 
     addUser: function (e) {
-      var userEmail = prompt('Email do usuário:');
-      if (userEmail) {
-        this.collection.add(new UserPermissions({email: userEmail, accountId: this.account.id}));
+      var username = prompt('Email do usuário:');
+      if (username) {
+        this.data.userEmails[username] = {username: username}
         this.render();
       }
     },
@@ -36,19 +37,28 @@ define(['underscore', 'view/Base', 'security', 'tpl!template/permission/edit.htm
     changePermission: function (e) {
       var $spanEl = this.$(e.target),
         tableRowId = $spanEl.parents('tr'),
-        email = tableRowId.find('td:first').text(),
-        model = this.collection.where({email:email})[0],
+        username = tableRowId.find('td:first').text(),
         permission = $spanEl.data('permission'),
         selected = $spanEl.data('value'),
-        modelPermissions = model.get('permissions');
+        model = this.collection.filter(p => username == p.get('user').username && permission == p.get('permission'))[0];
 
-      if (selected == false && modelPermissions.indexOf(permission) < 0) {
-        modelPermissions.push(permission);
+      if (selected === true) {
+        // remove permission from collection
+        this.collection.remove(model);
       } else {
-        modelPermissions = _.without(modelPermissions, permission);
+        if (model == null) {
+          // add it to the collection
+          this.collection.add(
+              new UserAccountPermission(
+                  {
+                    permission: permission,
+                    user: this.data.userEmails[username],
+                    account: {id: this.account.id}
+                  }
+              )
+          );
+        }
       }
-
-      model.set('permissions', modelPermissions.slice());
       this.render();
     },
 

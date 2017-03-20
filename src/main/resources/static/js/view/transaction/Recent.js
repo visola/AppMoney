@@ -1,21 +1,17 @@
-define(['view/Base', 'view/PageControl', 'collection/Transactions', 'collection/Categories', 'collection/Accounts', 'tpl!/template/transaction/recent.html'],
-    function (Base, PageControlView, Transactions, Categories, Accounts, RecentTransactionsTemplate) {
+define(['view/Base', 'view/PageControl', 'collection/Transactions', 'tpl!/template/transaction/recent.html'],
+    function (Base, PageControlView, Transactions, RecentTransactionsTemplate) {
 
   var RecentTransactionsView = Base.extend({
     template: RecentTransactionsTemplate,
 
     initialize: function () {
-      var transactions = this.collection = new Transactions(),
-        categories = this.data.categories = new Categories(),
-        accounts = this.data.accounts = new Accounts(),
-        _this = this;
-      categories.showHidden = true;
+      var transactions = this.collection = new Transactions();
       this.loading = true;
       this.pageControlView = new PageControlView(transactions, this);
 
-      Promise.all([transactions.fetch(), accounts.fetch(), categories.fetch()]).then(function () {
-        _this.loading = false;
-        _this.render();
+      transactions.fetch().then(() => {
+        this.loading = false;
+        this.render();
       });
     },
 

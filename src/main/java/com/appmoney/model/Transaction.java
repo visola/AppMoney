@@ -1,26 +1,56 @@
 package com.appmoney.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Calendar;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Entity
 public class Transaction {
 
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
   private Integer id;
-  @NotNull @Size(min=2, max=256) private String title;
-  @NotNull private BigDecimal value;
-  @NotNull private Date happened;
-  private Integer fromAccountId;
-  @NotNull private Integer toAccountId;
-  @NotNull private Integer categoryId;
-  private Date created;
-  private Integer createdBy;
-  private Date updated;
-  private Integer updatedBy;
+  @NotNull
+  @Size(min = 2, max = 256)
+  private String title;
+  @NotNull
+  private BigDecimal value;
+  @NotNull
+  private Calendar happened;
+  private Calendar created;
+  private Calendar updated;
+  private Calendar deleted;
   private String comments;
-  private Integer forecastEntryId;
+
+  @ManyToOne
+  private ForecastEntry forecastEntry;
+
+  @ManyToOne
+  private User createdBy;
+
+  @ManyToOne
+  private User updatedBy;
+
+  @ManyToOne
+  private User deletedBy;
+
+  @ManyToOne
+  @NotNull
+  private Category category;
+
+  @ManyToOne
+  @NotNull
+  private Account toAccount;
+
+  @ManyToOne
+  private Account fromAccount;
 
   public Integer getId() {
     return id;
@@ -46,68 +76,36 @@ public class Transaction {
     this.value = value;
   }
 
-  public Date getHappened() {
+  public Calendar getHappened() {
     return happened;
   }
 
-  public void setHappened(Date happened) {
+  public void setHappened(Calendar happened) {
     this.happened = happened;
   }
 
-  public Integer getFromAccountId() {
-    return fromAccountId;
-  }
-
-  public void setFromAccountId(Integer fromAccountId) {
-    this.fromAccountId = fromAccountId;
-  }
-
-  public Integer getToAccountId() {
-    return toAccountId;
-  }
-
-  public void setToAccountId(Integer toAccountId) {
-    this.toAccountId = toAccountId;
-  }
-
-  public Integer getCategoryId() {
-    return categoryId;
-  }
-
-  public void setCategoryId(Integer categoryId) {
-    this.categoryId = categoryId;
-  }
-
-  public Date getCreated() {
+  public Calendar getCreated() {
     return created;
   }
 
-  public void setCreated(Date created) {
+  public void setCreated(Calendar created) {
     this.created = created;
   }
 
-  public Integer getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(Integer createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public Date getUpdated() {
+  public Calendar getUpdated() {
     return updated;
   }
 
-  public void setUpdated(Date updated) {
+  public void setUpdated(Calendar updated) {
     this.updated = updated;
   }
 
-  public Integer getUpdatedBy() {
-    return updatedBy;
+  public Calendar getDeleted() {
+    return deleted;
   }
 
-  public void setUpdatedBy(Integer updatedBy) {
-    this.updatedBy = updatedBy;
+  public void setDeleted(Calendar deleted) {
+    this.deleted = deleted;
   }
 
   public String getComments() {
@@ -118,12 +116,60 @@ public class Transaction {
     this.comments = comments;
   }
 
-  public Integer getForecastEntryId() {
-    return forecastEntryId;
+  public ForecastEntry getForecastEntry() {
+    return forecastEntry;
   }
 
-  public void setForecastEntryId(Integer forecastEntryId) {
-    this.forecastEntryId = forecastEntryId;
+  public void setForecastEntry(ForecastEntry forecastEntry) {
+    this.forecastEntry = forecastEntry;
+  }
+
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
+  public User getUpdatedBy() {
+    return updatedBy;
+  }
+
+  public void setUpdatedBy(User updatedBy) {
+    this.updatedBy = updatedBy;
+  }
+
+  public User getDeletedBy() {
+    return deletedBy;
+  }
+
+  public void setDeletedBy(User deletedBy) {
+    this.deletedBy = deletedBy;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
+  }
+
+  public Account getToAccount() {
+    return toAccount;
+  }
+
+  public void setToAccount(Account toAccount) {
+    this.toAccount = toAccount;
+  }
+
+  public Account getFromAccount() {
+    return fromAccount;
+  }
+
+  public void setFromAccount(Account fromAccount) {
+    this.fromAccount = fromAccount;
   }
 
 }

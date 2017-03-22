@@ -23,7 +23,7 @@ public interface TransactionRepository extends PagingAndSortingRepository<Transa
       + " AND ("
       + "   t.toAccount.id IN (:accountIds)"
       + "   OR t.fromAccount.id IN (:accountIds)"
-      + ")")
+      + ") ORDER BY happened DESC, created DESC")
   List<Transaction> findByHappenedBetween(@Param("start") Calendar start, @Param("end") Calendar end, @Param("accountIds") Set<Integer> accountIds);
 
   @Query("SELECT t"
@@ -31,7 +31,7 @@ public interface TransactionRepository extends PagingAndSortingRepository<Transa
       + " WHERE ("
       + "   t.toAccount.id IN (:accountIds)"
       + "   OR t.fromAccount.id IN (:accountIds)"
-      + ")")
+      + ") ORDER BY happened DESC, created DESC")
   Page<Transaction> getRecentTransactions(@Param("accountIds") Set<Integer> accountIds, Pageable pageRequest);
 
 }

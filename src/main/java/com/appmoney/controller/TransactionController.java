@@ -126,6 +126,7 @@ public class TransactionController {
   private Set<Integer> getVisibleAccountIds(Integer userId) {
     return permissionsRepository.findByUserId(userId).stream()
         .map(UserAccountPermission::getAccount)
+        .filter(a -> a.getDeleted() == null)
         .map(Account::getId)
         .collect(Collectors.toSet());
   }

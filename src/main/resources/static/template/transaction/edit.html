@@ -21,7 +21,7 @@
       <select class="form-control" name="categoryId">
         <% for (var i = 0; i < categories.length; i++) { %>
           <% if (categories.at(i).get('hidden') === true) continue; %>
-          <option value="<%= categories.at(i).id %>" <%= model.get('categoryId') == categories.at(i).id ? 'selected="selected"' : '' %>><%= categories.at(i).getHierarchicalRepresentation('&nbsp;&nbsp;&nbsp;&nbsp;') %></option>
+          <option value="<%= categories.at(i).id %>" <%= model.get('category') && model.get('category').id == categories.at(i).id ? 'selected="selected"' : '' %>><%= categories.at(i).getHierarchicalRepresentation('&nbsp;&nbsp;&nbsp;&nbsp;') %></option>
         <% } %>
       </select>
     </div>
@@ -47,7 +47,7 @@
           var entries = forecastEntries.sortBy('title');
           for (var i = 0; i < entries.length; i++) {
         %>
-          <option value="<%= entries[i].id %>" <%= model.get('forecastEntryId') == entries[i].id ? 'selected="selected"' : '' %>><%= entries[i].get('title') %></option>
+          <option value="<%= entries[i].id %>" <%= model.get('forecastEntry') != null && model.get('forecastEntry').id == entries[i].id ? 'selected="selected"' : '' %>><%= entries[i].get('title') %></option>
         <% } %>
       </select>
     </div>

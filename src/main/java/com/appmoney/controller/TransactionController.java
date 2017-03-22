@@ -24,16 +24,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.appmoney.model.Account;
-import com.appmoney.model.UserAccountPermission;
+import com.appmoney.model.Category;
+import com.appmoney.model.ForecastEntry;
 import com.appmoney.model.Permission;
 import com.appmoney.model.Transaction;
 import com.appmoney.model.User;
-import com.appmoney.repository.UserAccountPermissionRepository;
+import com.appmoney.model.UserAccountPermission;
+import com.appmoney.repository.CategoryRepository;
+import com.appmoney.repository.ForecastEntryRepository;
 import com.appmoney.repository.TransactionRepository;
+import com.appmoney.repository.UserAccountPermissionRepository;
 
 @RestController
 @RequestMapping("/api/v1/transactions")
 public class TransactionController {
+
+  @Autowired
+  CategoryRepository categoryRepository;
+
+  @Autowired
+  ForecastEntryRepository forecastEntryRepository;
 
   @Autowired
   UserAccountPermissionRepository permissionsRepository;
@@ -45,11 +55,7 @@ public class TransactionController {
   public Transaction createTransaction(@RequestBody @Valid Transaction transaction, @AuthenticationPrincipal User user) {
     checkPermissions(transaction, user, Permission.OWNER);
 
-    transaction.setCreated(Calendar.getInstance());
-    transaction.setCreatedBy(user);
-
-    transaction.setUpdated(Calendar.getInstance());
-    transaction.setUpdatedBy(user);
+    setupTransactionToSave(transaction, user);
 
     transactionRepository.save(transaction);
     return transaction;
@@ -72,21 +78,17 @@ public class TransactionController {
       throw new RuntimeException("Transaction ID doesn't match the one in the path.");
     }
     Optional<Transaction> maybeLoaded = transactionRepository.findById(transactionId);
-    if (maybeLoaded.isPresent()) {
-      checkPermissions(maybeLoaded.get(), user, Permission.WRITE, Permission.OWNER);
-
-      Transaction loadedTransaction = maybeLoaded.get();
-
-      transaction.setCreated(loadedTransaction.getCreated());
-      transaction.setCreatedBy(loadedTransaction.getCreatedBy());
-
-      transaction.setUpdated(Calendar.getInstance());
-      transaction.setUpdatedBy(user);
-
-      transactionRepository.save(transaction);
-      return transaction;
+    if (!maybeLoaded.isPresent()) {
+      return null;
     }
-    return null;
+
+    checkPermissions(maybeLoaded.get(), user, Permission.WRITE, Permission.OWNER);
+
+    Transaction loadedTransaction = maybeLoaded.get();
+    setupTransactionToSave(transaction, user, loadedTransaction);
+
+    transactionRepository.save(transaction);
+    return transaction;
   }
 
   @RequestMapping(method=RequestMethod.GET, value="/betweenDates")
@@ -121,6 +123,31 @@ public class TransactionController {
       return transaction.get();
     }
     return null;
+  }
+
+  private void setupTransactionToSave(Transaction transaction, User user) {
+    setupTransactionToSave(transaction, user, null);
+  }
+
+  private void setupTransactionToSave(Transaction transaction, User user, Transaction loadedTransaction) {
+    if (loadedTransaction == null) {
+      transaction.setCreated(Calendar.getInstance());
+      transaction.setCreatedBy(user);
+    } else {
+      transaction.setCreated(loadedTransaction.getCreated());
+      transaction.setCreatedBy(loadedTransaction.getCreatedBy());
+    }
+
+    Category category = categoryRepository.findOne(transaction.getCategory().getId());
+    transaction.setCategory(category);
+
+    if (transaction.getForecastEntry() != null) {
+      ForecastEntry forecastEntry = forecastEntryRepository.findOne(transaction.getForecastEntry().getId());
+      transaction.setForecastEntry(forecastEntry);
+    }
+
+    transaction.setUpdated(Calendar.getInstance());
+    transaction.setUpdatedBy(user);
   }
 
   private Set<Integer> getVisibleAccountIds(Integer userId) {

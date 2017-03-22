@@ -85,8 +85,9 @@ public class AccountController {
   @RequestMapping(method = RequestMethod.DELETE, value="/{id}")
   public Account deleteAccount(@PathVariable int id, @AuthenticationPrincipal User user) {
     Account loadedAccount = loadAccountAndCheckOwner(id, user.getId());
-    accountRepository.delete(id);
-    return loadedAccount;
+    loadedAccount.setDeleted(Calendar.getInstance());
+    loadedAccount.setDeletedBy(user);
+    return accountRepository.save(loadedAccount);
   }
 
   @RequestMapping(method = RequestMethod.GET)

@@ -8,6 +8,6 @@ import com.appmoney.model.ForecastEntry;
 
 public interface ForecastEntryRepository extends PagingAndSortingRepository<ForecastEntry, Integer> {
 
-  List<ForecastEntry> findByForecastId(Integer id);
+  List<ForecastEntry> findByForecastId(Integer forecastId);
 
 }

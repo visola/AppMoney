@@ -25,8 +25,7 @@ define([
     },
 
     initialize: function (toId, creditOrFromAccountId) {
-      var _this = this,
-        accounts = this.data.accounts = new Accounts(),
+      var accounts = this.data.accounts = new Accounts(),
         categories = this.data.categories = new Categories(),
         forecastEntries = this.data.forecastEntries = new ForecastEntries(),
         credit = typeof creditOrFromAccountId == 'boolean' ? creditOrFromAccountId : null,
@@ -34,12 +33,11 @@ define([
 
       this.loading = true;
       this.data.fromAccount = null;
-      categories.showHidden = true;
 
       if (this.model) {
-        toId = this.model.get('toAccountId');
-        if (this.model.get('fromAccountId') !== null) {
-          fromAccountId = this.model.get('fromAccountId');
+        toId = this.model.get('toAccount').id;
+        if (this.model.get('fromAccount') !== null) {
+          fromAccountId = this.model.get('fromAccount').id;
         } else {
           credit = this.model.get('value') >= 0;
         }
@@ -48,13 +46,13 @@ define([
       }
 
       this.data.credit = credit;
-      Promise.all([accounts.fetch(), categories.fetch(), forecastEntries.fetch()]).then(function () {
-        _this.loading = false;
-        _this.data.account = accounts.get(toId);
+      Promise.all([accounts.fetch(), categories.fetch(), forecastEntries.fetch()]).then(() => {
+        this.loading = false;
+        this.data.account = accounts.get(toId);
         if (fromAccountId !== null) {
-          _this.data.fromAccount = accounts.get(fromAccountId);
+          this.data.fromAccount = accounts.get(fromAccountId);
         }
-        _this.render();
+        this.render();
       });
     },
 
@@ -85,11 +83,19 @@ define([
         value = -1 * value;
       }
 
+      data.category = {id: data.categoryId};
+      if (data.forecastEntryId == "") {
+        data._to_remove = ['forecastEntry', 'forecastEntryId'];
+        delete data.forecastEntryId;
+      } else {
+        data.forecastEntry = {id: data.forecastEntryId};
+      }
+
       data.value = value;
-      data.toAccountId = this.data.account.id;
+      data.toAccount = {id: this.data.account.id};
 
       if (this.data.fromAccount) {
-        data.fromAccountId = this.data.fromAccount.id;
+        data.fromAccount = {id: this.data.fromAccount.id};
       }
 
       return data;

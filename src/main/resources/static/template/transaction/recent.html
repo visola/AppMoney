@@ -29,7 +29,7 @@
               var fromAccount = collection.at(i).get('fromAccount');
               if (fromAccount) {
             %>
-              <%= fromAccountName %>
+              <%= fromAccount.name %>
               <span class="glyphicon glyphicon-arrow-right"></span>
             <% } %>
             <%= collection.at(i).get('toAccount').name %>

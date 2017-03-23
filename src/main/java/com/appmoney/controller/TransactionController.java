@@ -65,9 +65,11 @@ public class TransactionController {
   public Transaction deletetransction(@PathVariable Integer transactionId, @AuthenticationPrincipal User user) {
     Optional<Transaction> maybeLoaded = transactionRepository.findById(transactionId);
     if (maybeLoaded.isPresent()) {
-      checkPermissions(maybeLoaded.get(), user, Permission.WRITE, Permission.OWNER);
-      transactionRepository.delete(transactionId);
-      return maybeLoaded.get();
+      Transaction t = maybeLoaded.get();
+      checkPermissions(t, user, Permission.WRITE, Permission.OWNER);
+      t.setDeleted(Calendar.getInstance());
+      t.setDeletedBy(user);
+      return transactionRepository.save(t);
     }
     return null;
   }

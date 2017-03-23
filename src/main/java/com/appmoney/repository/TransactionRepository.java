@@ -20,6 +20,7 @@ public interface TransactionRepository extends PagingAndSortingRepository<Transa
   @Query("SELECT t"
       + " FROM Transaction t"
       + " WHERE t.happened BETWEEN :start AND :end"
+      + " AND t.deleted IS NULL"
       + " AND ("
       + "   t.toAccount.id IN (:accountIds)"
       + "   OR t.fromAccount.id IN (:accountIds)"
@@ -31,7 +32,8 @@ public interface TransactionRepository extends PagingAndSortingRepository<Transa
       + " WHERE ("
       + "   t.toAccount.id IN (:accountIds)"
       + "   OR t.fromAccount.id IN (:accountIds)"
-      + ") ORDER BY happened DESC, created DESC")
+      + ") AND t.deleted IS NULL"
+      + " ORDER BY happened DESC, created DESC")
   Page<Transaction> getRecentTransactions(@Param("accountIds") Set<Integer> accountIds, Pageable pageRequest);
 
 }

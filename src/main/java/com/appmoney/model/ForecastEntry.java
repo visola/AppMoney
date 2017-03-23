@@ -19,8 +19,6 @@ public class ForecastEntry {
   @NotNull
   @Size(min = 2, max = 256)
   private String title;
-  @NotNull
-  private Integer categoryId;
 
   private Calendar created;
   private Calendar updated;
@@ -33,6 +31,10 @@ public class ForecastEntry {
 
   @ManyToOne
   private Forecast forecast;
+
+  @ManyToOne
+  @NotNull
+  private Category category;
 
   public Integer getId() {
     return id;
@@ -50,12 +52,12 @@ public class ForecastEntry {
     this.title = title;
   }
 
-  public Integer getCategoryId() {
-    return categoryId;
+  public Category getCategory() {
+    return category;
   }
 
-  public void setCategoryId(Integer categoryId) {
-    this.categoryId = categoryId;
+  public void setCategory(Category category) {
+    this.category = category;
   }
 
   public Calendar getCreated() {

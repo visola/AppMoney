@@ -111,6 +111,8 @@ define([
 
     processData: function (data) {
       data.monthlyAmounts = this.getMonthlyAmountsFromForm();
+      data.category = {id: data.categoryId};
+      delete data.categoryId;
       return data;
     },
 

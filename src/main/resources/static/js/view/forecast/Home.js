@@ -157,7 +157,7 @@ define([
         entry = this.entries.at(i);
         entryId = entry.get('id');
         result.push({
-          category: this.categories.get(entry.get('categoryId')),
+          category: entry.get('category'),
           entry: entry,
           plannedTotalPreviousPeriod: this.getPlannedTotalForEntryAndPeriodOffset(entryId, -1),
           plannedTotalThisPeriod: this.getPlannedTotalForEntryAndPeriodOffset(entryId, 0),

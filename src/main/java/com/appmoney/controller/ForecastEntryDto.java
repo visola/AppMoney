@@ -3,12 +3,15 @@ package com.appmoney.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.appmoney.model.Category;
+import com.appmoney.model.Forecast;
+
 public class ForecastEntryDto {
 
   private Integer id;
-  private Integer forecastId;
+  private Forecast forecast;
   private String title;
-  private Integer categoryId;
+  private Category category;
   private List<MonthlyForecastEntryAmountDto> monthlyAmounts = new ArrayList<>();
 
   public Integer getId() {
@@ -19,14 +22,6 @@ public class ForecastEntryDto {
     this.id = id;
   }
 
-  public Integer getForecastId() {
-    return forecastId;
-  }
-
-  public void setForecastId(Integer forecastId) {
-    this.forecastId = forecastId;
-  }
-
   public String getTitle() {
     return title;
   }
@@ -35,12 +30,20 @@ public class ForecastEntryDto {
     this.title = title;
   }
 
-  public Integer getCategoryId() {
-    return categoryId;
+  public Forecast getForecast() {
+    return forecast;
   }
 
-  public void setCategoryId(Integer categoryId) {
-    this.categoryId = categoryId;
+  public void setForecast(Forecast forecast) {
+    this.forecast = forecast;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
   }
 
   public List<MonthlyForecastEntryAmountDto> getMonthlyAmounts() {

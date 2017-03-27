@@ -9,7 +9,7 @@ import com.appmoney.integrationtest.IntegrationTestConfiguration;
 import com.appmoney.integrationtest.SeleniumHelper;
 
 @ContextConfiguration(classes={IntegrationTestConfiguration.class}, initializers = ConfigFileApplicationContextInitializer.class)
-public class BaseGlue {
+public class BaseSteps {
 
   @Autowired
   protected SeleniumHelper seleniumHelper;

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cucumber.api.java.Before;
 
-public class DatabaseCleanerHook extends BaseGlue {
+public class DatabaseCleanerHook extends BaseSteps {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseCleanerHook.class);
 

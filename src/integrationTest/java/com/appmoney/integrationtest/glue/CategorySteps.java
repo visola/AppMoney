@@ -6,10 +6,11 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-public class CategorySteps extends BaseGlue {
+public class CategorySteps extends BaseSteps {
 
   @When("I change the category name to '(.*)'")
   public void changeCategoryName(String newName) {
@@ -60,9 +61,10 @@ public class CategorySteps extends BaseGlue {
   public void checkVisibilityForSubcategoryInCategoryList(String not, String categoryToFind, String expectedParent) {
     goToCategoriesScreen();
     WebElement body = driver.findElement(By.cssSelector("tbody"));
-    checkParentOfCategory(body.findElements(By.xpath("tr/td[1]")), categoryToFind, expectedParent, not == null);
+    checkParentOfCategory(body.findElements(By.xpath("tr/td[2]")), categoryToFind, expectedParent, not == null);
   }
 
+  @Given("I have a category called '([^']*)'")
   @When("I created a new category called '([^']*)'")
   public void createCategory(String name) {
     goToCreateCategoryForm();

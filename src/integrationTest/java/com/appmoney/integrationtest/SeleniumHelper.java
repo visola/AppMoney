@@ -48,12 +48,15 @@ public class SeleniumHelper {
 
   public void selectOption(String selectName, String optionText) {
     Select select = new Select(driver.findElement(By.name(selectName)));
+    boolean selected = false;
     for (WebElement option: select.getOptions()) {
       if (option.getText().contains(optionText)) {
         option.click();
+        selected = true;
         break;
       }
     }
+    if (!selected) throw new RuntimeException("Option '"+optionText+"' not found in select: "+selectName);
   }
 
   public void waitForAlert() {
@@ -80,6 +83,12 @@ public class SeleniumHelper {
   public void waitForText(String text) {
     new WebDriverWait(driver, WAIT_TIMEOUT)
       .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[text()=\""+text+"\"]")));
+  }
+
+  public void clearAndType(String fieldName, String text) {
+    WebElement nameField = driver.findElement(By.name(fieldName));
+    nameField.clear();
+    nameField.sendKeys(text);
   }
 
 }

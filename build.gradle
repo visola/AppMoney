@@ -66,7 +66,7 @@ task integrationTest (type:JavaExec, dependsOn:integrationTestClasses) {
   if (project.hasProperty('features')) {
     args += ['--name', "${features}"]
   }
-  args += ['--strict', '-f', "html:${buildDir}/reports/tests/integration", '--glue', 'com.appmoney.integrationtest.glue', 'src/integrationTest/features']
+  args += ['--strict', '-p', "html:${buildDir}/reports/tests/integration", '--glue', 'com.appmoney.integrationtest.glue', 'src/integrationTest/features/Category.feature']
 
   classpath = project.sourceSets.integrationTest.runtimeClasspath
   description = "Run integration tests. Add your features to src/integrationTest/features. Your step definitions should go inside package com.bearprogrammer.blog.sample.integrationTest.glue and your java classes to src/integrationTest/java."

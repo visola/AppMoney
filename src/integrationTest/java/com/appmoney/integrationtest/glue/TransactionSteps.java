@@ -6,15 +6,23 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-public class TransactionSteps extends BaseGlue {
+public class TransactionSteps extends BaseSteps {
 
-  @Then("I should not see a transaction with description '(.*)' in the home screen")
+  @Then("I should not see a transaction with description '(.*)' on the transaction list")
   public void checkTransactionDoesNotExistInHomeScreen(String description) {
     goToHomeScreen();
     seleniumHelper.checkElementDoesNotExist(description);
   }
 
-  @When("I click delete trnasaction")
+  @Then("^I see a transaction with description '(.*)', category '(.*)' and amount (\\d+\\.?\\d{0,2}) on the transaction list$")
+  public void checkTransactionExists(String description, String category, Float amount) {
+    goToHomeScreen();
+    seleniumHelper.waitForLink(description);
+    seleniumHelper.waitForText(category);
+    seleniumHelper.waitForText(String.format("$ %.2f", amount));
+  }
+
+  @When("I click delete transaction")
   public void clickDeleteTransaction() {
     driver.findElement(By.id("delete-transaction")).click();
     acceptAlert();
@@ -28,12 +36,33 @@ public class TransactionSteps extends BaseGlue {
     seleniumHelper.waitForElementWithId("delete-transaction");
   }
 
-  @Given("I have a transaction with description '(.*)' and category '(.*)' and amount '(.*)'")
-  public void transactionExist(String description, String category, Integer amount) throws InterruptedException {
+  @When("^I edit the transaction description to be '(.*)', category '(.*)', amount (\\d+\\.?\\d{0,2}) and date (\\d{2})/(\\d{2})/(\\d{4})$")
+  public void editTransaction(String description, String category, Float amount, String month, String day, String year) {
+    seleniumHelper.clearAndType("title", description);
+    seleniumHelper.selectOption("categoryId", category);
+    seleniumHelper.clearAndType("value", amount.toString());
+    if (month!= null) {
+      driver.findElement(By.name("happened")).sendKeys(month + day + year);
+    }
+    seleniumHelper.click("Salvar");
+    acceptAlert();
+  }
+
+  @When("^I have a transaction with description '(.*)', category '(.*)' and amount (\\d+\\.?\\d{0,2})$")
+  public void ensureTransaction(String description, String category, Float amount) {
+    ensureTransaction(description, category, amount, null, null, null);
+  }
+
+  @When("^I have a transaction with description '(.*)', category '(.*)', amount (\\d+\\.?\\d{0,2}) and date (\\d{2})/(\\d{2})/(\\d{4})$")
+  @Given("^I create a transaction with description '(.*)', category '(.*)', amount (\\d+\\.?\\d{0,2}) and date (\\d{2})/(\\d{2})/(\\d{4})$")
+  public void ensureTransaction(String description, String category, Float amount, String month, String day, String year) {
     goToCreateTransactionForm();
     driver.findElement(By.name("title")).sendKeys(description);
     seleniumHelper.selectOption("categoryId", category);
     driver.findElement(By.name("value")).sendKeys(amount.toString());
+    if (month!= null) {
+      driver.findElement(By.name("happened")).sendKeys(month + day + year);
+    }
     seleniumHelper.click("Salvar");
     acceptAlert();
   }

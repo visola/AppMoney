@@ -102,6 +102,10 @@ public class AccountController {
   @RequestMapping(method=RequestMethod.GET, value="/balances")
   public Map<Integer, BigDecimal> getBalances(@AuthenticationPrincipal User user) {
     List<Account> accounts = getAccounts(user);
+    if (accounts.size() == 0) {
+      return new HashMap<>();
+    }
+
     Set<Integer> accountIds = accounts.stream().map(Account::getId).collect(Collectors.toSet());
     Calendar minDate = accounts.stream().map(Account::getInitialBalanceDate).reduce(Calendar.getInstance(), (date, min) -> date.before(min) ? date: min);
 

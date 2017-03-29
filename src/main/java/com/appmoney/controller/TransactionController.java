@@ -1,5 +1,6 @@
 package com.appmoney.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -105,7 +107,12 @@ public class TransactionController {
     Calendar endCalendar = Calendar.getInstance();
     endCalendar.setTimeInMillis(end);
 
-    return transactionRepository.findByHappenedBetween(startCalendar, endCalendar, getVisibleAccountIds(user.getId()));
+    Set<Integer> visibleAccountIds = getVisibleAccountIds(user.getId());
+    if (visibleAccountIds.size() == 0) {
+      return new ArrayList<>();
+    }
+
+    return transactionRepository.findByHappenedBetween(startCalendar, endCalendar, visibleAccountIds);
   }
 
   @RequestMapping(method=RequestMethod.GET)
@@ -114,7 +121,11 @@ public class TransactionController {
       @RequestParam(required=false, defaultValue="10") int size,
       @AuthenticationPrincipal User user) {
     PageRequest pageRequest = new PageRequest(page, size);
-    return transactionRepository.getRecentTransactions(getVisibleAccountIds(user.getId()), pageRequest);
+    Set<Integer> visibleAccounts = getVisibleAccountIds(user.getId());
+    if (visibleAccounts.size() == 0) {
+      return new PageImpl<>(new ArrayList<>());
+    }
+    return transactionRepository.getRecentTransactions(visibleAccounts, pageRequest);
   }
 
   @RequestMapping(value="/{transactionId}", method=RequestMethod.GET)

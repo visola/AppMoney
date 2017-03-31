@@ -1,7 +1,5 @@
 <section class="controls">
   <span id="new-category" class="btn btn-primary glyphicon glyphicon-plus" title="Criar Categoria"></span>
-  <span id="show-all-default" class="btn btn-warning glyphicon glyphicon-eye-open" title="Mostrar categorias padrão"></span>
-  <span id="hide-all-default" class="btn btn-warning glyphicon glyphicon-eye-close" title="Esconder categorias padrão"></span>
 </section>
 
 <h2>Categorias</h2>
@@ -9,11 +7,6 @@
 <form class="form-inline">
   <div class="form-group">
     <input class="form-control" type="text" id="search-categories" placeholder="Buscar" value="<%= query %>"/>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input id="show-hidden" type="checkbox" <%= showHidden ? 'checked="checked"' : '' %>> Mostrar escondidos
-    </label>
   </div>
 </form>
 
@@ -23,32 +16,26 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th>ID</th>
         <th>Nome</th>
-        <th>Padrão</th>
-        <th>Ação</th>
+        <th>Categoria Pai (ID)</th>
+        <th>Dono</th>
+        <th>&nbsp;</th>
       </tr>
     </thead>
     <tbody>
       <%
         for (var i = 0; i < filtered.length ; i++) {
-          var parentId = filtered[i].get('parentId');
-          if (showHidden !== true && filtered[i].get('hidden') === true) continue;
+          let category = filtered[i];
       %>
-        <tr id="category-<%= filtered[i].id %>" <%= filtered[i].get('hidden') === true ? 'class="tone-down"' : ''%> >
-          <td><%= filtered[i].getHierarchicalRepresentation('&nbsp;&nbsp;&nbsp;&nbsp;') %></td>
-          <% if (filtered[i].get('createdBy') == null) { %>
-            <td>
-              <span class="glyphicon glyphicon-ok"></span>
-            </td>
-            <td>
-              <span class="toggle-default btn btn-default glyphicon glyphicon-eye-<%= filtered[i].get('hidden') === true ? 'open' : 'close'%>" title="Mostrar/Esconder categoria padrão"></span>
-            </td>
-          <% } else { %>
-            <td>&nbsp;</td>
-            <td>
-              <span class="edit-category btn btn-default glyphicon glyphicon-pencil" title="Editar Categoria"></span>
-            </td>
-          <% } %>
+        <tr id="category-<%= category.id %>">
+          <td><%= category.get('id') %></td>
+          <td><%= category.getHierarchicalRepresentation('&nbsp;&nbsp;&nbsp;&nbsp;') %></td>
+          <td><%= category.get('parent') ? `${category.get('parent').name} (${category.get('parent').id})` : '&nbsp;' %></td>
+          <td><%= category.get('owner').username %></td>
+          <td>
+            <span class="edit-category btn btn-default glyphicon glyphicon-pencil" title="Editar Categoria"></span>
+          </td>
         </tr>
       <% } %>
     </tbody>

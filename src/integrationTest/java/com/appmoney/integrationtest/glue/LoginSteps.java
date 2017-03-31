@@ -7,7 +7,7 @@ import com.appmoney.integrationtest.SeleniumHelper;
 
 import cucumber.api.java.en.Given;
 
-public class LoginSteps extends BaseGlue{
+public class LoginSteps extends BaseSteps{
 
   @Autowired
   SeleniumHelper seleniumHelper;

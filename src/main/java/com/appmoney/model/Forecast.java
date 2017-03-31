@@ -1,22 +1,36 @@
 package com.appmoney.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.Calendar;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+@Entity
 public class Forecast {
 
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
   private Integer id;
-  private List<Permission> permissions = new ArrayList<>();
-  private Date created;
-  private Integer createdBy;
-  private Date updated;
-  private Integer updatedBy;
-  @NotNull @Min(1) @Max(28) private Integer startDayOfMonth = 1;
+
+  private Calendar created;
+  private Calendar updated;
+
+  @ManyToOne
+  private User createdBy;
+
+  @ManyToOne
+  private User updatedBy;
+
+  @NotNull
+  @Min(1)
+  @Max(28)
+  private Integer startDayOfMonth = 1;
 
   public Integer getId() {
     return id;
@@ -26,43 +40,35 @@ public class Forecast {
     this.id = id;
   }
 
-  public List<Permission> getPermissions() {
-    return permissions;
-  }
-
-  public void setPermissions(List<Permission> permissions) {
-    this.permissions = permissions;
-  }
-
-  public Date getCreated() {
+  public Calendar getCreated() {
     return created;
   }
 
-  public void setCreated(Date created) {
+  public void setCreated(Calendar created) {
     this.created = created;
   }
 
-  public Integer getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(Integer createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public Date getUpdated() {
+  public Calendar getUpdated() {
     return updated;
   }
 
-  public void setUpdated(Date updated) {
+  public void setUpdated(Calendar updated) {
     this.updated = updated;
   }
 
-  public Integer getUpdatedBy() {
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
+  public User getUpdatedBy() {
     return updatedBy;
   }
 
-  public void setUpdatedBy(Integer updatedBy) {
+  public void setUpdatedBy(User updatedBy) {
     this.updatedBy = updatedBy;
   }
 

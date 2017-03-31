@@ -11,7 +11,7 @@ import com.appmoney.model.MonthlyForecastEntryAmount;
 
 public interface MonthlyForecastEntryAmountRepository extends PagingAndSortingRepository<MonthlyForecastEntryAmount, Integer> {
 
-  @Query("select m from MonthlyForecastEntryAmount m join m.forecastEntry e where e.forecastId = :forecastId")
+  @Query("select m from MonthlyForecastEntryAmount m join m.forecastEntry e where e.forecast.id = :forecastId")
   List<MonthlyForecastEntryAmount> findByForecastId(@Param("forecastId") Integer id);
 
   @Query("delete from MonthlyForecastEntryAmount m where m.forecastEntry.id = :forecastEntryId")

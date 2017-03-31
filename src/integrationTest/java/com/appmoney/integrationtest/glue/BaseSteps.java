@@ -2,14 +2,14 @@ package com.appmoney.integrationtest.glue;
 
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.ConfigFileApplicationContextInitializer;
+import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.appmoney.integrationtest.IntegrationTestConfiguration;
 import com.appmoney.integrationtest.SeleniumHelper;
 
 @ContextConfiguration(classes={IntegrationTestConfiguration.class}, initializers = ConfigFileApplicationContextInitializer.class)
-public class BaseGlue {
+public class BaseSteps {
 
   @Autowired
   protected SeleniumHelper seleniumHelper;

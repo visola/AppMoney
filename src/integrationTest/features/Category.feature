@@ -4,22 +4,7 @@ Feature: Categories
 
   Background:
     Given I am logged in with user 'jdoe@test.com'
-    And I have an account with name 'My Account' of type 'Checkings'
-
-  Scenario: I hide a default category
-    When I go to the categories screen
-    And I click toggle visibility for the default category called 'Moradia'
-    Then I should not see 'Moradia' in the category list
-    And I should not see 'Moradia' in the categories combo when adding a transaction
-
-  Scenario: I show a hidden default category
-    Given I go to the categories screen
-    And I click toggle visibility for the default category called 'Moradia'
-    When I go to the categories screen
-    And I click show hidden categories
-    And I click toggle visibility for the default category called 'Moradia'
-    Then I should see 'Moradia' in the category list
-    And I should see 'Moradia' in the categories combo when adding a transaction
+    And I have an account with name 'My Account' of type 'Conta Corrente'
 
   Scenario: I create a new category
     When I go to the categories screen
@@ -44,7 +29,7 @@ Feature: Categories
     And I should not see 'Bills' in the category list
     And I should not see 'Bills' in the categories combo when adding a transaction
 
-  Scenario: I edit a category parent
+  Scenario: I edit an existing category parent
     Given I created a new category called 'Bills'
     And I created a new category called 'House'
     And I created a new category with parent called 'Utilities' under 'Bills'

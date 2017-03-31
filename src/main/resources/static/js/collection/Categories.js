@@ -17,6 +17,7 @@ define(["backbone", 'model/Category'], function (Backbone, Category) {
       }
       return url;
     },
+
     save: function (options) {
       return this.sync("update", this, options);
     }

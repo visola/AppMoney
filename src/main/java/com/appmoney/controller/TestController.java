@@ -1,5 +1,7 @@
 package com.appmoney.controller;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ public class TestController {
   UserService userService;
 
   @RequestMapping(value="/testLogin", method=RequestMethod.GET)
+  @Transactional
   public ModelAndView testLogin(String username) {
     if (!userService.exists(username)) {
       userService.create(username);

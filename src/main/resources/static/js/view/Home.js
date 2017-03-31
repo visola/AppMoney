@@ -1,5 +1,5 @@
-define(['view/Base', 'view/transaction/Recent', 'tpl!template/home.html', 'collection/Accounts'],
-    function (BaseView, RecentTransactionsView, HomeTemplate, Accounts) {
+define(['view/Base', 'view/transaction/Recent', 'tpl!template/home.html', 'collection/Accounts', 'collection/UserAccountPermissions'],
+    function (BaseView, RecentTransactionsView, HomeTemplate, Accounts, UserAccountPermissions) {
 
   var HomeView = BaseView.extend({
     template: HomeTemplate,
@@ -7,15 +7,28 @@ define(['view/Base', 'view/transaction/Recent', 'tpl!template/home.html', 'colle
       'click .transferTo' : 'transferTo'
     },
 
+    hasPermission: function (accountId, permissionsToCheck) {
+      let permissions = this.permissions;
+      for (let i = 0; i < permissions.length; i++) {
+        let permission = permissions.at(i);
+        if (permission.get('account').id == accountId
+            && permissionsToCheck.indexOf(permission.get('permission')) >= 0) {
+          return true;
+        }
+      }
+      return false;
+    },
+
     initialize: function () {
-      var _this = this;
       this.loading = true;
       this.collection = new Accounts();
+      this.permissions = new UserAccountPermissions();
       this.recentTransactionsView = new RecentTransactionsView();
 
-      this.collection.fetch().then(function () {
-        _this.loading = false;
-        _this.render();
+      Promise.all([this.collection.fetch(), this.permissions.fetch()]).then(() => {
+        this.loading = false;
+        this.collection.balances().then( () => this.render() );
+        this.render();
       });
     },
 

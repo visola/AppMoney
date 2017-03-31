@@ -48,7 +48,12 @@ define(['underscore', 'jquery', 'backbone', 'router', 'view/Base'],
       }
 
       submitButton.attr('disabled', 'disabled')
+
       data = this.processData(data);
+      if (data._to_remove != null) {
+        data._to_remove.forEach(k => this.model.unset(k));
+        delete data._to_remove;
+      }
 
       this.model.save(data, {
         wait: true,

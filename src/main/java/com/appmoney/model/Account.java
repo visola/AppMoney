@@ -1,43 +1,51 @@
 package com.appmoney.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.Calendar;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+@Entity
 public class Account {
-  
+
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
   private Integer id;
   @NotNull
-  @Size(min=2, max=250)
+  @Size(min = 2, max = 250)
   private String name;
   @NotNull
   private BigDecimal initialBalance;
   @NotNull
   @Past
-  private Date initialBalanceDate;
-  private BigDecimal balance;
-  private Date created;
-  private Integer createdBy;
-  private Date updated;
-  private Integer updatedBy;
+  private Calendar initialBalanceDate;
+  private Calendar created;
+  @ManyToOne
+  private User createdBy;
+  private Calendar updated;
+  @ManyToOne
+  private User updatedBy;
   @NotNull
+  @Enumerated(EnumType.STRING)
   private AccountType type;
-  private List<Permission> permissions = new ArrayList<>();
+  private Calendar deleted;
+  @ManyToOne
+  private User deletedBy;
 
-  public BigDecimal getBalance() {
-    return balance;
-  }
-
-  public Date getCreated() {
+  public Calendar getCreated() {
     return created;
   }
 
-  public Integer getCreatedBy() {
+  public User getCreatedBy() {
     return createdBy;
   }
 
@@ -49,7 +57,7 @@ public class Account {
     return initialBalance;
   }
 
-  public Date getInitialBalanceDate() {
+  public Calendar getInitialBalanceDate() {
     return initialBalanceDate;
   }
 
@@ -57,23 +65,19 @@ public class Account {
     return name;
   }
 
-  public Date getUpdated() {
+  public Calendar getUpdated() {
     return updated;
   }
 
-  public Integer getUpdatedBy() {
+  public User getUpdatedBy() {
     return updatedBy;
   }
 
-  public void setBalance(BigDecimal balance) {
-    this.balance = balance;
-  }
-
-  public void setCreated(Date created) {
+  public void setCreated(Calendar created) {
     this.created = created;
   }
 
-  public void setCreatedBy(Integer createdBy) {
+  public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
 
@@ -85,7 +89,7 @@ public class Account {
     this.initialBalance = initialBalance;
   }
 
-  public void setInitialBalanceDate(Date initialBalanceDate) {
+  public void setInitialBalanceDate(Calendar initialBalanceDate) {
     this.initialBalanceDate = initialBalanceDate;
   }
 
@@ -93,11 +97,11 @@ public class Account {
     this.name = name;
   }
 
-  public void setUpdated(Date updated) {
+  public void setUpdated(Calendar updated) {
     this.updated = updated;
   }
 
-  public void setUpdatedBy(Integer updatedBy) {
+  public void setUpdatedBy(User updatedBy) {
     this.updatedBy = updatedBy;
   }
 
@@ -109,12 +113,45 @@ public class Account {
     this.type = type;
   }
 
-  public List<Permission> getPermissions() {
-    return permissions;
+  public User getDeletedBy() {
+    return deletedBy;
   }
 
-  public void setPermissions(List<Permission> permissions) {
-    this.permissions = permissions;
+  public void setDeletedBy(User deletedBy) {
+    this.deletedBy = deletedBy;
+  }
+
+  public Calendar getDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(Calendar deleted) {
+    this.deleted = deleted;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Account other = (Account) obj;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    return true;
   }
 
 }

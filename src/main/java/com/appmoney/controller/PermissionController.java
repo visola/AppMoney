@@ -1,83 +1,87 @@
 package com.appmoney.controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.appmoney.dao.AccountDao;
-import com.appmoney.dao.PermissionDao;
-import com.appmoney.dao.UserDao;
-import com.appmoney.model.Account;
+import com.appmoney.model.UserAccountPermission;
 import com.appmoney.model.Permission;
 import com.appmoney.model.User;
-import com.appmoney.model.UserPermission;
-import com.appmoney.model.UserPermissions;
+import com.appmoney.model.UserService;
+import com.appmoney.repository.AccountRepository;
+import com.appmoney.repository.UserAccountPermissionRepository;
 
 @RestController
-@RequestMapping("/api/v1/accounts/{accountId}/permissions")
+@RequestMapping("/api/v1/accounts")
 public class PermissionController {
 
   @Autowired
-  AccountDao accountDao;
+  AccountRepository accountRepository;
 
   @Autowired
-  PermissionDao permissionDao;
+  UserAccountPermissionRepository permissionRepository;
 
   @Autowired
-  UserDao userDao;
+  UserService userService;
 
-  @RequestMapping(method=RequestMethod.GET)
-  public Collection<UserPermissions> getPermissions(@PathVariable int accountId, @AuthenticationPrincipal User user) {
-    Optional<Account> account = accountDao.findById(accountId, user.getId());
-    if (account.isPresent()) {
-      if (account.get().getPermissions().contains(Permission.OWNER)) {
-        return permissionDao.findByAccountId(accountId);
-      }
-    }
-    return new ArrayList<>();
+  @RequestMapping(method=RequestMethod.GET, value="/permissions")
+  public Collection<UserAccountPermission> getPermissions(@AuthenticationPrincipal User user) {
+    return permissionRepository.findByUserId(user.getId());
   }
 
-  @RequestMapping(method=RequestMethod.PUT)
+  @RequestMapping(method=RequestMethod.GET, value="/{accountId}/permissions")
+  public Collection<UserAccountPermission> getPermissions(@PathVariable int accountId, @AuthenticationPrincipal User user) {
+    return permissionRepository.findByAccountId(accountId);
+  }
+
+  @RequestMapping(method=RequestMethod.PUT, value="/{accountId}/permissions")
   @Transactional
-  public Collection<UserPermissions> updatePermissions(@PathVariable int accountId, @RequestBody List<UserPermissions> permissions, @AuthenticationPrincipal User loggedInUser) {
-    if (permissions.stream().anyMatch(p -> p.getAccountId() != accountId)) {
+  public Collection<UserAccountPermission> updatePermissions(
+      @PathVariable int accountId,
+      @RequestBody List<UserAccountPermission> permissions,
+      @AuthenticationPrincipal User user) {
+
+    if (permissions.stream().anyMatch(p -> p.getAccount().getId() != accountId)) {
       throw new RuntimeException("All permissions have to be for the same account.");
     }
 
-    Optional<Account> account = accountDao.findById(accountId, loggedInUser.getId());
-    if (account.isPresent()) {
-      if (account.get().getPermissions().contains(Permission.OWNER)) {
-        permissionDao.deleteAllPermissions(accountId);
-        for (UserPermissions userPermissions : permissions) {
-          User user = ensureUser(userPermissions.getEmail());
-          for (Permission p : userPermissions.getPermissions()) {
-            UserPermission permission = new UserPermission();
-            permission.setAccountId(accountId);
-            permission.setUserId(user.getId());
-            permission.setEmail(user.getUsername());
-            permission.setPermission(p);
-            permissionDao.save(permission);
-          }
-        }
+    checkPermission(accountId, user.getId());
+
+    permissionRepository.deleteByAccountId(accountId);
+    permissions.stream().forEach(p -> {
+      if (p.getUser().getId() == null) {
+        User u = ensureUser(p.getUser().getUsername());
+        p.setUser(u);
       }
+      p.setId(null);
+      permissionRepository.save(p);
+    });
+
+    return permissionRepository.findByAccountId(accountId);
+  }
+
+  private void checkPermission(Integer accountId, Integer userId) {
+    List<UserAccountPermission> loadedPermissions = permissionRepository.findByAccountIdAndUserId(accountId, userId);
+    if (!loadedPermissions.stream().anyMatch(p -> p.getPermission() == Permission.OWNER)) {
+      throw new AccessDeniedException("You do not own this account.");
     }
-    return getPermissions(accountId, loggedInUser);
   }
 
   private User ensureUser(String email) {
-    Optional<User> u = userDao.findUserByEmail(email);
+    Optional<User> u = userService.maybeFindByUsername(email);
     if (!u.isPresent()) {
-      u = Optional.of(userDao.create(email));
+      u = Optional.of(userService.create(email));
     }
     return u.get();
   }

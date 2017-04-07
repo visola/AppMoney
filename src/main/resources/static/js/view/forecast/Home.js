@@ -81,7 +81,7 @@ define([
     },
 
     getCategoriesInForecast: function () {
-      return this.entries.map(e => e.get('categoryId'));
+      return this.entries.map(e => e.get('category').id);
     },
 
     getEntriesForPeriod: function (offset) {
@@ -216,7 +216,7 @@ define([
 
     getTransactions: function () {
       return this.transactions.filter((t) => {
-        return t.get('fromAccountId') === null && t.get('value') < 0;
+        return t.get('fromAccount') === null && t.get('value') < 0;
       });
     },
 

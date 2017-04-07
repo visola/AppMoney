@@ -5,7 +5,7 @@ define(["chai", "moment", "model/ForecastEntry", "model/Transaction"], function 
   beforeEach(function () {
     forecastEntry = new ForecastEntry({
       id: 1,
-      categoryId: 1
+      category: { id: 1 }
     });
   });
 
@@ -40,8 +40,8 @@ define(["chai", "moment", "model/ForecastEntry", "model/Transaction"], function 
     describe("matches transaction", function () {
       it("matches a transaction that is mapped to it, even if it belongs to a different category", function () {
         var transaction = new Transaction({
-          categoryId: 10,
-          forecastEntryId: forecastEntry.get('id')
+          category: { id: 10 },
+          forecastEntry: { id: forecastEntry.get('id') }
         });
 
         expect(forecastEntry.matchesTransaction(transaction)).to.be.eq(true);
@@ -49,8 +49,8 @@ define(["chai", "moment", "model/ForecastEntry", "model/Transaction"], function 
 
       it("matches a transaction when it's not mapped but has the same category ID", function () {
         var transaction = new Transaction({
-          categoryId: 1,
-          forecastEntryId: null
+          category: { id: 1 },
+          forecastEntry: null
         });
 
         expect(forecastEntry.matchesTransaction(transaction)).to.be.eq(true);
@@ -58,8 +58,8 @@ define(["chai", "moment", "model/ForecastEntry", "model/Transaction"], function 
 
       it("doesn't match a transaction when it's not mapped and doesn't have the same category ID", function () {
         var transaction = new Transaction({
-          categoryId: 10,
-          forecastEntryId: 10
+          category: { id: 10 },
+          forecastEntry: { id: 10 }
         });
 
         expect(forecastEntry.matchesTransaction(transaction)).to.be.eq(false);
@@ -67,8 +67,8 @@ define(["chai", "moment", "model/ForecastEntry", "model/Transaction"], function 
 
       it("doesn't match a transaction that's not mapped to it even if the same category", function () {
         var transaction = new Transaction({
-          categoryId: 1,
-          forecastEntryId: 10
+          category: { id: 1 },
+          forecastEntry: { id: 10 }
         });
 
         expect(forecastEntry.matchesTransaction(transaction)).to.be.eq(false);

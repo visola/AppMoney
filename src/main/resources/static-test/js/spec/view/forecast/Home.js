@@ -40,7 +40,7 @@ define(["chai", "sinon", "moment", "big", "view/forecast/Home"], function (chai,
 
     describe("get transactions", function () {
       it("returns the available transaction", function () {
-        var transaction = {id: 10, toAccountId: 1, fromAccountId: null, happened: '2017-01-01', value: -100, categoryId: categories[0].id};
+        var transaction = {id: 10, toAccount: {id: 1}, fromAccount: null, happened: '2017-01-01', value: -100, category: categories[0]};
         server.respondWith(/.+betweenDates\?start=\d+&end=\d+/, createRequest([transaction]));
 
         homeView = new ForecastHomeView();
@@ -51,7 +51,7 @@ define(["chai", "sinon", "moment", "big", "view/forecast/Home"], function (chai,
       });
 
       it("filters transactions with a fromAccountId", function () {
-        var transaction = {id: 10, toAccountId: 1, fromAccountId: 2, happened: '2017-01-01', value: -100, categoryId: categories[0].id};
+        var transaction = {id: 10, toAccount: {id: 1}, fromAccount: {id: 2}, happened: '2017-01-01', value: -100, category: categories[0]};
         server.respondWith(/.+betweenDates\?start=\d+&end=\d+/, createRequest([transaction]));
 
         homeView = new ForecastHomeView();
@@ -93,9 +93,9 @@ define(["chai", "sinon", "moment", "big", "view/forecast/Home"], function (chai,
           day = moment([2017, 1, forecast.startDayOfMonth]),
           forecastEntry = {
             "id":7,
-            "forecastId":forecast.id,
+            "forecast":forecast,
             "title":"Some forecast entry",
-            "categoryId":categories[0].id,
+            "category":categories[0],
             "monthlyAmounts":[{
               "month":1,
               "year":2016,
@@ -148,12 +148,13 @@ define(["chai", "sinon", "moment", "big", "view/forecast/Home"], function (chai,
 
         it("contains the transaction item", function () {
           var day = moment(),
-            transaction = {id: 10,
-              toAccountId: 1,
-              fromAccountId: null,
+            transaction = {
+              id: 10,
+              toAccount: {id: 1},
+              fromAccount: null,
               happened: day.format("YYYY-MM-DD"),
               value: -100,
-              categoryId: categories[0].id
+              category: categories[0]
           };
           server.respondWith(/.+betweenDates\?start=\d+&end=\d+/, createRequest([transaction]));
 

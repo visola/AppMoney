@@ -46,8 +46,8 @@ public class IntegrationTestConfiguration {
   }
 
   @Bean
-  public SeleniumHelper seleniumHelper() {
-    return new SeleniumHelper();
+  public SeleniumHelper seleniumHelper(WebDriver driver) {
+    return new SeleniumHelper(driver);
   }
 
   @Bean

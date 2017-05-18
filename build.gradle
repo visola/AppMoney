@@ -46,7 +46,8 @@ dependencies {
   integrationTestCompile 'info.cukes:cucumber-java8:1.2.4'
   integrationTestCompile 'info.cukes:cucumber-junit:1.2.4'
   integrationTestCompile 'info.cukes:cucumber-spring:1.2.4'
-  integrationTestCompile 'org.seleniumhq.selenium:selenium-java:2.41.0'
+  integrationTestCompile 'org.seleniumhq.selenium:selenium-java:3.4.0'
+  integrationTestCompile 'org.seleniumhq.selenium:selenium-support:3.4.0'
   integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 

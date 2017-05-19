@@ -19,5 +19,5 @@ before_install:
 
 before_script:
   - export PROFILES=travis,test
-  - ./gradlew bootRun
   - psql -c 'create database appmoney;' -U postgres
+  - ./gradlew bootRun

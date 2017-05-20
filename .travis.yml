@@ -17,7 +17,7 @@ before_install:
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - sudo dpkg -i google-chrome*.deb
   - mkdir_p /tmp/bin
-  - cd /tmp/bin && wget https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+  - .travis/setup_chrome_driver.sh
   - export PATH=/tmp/bin:$PATH
 
 before_script:

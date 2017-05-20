@@ -16,9 +16,16 @@ before_install:
   - sudo apt-get install -y libappindicator1 fonts-liberation
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - sudo dpkg -i google-chrome*.deb
+  - mkdir_p /tmp/bin
+  - cd /tmp/bin && wget https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+  - export PATH=/tmp/bin:$PATH
 
 before_script:
   - export PROFILES=travis,test
   - psql -c 'create database appmoney;' -U postgres
   - ./gradlew bootRun &
-  - sleep 15
+  - sleep 20
+
+sript:
+  - ./gradlew check
+  - ./gradlew integrationTest

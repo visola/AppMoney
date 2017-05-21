@@ -26,5 +26,4 @@ before_script:
   - sleep 20
 
 sript:
-  - ./gradlew check
-  - ./gradlew integrationTest
+  - ./gradlew check integrationTest

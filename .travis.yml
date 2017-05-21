@@ -25,5 +25,4 @@ before_script:
   - ./gradlew bootRun &
   - sleep 20
 
-script:
-  - ./gradlew --parallel check integrationTest
+script: ./gradlew --parallel check integrationTest

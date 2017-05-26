@@ -22,7 +22,6 @@ before_install:
 before_script:
   - export PROFILES=travis,test
   - psql -c 'create database appmoney;' -U postgres
-  - ./gradlew bootRun &
-  - sleep 20
+  - .travis/start_application.sh
 
 script: ./gradlew --parallel check integrationTest

@@ -21,7 +21,7 @@ public class ScreenShotHook {
         byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
         scenario.embed(screenshot, "image/png");
       } catch (WebDriverException wde) {
-        System.err.println(wde.getMessage());
+        wde.printStackTrace();
       } catch (ClassCastException cce) {
         cce.printStackTrace();
       }

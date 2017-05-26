@@ -1,21 +1,33 @@
 package com.appmoney.integrationtest;
 
+import java.util.concurrent.TimeUnit;
+
+import org.assertj.core.util.Objects;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class SeleniumHelper {
 
   private static final int WAIT_TIMEOUT = 10;
 
+  private final FluentWait<WebDriver> wait;
+  private final WebDriver driver;
+
   @Autowired
-  WebDriver driver;
+  public SeleniumHelper(WebDriver driver) {
+    this.driver = driver;
+    this.wait = new FluentWait<WebDriver>(driver)
+        .withTimeout(WAIT_TIMEOUT, TimeUnit.SECONDS)
+        .ignoring(NoSuchElementException.class)
+        .ignoring(NoAlertPresentException.class);
+  }
 
   public void checkElementDoesNotExist(String text) {
     try {
@@ -59,30 +71,32 @@ public class SeleniumHelper {
     if (!selected) throw new RuntimeException("Option '"+optionText+"' not found in select: "+selectName);
   }
 
-  public void waitForAlert() {
-    new WebDriverWait(driver, WAIT_TIMEOUT)
-      .ignoring(NoAlertPresentException.class)
-      .until(ExpectedConditions.alertIsPresent());
+  public void waitForAlert(String withText) {
+    wait.until( d -> {
+      Alert a = d.switchTo().alert();
+      String actualText = a.getText();
+      if (!Objects.areEqual(withText, actualText)) {
+        a.dismiss();
+        throw new RuntimeException(String.format("Expected alert with text: '%s' but got '%s'", withText, actualText));
+      }
+      return a;
+    });
   }
 
   public void waitForElementWithId(String elementId) {
-    new WebDriverWait(driver, WAIT_TIMEOUT)
-    .until(ExpectedConditions.visibilityOfElementLocated(By.id(elementId)));
+    wait.until(d -> d.findElement(By.id(elementId)));
   }
 
   public void waitForElementWithClass(String className) {
-    new WebDriverWait(driver, WAIT_TIMEOUT)
-    .until(ExpectedConditions.visibilityOfElementLocated(By.className(className)));
+    wait.until(d -> d.findElement(By.className(className)).isDisplayed());
   }
 
   public void waitForLink(String linkText) {
-    new WebDriverWait(driver, WAIT_TIMEOUT)
-      .until(ExpectedConditions.visibilityOfElementLocated(By.linkText(linkText)));
+    wait.until(d -> d.findElement(By.linkText(linkText)));
   }
 
   public void waitForText(String text) {
-    new WebDriverWait(driver, WAIT_TIMEOUT)
-      .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[text()=\""+text+"\"]")));
+    wait.until(d -> d.findElement(By.xpath("//*[text()=\""+text+"\"]")));
   }
 
   public void clearAndType(String fieldName, String text) {

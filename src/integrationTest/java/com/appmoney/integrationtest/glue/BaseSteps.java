@@ -18,7 +18,11 @@ public class BaseSteps {
   protected WebDriver driver;
 
   public void acceptAlert() {
-    seleniumHelper.waitForAlert();
+    acceptAlert("Dados salvos corretamente!");
+  }
+
+  public void acceptAlert(String withText) {
+    seleniumHelper.waitForAlert(withText);
     driver.switchTo().alert().accept();
   }
 

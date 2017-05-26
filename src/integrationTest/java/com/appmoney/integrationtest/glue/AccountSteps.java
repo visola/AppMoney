@@ -56,7 +56,7 @@ public class AccountSteps extends BaseSteps {
   @When("^I delete the account$")
   public void deleteAccount() {
     driver.findElement(By.id("delete-account")).click();
-    acceptAlert();
+    acceptAlert("Você tem certeza que quer apagar esta conta?");
     waitForHomeScreen();
   }
 

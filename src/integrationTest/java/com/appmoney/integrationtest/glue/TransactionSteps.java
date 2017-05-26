@@ -25,7 +25,7 @@ public class TransactionSteps extends BaseSteps {
   @When("I click delete transaction")
   public void clickDeleteTransaction() {
     driver.findElement(By.id("delete-transaction")).click();
-    acceptAlert();
+    acceptAlert("Você tem certeza que quer apagar esta transação?");
     waitForHomeScreen();
   }
 

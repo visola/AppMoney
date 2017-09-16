@@ -24,4 +24,8 @@ before_script:
   - psql -c 'create database appmoney;' -U postgres
   - .travis/start_application.sh
 
-script: ./gradlew --parallel check integrationTest sonarqube -Dsonar.organization=visola-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_CUBE_KEY
+script: ./gradlew --parallel check integrationTest
+
+after_success:
+  - .travis/stop_application.sh
+  - ./gradlew sonarqube -Dsonar.organization=visola-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_CUBE_KEY
